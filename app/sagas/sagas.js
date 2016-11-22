@@ -1,7 +1,7 @@
-import entitie from './entitie';
+import entity from './entity';
 
 export default function *rootSaga() {
   yield [
-    entitie(),
+    entity(),
   ];
 }

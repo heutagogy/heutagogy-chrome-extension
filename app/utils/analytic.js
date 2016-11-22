@@ -1,5 +1,5 @@
 import ReactGA from 'react-ga';
-import { ANALYTYC_USER_ID } from './../constants/Api';
+import { ANALYTIC_USER_ID } from './../constants/Api';
 
 const CATEGORIES = {
   USER_ACTIONS: 'User actions',
@@ -15,9 +15,9 @@ const defaultConfig = process.env.NODE_ENV === 'production' ? {} : {
 const eventsHash = {
 };
 
-class Analytyc {
+class Analytic {
   constructor() {
-    ReactGA.initialize(ANALYTYC_USER_ID, {
+    ReactGA.initialize(ANALYTIC_USER_ID, {
       ...defaultConfig,
     });
     ReactGA.event({
@@ -48,4 +48,4 @@ class Analytyc {
   }
 }
 
-export default (new Analytyc());
+export default (new Analytic());

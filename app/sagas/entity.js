@@ -7,10 +7,10 @@ function *handleSomething() {
   yield null;
 }
 
-export function *entitie() {
+export function *entity() {
   yield [
     takeEvery('someactiontype', handleSomething),
   ];
 }
 
-export default entitie;
+export default entity;
