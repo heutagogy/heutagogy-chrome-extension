@@ -19,5 +19,5 @@
     "page": "background.html"
   },
   "permissions": [ "contextMenus", "management", "tabs", "storage", "https://github.com/*" ],
-  "content_security_policy": "default-src 'self' http://localhost:3000/* https://localhost:3000/*; script-src 'self' http://localhost:3000 https://localhost:3000 https://www.google-analytics.com/* https://www.google-analytics.com/ https://www.google-analytics.com 'unsafe-eval'; connect-src http://localhost:3000 https://localhost:3000 http://localhost:5000/* https://localhost:5000/*; style-src * 'unsafe-inline' 'self' blob:; img-src 'self' data:;"
+  "content_security_policy": "default-src 'self' http://localhost:3000/ ; font-src http://localhost:3000/js/; script-src 'self' http://localhost:3000 https://www.google-analytics.com/ 'unsafe-eval'; connect-src http://localhost:3000 http://localhost:5000/api/v1/; style-src * 'unsafe-inline' 'self' blob:; img-src 'self' data:;"
 }
