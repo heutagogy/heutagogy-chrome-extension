@@ -1,6 +1,6 @@
-import { PropTypes, Component } from 'react';
-import Immutable from 'immutable';
 import Toggle from 'material-ui/Toggle';
+import { PropTypes, Component } from 'react';
+import { rememberCurrentArticle } from '../../../app/utils/utils';
 
 const inlineStyles = {
   saveControl: {
@@ -20,24 +20,7 @@ class SaveControl extends Component {
   }
 
   handleToggle = (e, state) => {
-    chrome.tabs.query({
-      active: true,
-      lastFocusedWindow: true,
-    }, (tabs) => {
-      const currentUrl = tabs[0].url;
-      const currentTitle = tabs[0].title;
-      const icon = tabs[0].favIconUrl;
-
-      this.props.rememberArticle({
-        article: Immutable.fromJS({
-          title: currentTitle,
-          url: currentUrl,
-          timestamp: Date.now(),
-          icon,
-          state,
-        }),
-      });
-    });
+    rememberCurrentArticle(state, this.props.rememberArticle);
   }
 
   render() {
