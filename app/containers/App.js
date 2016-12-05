@@ -4,9 +4,12 @@ import Immutable from 'immutable';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import SaveControl from './../components/SaveControl';
+import Modal from './../components/Modal';
 import { rememberArticle } from './../actions/article';
 import { saveCurrentUrl } from './../actions/view';
+import { showModal } from './../actions/modal';
 import { getArticle } from './../selectors/article';
+import { runOnCurrentArticle } from './../utils/utils';
 
 import themes from './../uiTheme/themes';
 
@@ -19,6 +22,7 @@ class App extends Component {
     article: PropTypes.instanceOf(Immutable.Map),
     rememberArticle: PropTypes.func.isRequired,
     saveCurrentUrl: PropTypes.func.isRequired,
+    showModal: PropTypes.func.isRequired,
   }
 
   static childContextTypes = {
@@ -36,13 +40,8 @@ class App extends Component {
   }
 
   componentWillMount() {
-    chrome.tabs.query({
-      active: true,
-      lastFocusedWindow: true,
-    }, (tabs) => {
-      const currentUrl = tabs[0].url;
-
-      this.props.saveCurrentUrl({ currentUrl });
+    runOnCurrentArticle(({ url }) => {
+      this.props.saveCurrentUrl({ currentUrl: url });
     });
   }
 
@@ -59,8 +58,10 @@ class App extends Component {
           <SaveControl
             defaultState={this.props.article.get('state')}
             rememberArticle={this.props.rememberArticle}
+            showModal={this.props.showModal}
           />
         </MuiThemeProvider>
+        <Modal />
       </div>
     );
   }
@@ -70,4 +71,10 @@ const mapStateToProps = (state) => ({
   article: getArticle(state, state.getIn(['view', 'currentUrl'])),
 });
 
-export default connect(mapStateToProps, { rememberArticle, saveCurrentUrl })(App);
+const mapDispatchToProps = {
+  rememberArticle,
+  saveCurrentUrl,
+  showModal,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

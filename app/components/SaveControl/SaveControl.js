@@ -1,6 +1,7 @@
+import Immutable from 'immutable';
 import Toggle from 'material-ui/Toggle';
 import { PropTypes, Component } from 'react';
-import { rememberCurrentArticle } from '../../../app/utils/utils';
+import { runOnCurrentArticle } from '../../../app/utils/utils';
 
 const inlineStyles = {
   saveControl: {
@@ -13,6 +14,7 @@ class SaveControl extends Component {
   static propTypes = {
     defaultState: PropTypes.bool,
     rememberArticle: PropTypes.func.isRequired,
+    showModal: PropTypes.func.isRequired,
   }
 
   static contextTypes = {
@@ -20,7 +22,25 @@ class SaveControl extends Component {
   }
 
   handleToggle = (e, state) => {
-    rememberCurrentArticle(state, this.props.rememberArticle);
+    if (!this.props.defaultState) {
+      runOnCurrentArticle(({ url, title, icon }) => {
+        this.props.rememberArticle({
+          article: Immutable.fromJS({
+            icon,
+            state,
+            timestamp: Date.now(),
+            title,
+            url,
+          }),
+        });
+      });
+    } else {
+      runOnCurrentArticle(({ url, title, icon }) => {
+        this.props.showModal({
+          article: Immutable.fromJS({ title, url, icon }),
+        });
+      });
+    }
   }
 
   render() {
