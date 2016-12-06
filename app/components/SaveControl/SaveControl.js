@@ -2,6 +2,7 @@ import Immutable from 'immutable';
 import Toggle from 'material-ui/Toggle';
 import { PropTypes, Component } from 'react';
 import { runOnCurrentArticle } from '../../../app/utils/utils';
+import articleSchema from '../../schemas/article';
 
 const inlineStyles = {
   saveControl: {
@@ -13,6 +14,7 @@ const inlineStyles = {
 class SaveControl extends Component {
   static propTypes = {
     defaultState: PropTypes.bool,
+    loadEntities: PropTypes.func.isRequired,
     rememberArticle: PropTypes.func.isRequired,
   }
 
@@ -22,6 +24,11 @@ class SaveControl extends Component {
 
   handleToggle = (e, state) => {
     if (!this.props.defaultState) {
+      this.props.loadEntities({
+        href: '/bookmarks',
+        schema: articleSchema,
+      });
+
       runOnCurrentArticle(({ url, title, icon }) => {
         this.props.rememberArticle({
           article: Immutable.fromJS({

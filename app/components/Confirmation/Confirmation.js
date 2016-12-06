@@ -1,5 +1,6 @@
 import Immutable from 'immutable';
 import { PropTypes, Component } from 'react';
+import articleSchema from '../../schemas/article';
 
 const inlineStyles = {
   duplicateArticle: {
@@ -18,6 +19,7 @@ const inlineStyles = {
 class Confirmation extends Component {
   static propTypes = {
     article: PropTypes.object,
+    loadEntities: PropTypes.func.isRequired,
     rememberArticle: PropTypes.func.isRequired,
   }
 
@@ -31,6 +33,11 @@ class Confirmation extends Component {
     const icon = this.props.article.get('icon');
     const title = this.props.article.get('title');
     const url = this.props.article.get('url');
+
+    this.props.loadEntities({
+      href: '/bookmarks',
+      schema: articleSchema,
+    });
 
     this.props.rememberArticle({
       article: Immutable.fromJS({
@@ -56,7 +63,7 @@ class Confirmation extends Component {
     return (
       <div style={inlineStyles.duplicateArticle}>
         <a href={this.props.article.get('url')}>{this.props.article.get('title')}</a>
-        <p>{'Article saved. Do you want to duplicate?'}</p>
+        <p>{'Article saved. Do you want to duplicate it?'}</p>
         <button
           style={inlineStyles.buttonLeft}
           onClick={this.handleYes}

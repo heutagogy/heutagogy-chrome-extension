@@ -2,7 +2,6 @@ import React from 'react'; // eslint-disable-line
 import ReactDOM from 'react-dom';
 import Immutable from 'immutable';
 import { bindKeyRememberArticle } from './../../app/utils/keyBindings';
-import { loadEntities } from './../../app/utils/loader.js';
 import Root from '../../app/containers/Root';
 import './../../app/assets/media.less';
 import './../../app/assets/normalize.less';
@@ -21,5 +20,4 @@ chrome.storage.local.get('state', (obj) => {
   );
 
   bindKeyRememberArticle(store);
-  loadEntities(store);
 });
