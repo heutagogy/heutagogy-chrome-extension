@@ -38,11 +38,6 @@ module.exports = { //eslint-disable-line
   },
   module: {
     loaders: [
-      { test: /\.(woff(2)?|ttf|eot)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'url?limit=1' },
-      {
-        test: /\.json$/,
-        loader: 'json-loader',
-      },
       {
         test: /\.js$/,
         loader: 'babel',
@@ -50,7 +45,13 @@ module.exports = { //eslint-disable-line
         query: {
           presets: ['react-optimize'],
         },
-      }, {
+      },
+      { test: /\.(woff(2)?|ttf|eot)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'url?limit=1' },
+      {
+        test: /\.json$/,
+        loader: 'json-loader',
+      },
+      {
         test: /\.css$/,
         loaders: [
           'style',

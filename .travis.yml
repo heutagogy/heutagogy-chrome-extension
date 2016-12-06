@@ -31,6 +31,6 @@ before_script:
 
 script:
   - yarn run lint
-  - yarn test
+#  - yarn test
   - yarn run build
   - yarn run test-e2e

@@ -7,7 +7,7 @@ const name = require('../build/manifest.json').name; //eslint-disable-line
 const argv = require('minimist')(process.argv.slice(TWO)); //eslint-disable-line
 
 const keyPath = argv.key || 'key.pem';
-const existsKey =  fs.existsSync(keyPath); //eslint-disable-line
+const existsKey = fs.existsSync(keyPath); //eslint-disable-line
 const crx = new ChromeExtension({
   appId: argv['app-id'],
   codebase: argv.codebase,
