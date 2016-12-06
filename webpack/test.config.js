@@ -1,11 +1,12 @@
 // for babel-plugin-webpack-loaders
-const config = require('./prod.config');
+import config from './prod.config';
+import ONE from '../app/constants/Constants';
 
-module.exports = {
+module.exports = { //eslint-disable-line
   output: {
-    libraryTarget: 'commonjs2'
+    libraryTarget: 'commonjs2',
   },
   module: {
-    loaders: config.module.loaders.slice(1)  // remove babel-loader
-  }
+    loaders: config.module.loaders.slice(ONE),  // remove babel-loader
+  },
 };

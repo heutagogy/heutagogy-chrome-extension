@@ -1,5 +1,5 @@
-const path = require('path');
-const webpack = require('webpack');
+const path = require('path'); //eslint-disable-line
+const webpack = require('webpack'); //eslint-disable-line
 
 const host = 'localhost';
 const port = 3000;
@@ -78,20 +78,20 @@ const baseDevConfig = () => ({
 
 const injectPageConfig = baseDevConfig();
 
-injectPageConfig.entry = [
+injectPageConfig.entry = [ //eslint-disable-line
   customPath,
   path.join(__dirname, '../chrome/extension/inject'),
 ];
-delete injectPageConfig.hotMiddleware;
-delete injectPageConfig.module.loaders[0].query;
+delete injectPageConfig.hotMiddleware; //eslint-disable-line
+delete injectPageConfig.module.loaders[0].query; //eslint-disable-line
 injectPageConfig.plugins.shift(); // remove HotModuleReplacementPlugin
-injectPageConfig.output = {
+injectPageConfig.output = { //eslint-disable-line
   path: path.join(__dirname, '../dev/js'),
   filename: 'inject.bundle.js',
 };
 const appConfig = baseDevConfig();
 
-module.exports = [
+module.exports = [ //eslint-disable-line
   injectPageConfig,
   appConfig,
 ];

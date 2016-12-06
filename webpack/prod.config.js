@@ -1,9 +1,9 @@
-const path = require('path');
-const webpack = require('webpack');
+const path = require('path'); //eslint-disable-line
+const webpack = require('webpack'); //eslint-disable-line
 
 const customPath = path.join(__dirname, './customPublicPath');
 
-module.exports = {
+module.exports = { //eslint-disable-line
   entry: {
     app: [customPath, path.join(__dirname, '../chrome/extension/app')],
     background: [customPath, path.join(__dirname, '../chrome/extension/background')],

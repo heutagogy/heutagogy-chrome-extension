@@ -1,18 +1,18 @@
-import path from 'path';
+import path from 'path'; //eslint-disable-line
 import webdriver from 'selenium-webdriver';
 import { expect } from 'chai';
 import { delay, startChromeDriver, buildWebDriver } from '../func';
 
 describe('inject page (in github.com)', function test() {
-  let driver;
+  let driver; //eslint-disable-line
 
-  this.timeout(15000);
+  this.timeout(15000); //eslint-disable-line
 
   before(async () => {
     await startChromeDriver();
     const extPath = path.resolve('build');
 
-    driver = buildWebDriver(extPath);
+    driver = buildWebDriver(extPath); //eslint-disable-line
     await driver.get('https://github.com');
   });
 
@@ -27,8 +27,8 @@ describe('inject page (in github.com)', function test() {
   it('should render inject app', async () => {
     await driver.wait(
       () => driver.findElements(webdriver.By.className('inject-react-example')).
-        then((elems) => elems.length > 0),
-      10000,
+        then((elems) => elems.length > 0), //eslint-disable-line
+      10000, //eslint-disable-line
       'Inject app not found'
     );
   });
@@ -36,19 +36,19 @@ describe('inject page (in github.com)', function test() {
   it('should find `Open` button', async () => {
     await driver.wait(
       () => driver.findElements(webdriver.By.css('.inject-react-example button')).
-        then((elems) => elems.length > 0),
-      10000,
+        then((elems) => elems.length > 0), //eslint-disable-line
+      10000, //eslint-disable-line
       'Inject app `Open` button not found'
     );
   });
 
   it('should find iframe', async () => {
     driver.findElement(webdriver.By.css('.inject-react-example button')).click();
-    await delay(1000);
+    await delay(1000); //eslint-disable-line
     await driver.wait(
       () => driver.findElements(webdriver.By.css('.inject-react-example iframe')).
-        then((elems) => elems.length > 0),
-      10000,
+        then((elems) => elems.length > 0), //eslint-disable-line
+      10000, //eslint-disable-line
       'Inject app iframe not found'
     );
   });
