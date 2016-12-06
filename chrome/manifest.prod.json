@@ -26,6 +26,6 @@
   "background": {
     "page": "background.html"
   },
-  "permissions": [ "contextMenus", "tabs", "storage", "https://github.com/*", "http://localhost:5000/api/v1/*" ],
+  "permissions": [ "contextMenus", "notifications", "tabs", "storage", "https://github.com/*", "http://localhost:5000/api/v1/*" ],
   "content_security_policy": "default-src 'self' http://localhost:3000/ ; font-src http://localhost:3000/js/; script-src 'self' http://localhost:3000 https://www.google-analytics.com/ 'unsafe-eval'; connect-src http://localhost:3000 http://localhost:5000/api/v1/; style-src * 'unsafe-inline' 'self' blob:; img-src 'self' data:;"
 }

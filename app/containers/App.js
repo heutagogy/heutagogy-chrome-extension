@@ -4,10 +4,9 @@ import Immutable from 'immutable';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import SaveControl from './../components/SaveControl';
-import Modal from './../components/Modal';
+import Confirmation from './../components/Confirmation';
 import { rememberArticle } from './../actions/article';
 import { saveCurrentUrl } from './../actions/view';
-import { showModal } from './../actions/modal';
 import { getArticle } from './../selectors/article';
 import { runOnCurrentArticle } from './../utils/utils';
 
@@ -22,7 +21,6 @@ class App extends Component {
     article: PropTypes.instanceOf(Immutable.Map),
     rememberArticle: PropTypes.func.isRequired,
     saveCurrentUrl: PropTypes.func.isRequired,
-    showModal: PropTypes.func.isRequired,
   }
 
   static childContextTypes = {
@@ -58,10 +56,12 @@ class App extends Component {
           <SaveControl
             defaultState={this.props.article.get('state')}
             rememberArticle={this.props.rememberArticle}
-            showModal={this.props.showModal}
           />
         </MuiThemeProvider>
-        <Modal />
+        <Confirmation
+          article={this.props.article}
+          rememberArticle={this.props.rememberArticle}
+        />
       </div>
     );
   }
@@ -74,7 +74,6 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
   rememberArticle,
   saveCurrentUrl,
-  showModal,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

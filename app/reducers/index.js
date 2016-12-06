@@ -6,7 +6,6 @@ import Immutable from 'immutable';
 import { reducer as formReducer } from 'redux-form/immutable';
 
 import dataView from './dataView';
-import modal from './modal';
 import view from './view';
 import analytic from './../utils/analytic';
 import { saveEntities } from './../utils/localStorageUtils';
@@ -50,7 +49,6 @@ const entities = (state = initialState, action) => {
 export default combineReducers({
   entities,
   dataView,
-  modal,
   view,
   form: formReducer,
 });

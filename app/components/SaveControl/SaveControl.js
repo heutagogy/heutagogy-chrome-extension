@@ -14,7 +14,6 @@ class SaveControl extends Component {
   static propTypes = {
     defaultState: PropTypes.bool,
     rememberArticle: PropTypes.func.isRequired,
-    showModal: PropTypes.func.isRequired,
   }
 
   static contextTypes = {
@@ -35,11 +34,7 @@ class SaveControl extends Component {
         });
       });
     } else {
-      runOnCurrentArticle(({ url, title, icon }) => {
-        this.props.showModal({
-          article: Immutable.fromJS({ title, url, icon }),
-        });
-      });
+      // implement removal
     }
   }
 

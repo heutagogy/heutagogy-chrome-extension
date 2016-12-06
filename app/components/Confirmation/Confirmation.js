@@ -1,8 +1,5 @@
 import Immutable from 'immutable';
-import { connect } from 'react-redux';
 import { PropTypes, Component } from 'react';
-import { rememberArticle } from '../../actions/article';
-import { hideModal } from '../../actions/modal';
 
 const inlineStyles = {
   duplicateArticle: {
@@ -18,10 +15,9 @@ const inlineStyles = {
   },
 };
 
-class DuplicateArticle extends Component {
+class Confirmation extends Component {
   static propTypes = {
     article: PropTypes.object,
-    hideModal: PropTypes.func.isRequired,
     rememberArticle: PropTypes.func.isRequired,
   }
 
@@ -45,16 +41,17 @@ class DuplicateArticle extends Component {
         icon,
       }),
     });
-    this.props.hideModal();
     window.close();
   }
 
   handleNo() {
-    this.props.hideModal();
     window.close();
   }
 
   render() {
+    if (!this.props.article.get('state')) {
+      return null;
+    }
 
     return (
       <div style={inlineStyles.duplicateArticle}>
@@ -77,13 +74,4 @@ class DuplicateArticle extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  article: state.getIn(['modal', 'modalMeta', 'article']),
-});
-
-const mapDispatchToProps = {
-  rememberArticle,
-  hideModal,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(DuplicateArticle);
+export default Confirmation;
