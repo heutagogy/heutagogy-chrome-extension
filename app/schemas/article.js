@@ -1,7 +1,9 @@
-import { Schema } from 'normalizr';
+import { Schema, arrayOf } from 'normalizr';
 
-const article = new Schema('article', {
-  idAttribute: 'id',
-});
+const article = arrayOf(new Schema('article', {
+  idAttribute: 'url',
+  meta: { removeProps: ['id'] },
+  defaults: { state: true },
+}));
 
 export default article;

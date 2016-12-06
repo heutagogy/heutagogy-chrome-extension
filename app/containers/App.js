@@ -4,9 +4,12 @@ import Immutable from 'immutable';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import SaveControl from './../components/SaveControl';
+import Confirmation from './../components/Confirmation';
 import { rememberArticle } from './../actions/article';
 import { saveCurrentUrl } from './../actions/view';
+import { loadEntities } from './../actions/entity';
 import { getArticle } from './../selectors/article';
+import { runOnCurrentArticle } from './../utils/utils';
 
 import themes from './../uiTheme/themes';
 
@@ -17,6 +20,7 @@ const theme = () => getMuiTheme({});
 class App extends Component {
   static propTypes = {
     article: PropTypes.instanceOf(Immutable.Map),
+    loadEntities: PropTypes.func.isRequired,
     rememberArticle: PropTypes.func.isRequired,
     saveCurrentUrl: PropTypes.func.isRequired,
   }
@@ -36,13 +40,8 @@ class App extends Component {
   }
 
   componentWillMount() {
-    chrome.tabs.query({
-      active: true,
-      lastFocusedWindow: true,
-    }, (tabs) => {
-      const currentUrl = tabs[0].url;
-
-      this.props.saveCurrentUrl({ currentUrl });
+    runOnCurrentArticle(({ url }) => {
+      this.props.saveCurrentUrl({ currentUrl: url });
     });
   }
 
@@ -58,9 +57,15 @@ class App extends Component {
         <MuiThemeProvider muiTheme={theme()}>
           <SaveControl
             defaultState={this.props.article.get('state')}
+            loadEntities={this.props.loadEntities}
             rememberArticle={this.props.rememberArticle}
           />
         </MuiThemeProvider>
+        <Confirmation
+          article={this.props.article}
+          loadEntities={this.props.loadEntities}
+          rememberArticle={this.props.rememberArticle}
+        />
       </div>
     );
   }
@@ -70,4 +75,10 @@ const mapStateToProps = (state) => ({
   article: getArticle(state, state.getIn(['view', 'currentUrl'])),
 });
 
-export default connect(mapStateToProps, { rememberArticle, saveCurrentUrl })(App);
+const mapDispatchToProps = {
+  loadEntities,
+  rememberArticle,
+  saveCurrentUrl,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
