@@ -1,13 +1,12 @@
-import { normalize } from 'normalizr';
 import Immutable from 'immutable';
-
+import { normalize } from 'normalizr';
 import { NOT_FOUND, EMPTY_VALUE } from './../constants/Constants';
 
 const hash = {
 };
 
 class SchemaUtils {
-  getSuccessActionTypeWithSchema({ type, schema, meta }) {
+  getSuccessActionTypeWithSchema({ type, meta, schema }) {
     return {
       type,
       meta,

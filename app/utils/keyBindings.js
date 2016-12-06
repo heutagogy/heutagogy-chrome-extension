@@ -1,8 +1,8 @@
 import Immutable from 'immutable';
-import { rememberArticle } from '../../../app/actions/article';
-import { runOnCurrentArticle } from '../../../app/utils/utils';
-import { getArticle } from '../../../app/selectors/article';
-import { saveCurrentUrl } from '../../../app/actions/view';
+import { rememberArticle } from '../actions/article';
+import { runOnCurrentArticle } from '../utils/utils';
+import { getArticle } from '../selectors/article';
+import { saveCurrentUrl } from '../actions/view';
 
 export const bindKeyRememberArticle = (store) => {
   chrome.commands.onCommand.addListener((command) => {

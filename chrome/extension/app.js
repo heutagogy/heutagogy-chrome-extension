@@ -1,7 +1,8 @@
 import React from 'react'; // eslint-disable-line
 import ReactDOM from 'react-dom';
 import Immutable from 'immutable';
-import { bindKeyRememberArticle } from './background/keyBindings';
+import { bindKeyRememberArticle } from './../../app/utils/keyBindings';
+import { loadEntities } from './../../app/utils/loader.js';
 import Root from '../../app/containers/Root';
 import './../../app/assets/media.less';
 import './../../app/assets/normalize.less';
@@ -14,11 +15,11 @@ chrome.storage.local.get('state', (obj) => {
   const store = createStore(Immutable.fromJS(initialState));
 
   chrome.browserAction.setBadgeBackgroundColor({ color: '#ff0000' });
-
-  bindKeyRememberArticle(store);
-
   ReactDOM.render(
     <Root store={store} />,
       document.querySelector('#root')
   );
+
+  bindKeyRememberArticle(store);
+  loadEntities(store);
 });

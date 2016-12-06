@@ -56,7 +56,7 @@ class Confirmation extends Component {
     return (
       <div style={inlineStyles.duplicateArticle}>
         <a href={this.props.article.get('url')}>{this.props.article.get('title')}</a>
-        <p>{'Article already saved. Duplicate?'}</p>
+        <p>{'Article saved. Do you want to duplicate?'}</p>
         <button
           style={inlineStyles.buttonLeft}
           onClick={this.handleYes}
