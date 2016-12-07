@@ -1,21 +1,27 @@
-const bluebird = require('bluebird');
+import bluebird from 'bluebird';
 
-global.Promise = bluebird;
+global.Promise = bluebird; //eslint-disable-line
 
-function promisifier(method) {
-  // return a function
-  return function promisified(...args) {
+const promisifier = (method) => {
+  // a function
+  const promisified = (...args) => {
     // which returns a promise
-    return new Promise((resolve) => {
-      args.push(resolve);
-      method.apply(this, args);
-    });
-  };
-}
+    const promise = new Promise(
+      (resolve) => {
+        args.push(resolve);
+        method.apply(this, args);
+      }
+    );
 
-function promisifyAll(obj, list) {
+    return promise;
+  };
+
+  return promisified;
+};
+
+const promisifyAll = (obj, list) => {
   list.forEach((api) => bluebird.promisifyAll(obj[api], { promisifier }));
-}
+};
 
 // let chrome extension api support Promise
 promisifyAll(chrome, [
@@ -28,7 +34,7 @@ promisifyAll(chrome.storage, [
   'local',
 ]);
 
-require('./background/contextMenus');
-require('./background/inject');
-require('./background/badge');
-require('./app');
+require('./background/contextMenus'); //eslint-disable-line
+require('./background/inject'); //eslint-disable-line
+require('./background/badge'); //eslint-disable-line
+require('./app'); //eslint-disable-line

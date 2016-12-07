@@ -1,9 +1,9 @@
-const path = require('path');
-const webpack = require('webpack');
+const path = require('path'); //eslint-disable-line
+const webpack = require('webpack'); //eslint-disable-line
 
 const customPath = path.join(__dirname, './customPublicPath');
 
-module.exports = {
+module.exports = { //eslint-disable-line
   entry: {
     app: [customPath, path.join(__dirname, '../chrome/extension/app')],
     background: [customPath, path.join(__dirname, '../chrome/extension/background')],
@@ -38,11 +38,6 @@ module.exports = {
   },
   module: {
     loaders: [
-      { test: /\.(woff(2)?|ttf|eot)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'url?limit=1' },
-      {
-        test: /\.json$/,
-        loader: 'json-loader',
-      },
       {
         test: /\.js$/,
         loader: 'babel',
@@ -50,7 +45,16 @@ module.exports = {
         query: {
           presets: ['react-optimize'],
         },
-      }, {
+      },
+      {
+        test: /\.(woff(2)?|ttf|eot)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        loader: 'url?limit=1',
+      },
+      {
+        test: /\.json$/,
+        loader: 'json-loader',
+      },
+      {
         test: /\.css$/,
         loaders: [
           'style',

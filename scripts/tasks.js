@@ -1,19 +1,20 @@
-require('shelljs/global');
+require('shelljs/global'); //eslint-disable-line
 
-exports.replaceWebpack = () => {
+exports.replaceWebpack = () => { //eslint-disable-line
   const replaceTasks = [{
     from: 'webpack/replace/JsonpMainTemplate.runtime.js',
-    to: 'node_modules/webpack/lib/JsonpMainTemplate.runtime.js'
+    to: 'node_modules/webpack/lib/JsonpMainTemplate.runtime.js',
   }, {
     from: 'webpack/replace/process-update.js',
-    to: 'node_modules/webpack-hot-middleware/process-update.js'
+    to: 'node_modules/webpack-hot-middleware/process-update.js',
   }];
 
-  replaceTasks.forEach(task => cp(task.from, task.to));
+  replaceTasks.forEach((task) => cp(task.from, task.to));
 };
 
-exports.copyAssets = (type) => {
+exports.copyAssets = (type) => { //eslint-disable-line
   const env = type === 'build' ? 'prod' : type;
+
   rm('-rf', type);
   mkdir(type);
   cp(`chrome/manifest.${env}.json`, `${type}/manifest.json`);

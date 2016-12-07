@@ -1,27 +1,31 @@
 import chromedriver from 'chromedriver';
 import webdriver from 'selenium-webdriver';
 
-export function delay(time) {
-  return new Promise(resolve => setTimeout(resolve, time));
-}
+export const delay = (time) => {
+  const promise = new Promise((resolve) => setTimeout(resolve, time));
 
-let crdvIsStarted = false;
-export function startChromeDriver() {
+  return promise;
+};
+
+let crdvIsStarted = false; //eslint-disable-line
+export const startChromeDriver = () => {
   if (crdvIsStarted) return Promise.resolve();
   chromedriver.start();
   process.on('exit', chromedriver.stop);
-  crdvIsStarted = true;
-  return delay(1000);
-}
+  crdvIsStarted = true; //eslint-disable-line
 
-export function buildWebDriver(extPath) {
-  return new webdriver.Builder()
-    .usingServer('http://localhost:9515')
-    .withCapabilities({
-      chromeOptions: {
-        args: [`load-extension=${extPath}`]
-      }
-    })
-    .forBrowser('chrome')
-    .build();
-}
+  return delay(1000); //eslint-disable-line
+};
+
+export const buildWebDriver = (extPath) => {
+  const builder = new webdriver.Builder().
+        usingServer('http://localhost:9515').
+        withCapabilities({
+          chromeOptions: {
+            args: [`load-extension=${extPath}`],
+          },
+        }).
+        forBrowser('chrome');
+
+  return builder.build();
+};

@@ -16,7 +16,7 @@ class InjectApp extends Component {
     return (
       <div>
         <button onClick={this.handleOnClick}>
-          Open
+          {'Open'}
         </button>
         <Dock
           defaultSize={0.4}
