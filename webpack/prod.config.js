@@ -46,7 +46,10 @@ module.exports = { //eslint-disable-line
           presets: ['react-optimize'],
         },
       },
-      { test: /\.(woff(2)?|ttf|eot)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'url?limit=1' },
+      {
+        test: /\.(woff(2)?|ttf|eot)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        loader: 'url?limit=1',
+      },
       {
         test: /\.json$/,
         loader: 'json-loader',

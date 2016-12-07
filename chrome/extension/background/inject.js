@@ -1,12 +1,14 @@
 import OK from '../../../app/constants/HttpCodes';
 
 const isInjected = (tabId) => {
-  chrome.tabs.executeScriptAsync(tabId, {
+  const injected = chrome.tabs.executeScriptAsync(tabId, {
     code: `var injected = window.reactExampleInjected;
       window.reactExampleInjected = true;
       injected;`,
     runAt: 'document_start',
   });
+
+  return injected;
 };
 
 const loadScript = (name, tabId, cb) => {
