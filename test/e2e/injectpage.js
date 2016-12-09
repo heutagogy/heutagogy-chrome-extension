@@ -1,7 +1,7 @@
 import path from 'path'; //eslint-disable-line
 import webdriver from 'selenium-webdriver';
 import { expect } from 'chai';
-import { delay, startChromeDriver, buildWebDriver } from '../func';
+import { delay, buildWebDriver } from '../func';
 
 describe('inject page (in github.com)', function test() {
   let driver; //eslint-disable-line
@@ -9,7 +9,6 @@ describe('inject page (in github.com)', function test() {
   this.timeout(15000); //eslint-disable-line
 
   before(async () => {
-    await startChromeDriver();
     const extPath = path.resolve('build');
 
     driver = buildWebDriver(extPath); //eslint-disable-line
