@@ -6,7 +6,7 @@ const id = (x) => (x);
 describe('save options action', () => {
   it('', () => {
     const serverAddress = 'http://localhost:5000';
-    const username = 'myusername';
+    const username = 'myuser';
     const password = 'mypassword';
 
     expect(saveOptions({ serverAddress, username, password })(id)).to.eql({
