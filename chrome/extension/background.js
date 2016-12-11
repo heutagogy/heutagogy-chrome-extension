@@ -41,4 +41,3 @@ require('./background/inject'); //eslint-disable-line
 require('./background/badge'); //eslint-disable-line
 
 initRedux(bindKeyRememberArticle);
-

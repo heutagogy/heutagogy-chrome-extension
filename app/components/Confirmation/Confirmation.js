@@ -1,6 +1,5 @@
 import Immutable from 'immutable';
 import { PropTypes, Component } from 'react';
-import articleSchema from '../../schemas/article';
 
 const inlineStyles = {
   duplicateArticle: {

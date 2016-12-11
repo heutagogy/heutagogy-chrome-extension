@@ -1,5 +1,5 @@
 import { PropTypes, Component } from 'react';
-import { ONE } from '../constants/Constants'
+import { ONE } from '../constants/Constants';
 
 const inlineStyles = {
   options: {
