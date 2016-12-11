@@ -1,4 +1,6 @@
 import bluebird from 'bluebird';
+import { bindKeyRememberArticle } from '../../app/utils/keyBindings';
+import { initRedux } from '../../app/utils/utils';
 
 global.Promise = bluebird; //eslint-disable-line
 
@@ -37,4 +39,6 @@ promisifyAll(chrome.storage, [
 require('./background/contextMenus'); //eslint-disable-line
 require('./background/inject'); //eslint-disable-line
 require('./background/badge'); //eslint-disable-line
-require('./app'); //eslint-disable-line
+
+initRedux(bindKeyRememberArticle);
+
