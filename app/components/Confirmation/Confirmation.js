@@ -1,6 +1,5 @@
 import Immutable from 'immutable';
 import { PropTypes, Component } from 'react';
-import articleSchema from '../../schemas/article';
 
 const inlineStyles = {
   duplicateArticle: {
@@ -19,7 +18,7 @@ const inlineStyles = {
 class Confirmation extends Component {
   static propTypes = {
     article: PropTypes.object,
-    loadEntities: PropTypes.func.isRequired,
+    options: PropTypes.instanceOf(Immutable.Map),
     rememberArticle: PropTypes.func.isRequired,
   }
 
@@ -34,11 +33,6 @@ class Confirmation extends Component {
     const title = this.props.article.get('title');
     const url = this.props.article.get('url');
 
-    this.props.loadEntities({
-      href: '/bookmarks',
-      schema: articleSchema,
-    });
-
     this.props.rememberArticle({
       article: Immutable.fromJS({
         state: true,
@@ -47,6 +41,7 @@ class Confirmation extends Component {
         url,
         icon,
       }),
+      options: this.props.options,
     });
     window.close();
   }

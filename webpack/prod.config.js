@@ -8,6 +8,7 @@ module.exports = { //eslint-disable-line
     app: [customPath, path.join(__dirname, '../chrome/extension/app')],
     background: [customPath, path.join(__dirname, '../chrome/extension/background')],
     inject: [customPath, path.join(__dirname, '../chrome/extension/inject')],
+    options: [customPath, path.join(__dirname, '../chrome/extension/options')],
   },
   output: {
     path: path.join(__dirname, '../build/js'),
