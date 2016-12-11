@@ -1,4 +1,5 @@
 import { PropTypes, Component } from 'react';
+import { ONE } from '../constants/Constants'
 
 const inlineStyles = {
   options: {
@@ -17,9 +18,18 @@ class TextInput extends Component {
 
   constructor() {
     super();
+    this.getPlaceholder = this.getPlaceholder.bind(this);
     this.getType = this.getType.bind(this);
     this.handleOnBlur = this.handleOnBlur.bind(this);
     this.handleOnFocus = this.handleOnFocus.bind(this);
+  }
+
+  getPlaceholder() {
+    if (this.props.type === 'password') {
+      return Array(this.props.placeholder.length + ONE).join('•');
+    }
+
+    return this.props.placeholder;
   }
 
   getType() {
@@ -51,7 +61,7 @@ class TextInput extends Component {
         </label>
         <input
           id={this.props.id}
-          placeholder={this.props.placeholder}
+          placeholder={this.getPlaceholder()}
           style={inlineStyles.options}
           type={this.getType()}
           onBlur={this.handleOnBlur}
