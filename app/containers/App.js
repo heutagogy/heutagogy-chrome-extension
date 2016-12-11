@@ -7,8 +7,8 @@ import SaveControl from './../components/SaveControl';
 import Confirmation from './../components/Confirmation';
 import { rememberArticle } from './../actions/article';
 import { saveCurrentUrl } from './../actions/view';
-import { loadEntities } from './../actions/entity';
 import { getArticle } from './../selectors/article';
+import { getOptions } from './../selectors/options';
 import { runOnCurrentArticle } from './../utils/utils';
 
 import themes from './../uiTheme/themes';
@@ -20,7 +20,7 @@ const theme = () => getMuiTheme({});
 class App extends Component {
   static propTypes = {
     article: PropTypes.instanceOf(Immutable.Map),
-    loadEntities: PropTypes.func.isRequired,
+    options: PropTypes.instanceOf(Immutable.Map),
     rememberArticle: PropTypes.func.isRequired,
     saveCurrentUrl: PropTypes.func.isRequired,
   }
@@ -57,13 +57,13 @@ class App extends Component {
         <MuiThemeProvider muiTheme={theme()}>
           <SaveControl
             defaultState={this.props.article.get('state')}
-            loadEntities={this.props.loadEntities}
+            options={this.props.options}
             rememberArticle={this.props.rememberArticle}
           />
         </MuiThemeProvider>
         <Confirmation
           article={this.props.article}
-          loadEntities={this.props.loadEntities}
+          options={this.props.options}
           rememberArticle={this.props.rememberArticle}
         />
       </div>
@@ -73,10 +73,10 @@ class App extends Component {
 
 const mapStateToProps = (state) => ({
   article: getArticle(state, state.getIn(['view', 'currentUrl'])),
+  options: getOptions(state),
 });
 
 const mapDispatchToProps = {
-  loadEntities,
   rememberArticle,
   saveCurrentUrl,
 };

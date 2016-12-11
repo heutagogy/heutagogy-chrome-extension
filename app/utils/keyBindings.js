@@ -2,9 +2,8 @@ import Immutable from 'immutable';
 import { rememberArticle } from '../actions/article';
 import { runOnCurrentArticle } from '../utils/utils';
 import { getArticle } from '../selectors/article';
-import { loadEntities } from '../actions/entity';
+import { getOptions } from '../selectors/options';
 import { saveCurrentUrl } from '../actions/view';
-import articleSchema from '../schemas/article';
 
 export const bindKeyRememberArticle = (store) => {
   chrome.commands.onCommand.addListener((command) => {
@@ -21,10 +20,7 @@ export const bindKeyRememberArticle = (store) => {
             message: 'Article already saved. Use extension\'s popup for duplication.',
           });
         } else {
-          loadEntities({
-            href: '/bookmarks',
-            schema: articleSchema,
-          })(store.dispatch);
+          const options = getOptions(state);
 
           store.dispatch(saveCurrentUrl({ currentUrl: url }));
 
@@ -36,6 +32,7 @@ export const bindKeyRememberArticle = (store) => {
               icon,
               state: true,
             }),
+            options,
           })(store.dispatch);
         }
       });

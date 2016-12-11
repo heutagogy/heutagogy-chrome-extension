@@ -7,8 +7,10 @@ import { reducer as formReducer } from 'redux-form/immutable';
 
 import dataView from './dataView';
 import view from './view';
+import options from './options';
 import analytic from './../utils/analytic';
 import { saveEntities } from './../utils/localStorageUtils';
+import { ZERO } from './../constants/Constants';
 
 import * as entityReducers from './entityReducers';
 
@@ -28,11 +30,7 @@ const applyEntitiesToState = (state, action) => {
 
 const isActionWithEntities = (action) => action.payload && action.payload.get && action.payload.get('entities');
 
-const initialState = Immutable.fromJS({
-  authUser: {},
-});
-
-const entities = (state = initialState, action) => {
+const entities = (state = Immutable.fromJS({}), action) => {
   analytic.handleEvent(action);
 
   const nextState = isActionWithEntities(action)
@@ -41,7 +39,9 @@ const entities = (state = initialState, action) => {
 
   const finalState = Object.keys(entityReducers).reduce((prev, key) => entityReducers[key](prev, action), nextState);
 
-  saveEntities(finalState);
+  if (Object.keys(finalState).length !== ZERO) {
+    saveEntities(finalState);
+  }
 
   return finalState;
 };
@@ -49,6 +49,7 @@ const entities = (state = initialState, action) => {
 export default combineReducers({
   entities,
   dataView,
+  options,
   view,
   form: formReducer,
 });
