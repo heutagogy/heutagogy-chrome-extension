@@ -50,20 +50,29 @@ class Confirmation extends Component {
     window.close();
   }
 
+  isEnabled() {
+    const article = this.props.article;
+    const isSaved = article.get('state');
+
+    const confirmationState = JSON.parse(localStorage.confirmation || '{}');
+
+    return isSaved && confirmationState[article.get('url')];
+  }
+
   render() {
-    if (!this.props.article.get('state')) {
+    if (!this.isEnabled()) {
       return null;
     }
 
     return (
       <div style={inlineStyles.duplicateArticle}>
         <a href={this.props.article.get('url')}>{this.props.article.get('title')}</a>
-        <p>{'Article saved. Do you want to duplicate it?'}</p>
+        <p><i>{'Article already saved. Do you want to duplicate it?'}</i></p>
         <button
           style={inlineStyles.buttonLeft}
           onClick={this.handleYes}
         >
-          {'Yes'}
+          {'Yeah'}
         </button>
         <button
           style={inlineStyles.buttonRight}
