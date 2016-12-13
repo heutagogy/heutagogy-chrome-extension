@@ -4,11 +4,11 @@ import { runOnCurrentArticle } from '../utils/utils';
 import { getArticle } from '../selectors/article';
 import { getOptions } from '../selectors/options';
 
-export const updateConfirmationState = (url) => {
-  const prevState = JSON.parse(localStorage.confirmation || '{}');
+const updateDuplicationConfirmationState = (url) => {
+  const prevState = JSON.parse(localStorage.duplicationConfirmation || '{}');
   const newState = Object.assign({}, prevState, { [url]: true });
 
-  localStorage.setItem('confirmation', JSON.stringify(newState));
+  localStorage.setItem('duplicationConfirmation', JSON.stringify(newState));
 };
 
 export const bindKeyRememberArticle = (store) => {
@@ -18,14 +18,14 @@ export const bindKeyRememberArticle = (store) => {
         const state = store.getState();
         const article = getArticle(state, url);
 
-        updateConfirmationState(url);
+        updateDuplicationConfirmationState(url);
 
         if (article.get('state') === true) {
           chrome.notifications.create({
             iconUrl: '/img/icon-48.png',
             type: 'basic',
             title: 'Heutagogy',
-            message: 'Article already saved. Use extension\'s popup for duplication.',
+            message: 'Article is already saved. Use extension\'s popup for duplication.',
           });
         } else {
           rememberArticle({

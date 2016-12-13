@@ -15,7 +15,7 @@ const inlineStyles = {
   },
 };
 
-class Confirmation extends Component {
+class DuplicationConfirmation extends Component {
   static propTypes = {
     article: PropTypes.object,
     options: PropTypes.instanceOf(Immutable.Map),
@@ -54,9 +54,9 @@ class Confirmation extends Component {
     const article = this.props.article;
     const isSaved = article.get('state');
 
-    const confirmationState = JSON.parse(localStorage.confirmation || '{}');
+    const duplicationConfirmationState = JSON.parse(localStorage.duplicationConfirmation || '{}');
 
-    return isSaved && confirmationState[article.get('url')];
+    return isSaved && duplicationConfirmationState[article.get('url')];
   }
 
   render() {
@@ -67,22 +67,22 @@ class Confirmation extends Component {
     return (
       <div style={inlineStyles.duplicateArticle}>
         <a href={this.props.article.get('url')}>{this.props.article.get('title')}</a>
-        <p><i>{'Article already saved. Do you want to duplicate it?'}</i></p>
+        <p><i>{'Article is already saved. Do you want to duplicate it?'}</i></p>
         <button
           style={inlineStyles.buttonLeft}
           onClick={this.handleYes}
         >
-          {'Yeah'}
+          {'Yes'}
         </button>
         <button
           style={inlineStyles.buttonRight}
           onClick={this.handleNo}
         >
-          {'Nope'}
+          {'No'}
         </button>
       </div>
     );
   }
 }
 
-export default Confirmation;
+export default DuplicationConfirmation;
