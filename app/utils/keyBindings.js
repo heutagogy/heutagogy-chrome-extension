@@ -3,14 +3,22 @@ import { rememberArticle } from '../actions/article';
 import { runOnCurrentArticle } from '../utils/utils';
 import { getArticle } from '../selectors/article';
 import { getOptions } from '../selectors/options';
-import { saveCurrentUrl } from '../actions/view';
+
+export const updateConfirmationState = (url) => {
+  const prevState = JSON.parse(localStorage.confirmation || '{}');
+  const newState = Object.assign({}, prevState, { [url]: true });
+
+  localStorage.setItem('confirmation', JSON.stringify(newState));
+};
 
 export const bindKeyRememberArticle = (store) => {
   chrome.commands.onCommand.addListener((command) => {
     if (command === 'remember-article') {
       runOnCurrentArticle(({ url, title, icon }) => {
         const state = store.getState();
-        const article = getArticle(state, state.getIn(['view', 'currentUrl']));
+        const article = getArticle(state, url);
+
+        updateConfirmationState(url);
 
         if (article.get('state') === true) {
           chrome.notifications.create({
@@ -20,10 +28,6 @@ export const bindKeyRememberArticle = (store) => {
             message: 'Article already saved. Use extension\'s popup for duplication.',
           });
         } else {
-          const options = getOptions(state);
-
-          store.dispatch(saveCurrentUrl({ currentUrl: url }));
-
           rememberArticle({
             article: Immutable.fromJS({
               title,
@@ -32,7 +36,7 @@ export const bindKeyRememberArticle = (store) => {
               icon,
               state: true,
             }),
-            options,
+            options: getOptions(state),
           })(store.dispatch);
         }
       });
