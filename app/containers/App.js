@@ -4,7 +4,7 @@ import Immutable from 'immutable';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import SaveControl from './../components/SaveControl';
-import Confirmation from './../components/Confirmation';
+import DuplicationConfirmation from './../components/DuplicationConfirmation';
 import { rememberArticle } from './../actions/article';
 import { saveCurrentUrl } from './../actions/view';
 import { getArticle } from './../selectors/article';
@@ -61,7 +61,7 @@ class App extends Component {
             rememberArticle={this.props.rememberArticle}
           />
         </MuiThemeProvider>
-        <Confirmation
+        <DuplicationConfirmation
           article={this.props.article}
           options={this.props.options}
           rememberArticle={this.props.rememberArticle}

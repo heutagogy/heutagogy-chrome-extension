@@ -35,10 +35,10 @@ class SaveControl extends Component {
 
   saveOnUnload(url) {
     chrome.extension.getViews({ type: 'popup' })[0].onunload = () => { //eslint-disable-line
-      const prevState = JSON.parse(localStorage.confirmation || '{}');
+      const prevState = JSON.parse(localStorage.duplicationConfirmation || '{}');
       const newState = Object.assign({}, prevState, { [url]: true });
 
-      localStorage.setItem('confirmation', JSON.stringify(newState));
+      localStorage.setItem('duplicationConfirmation', JSON.stringify(newState));
     };
   }
 
