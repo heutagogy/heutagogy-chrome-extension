@@ -80,6 +80,7 @@
     "material-design-icons": "^3.0.1",
     "material-icons": "^0.1.0",
     "material-ui": "^0.16.4",
+    "moment": "^2.17.1",
     "normalizr": "^2.2.1",
     "pure-render-decorator": "^1.2.1",
     "radium": "^0.18.1",

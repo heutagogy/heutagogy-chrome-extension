@@ -7,7 +7,7 @@ export const LOAD_ENTITIES_START = 'LOAD_ENTITIES_START';
 export const LOAD_ENTITIES_SUCCESS = 'LOAD_ENTITIES_SUCCESS';
 export const LOAD_ENTITIES_FAILURE = 'LOAD_ENTITIES_FAILURE';
 
-const fetchEntities = ({ href, schema, options }) => {
+const fetchEntities = ({ href, schema, serverAddress, token }) => {
   const meta = {};
 
   return {
@@ -21,15 +21,12 @@ const fetchEntities = ({ href, schema, options }) => {
         }),
         { type: LOAD_ENTITIES_FAILURE, meta },
       ],
-      headers: getHttpHeaders({
-        username: options.get('username'),
-        password: options.get('password'),
-      }),
+      headers: getHttpHeaders(token),
       method: 'GET',
-      endpoint: `${options.get('serverAddress')}/${API_VERSION}/${href}`,
+      endpoint: `${serverAddress}/${API_VERSION}/${href}`,
     },
   };
 };
 
-export const loadEntities = ({ href, schema, options }) =>
-  (dispatch) => dispatch(fetchEntities({ href, schema, options }));
+export const loadEntities = ({ href, schema, serverAddress, token }) =>
+  (dispatch) => dispatch(fetchEntities({ href, schema, serverAddress, token }));
