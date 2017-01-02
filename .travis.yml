@@ -1,9 +1,7 @@
 sudo: required
 dist: trusty
 language: node_js
-node_js:
-  - "6"
-  - "7"
+node_js: 7
 cache:
   yarn: true
   directories:
@@ -26,7 +24,7 @@ install:
 before_script:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start &
-  - travis_retry wget http://chromedriver.storage.googleapis.com/2.25/chromedriver_linux64.zip
+  - travis_retry wget http://chromedriver.storage.googleapis.com/2.27/chromedriver_linux64.zip
   - unzip chromedriver_linux64.zip
   - sudo chmod u+x chromedriver
   - sudo mv chromedriver /usr/bin/
