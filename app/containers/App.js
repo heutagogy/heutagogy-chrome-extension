@@ -11,6 +11,7 @@ import { getArticle } from './../selectors/article';
 import { getUser } from './../selectors/user';
 import { getOptions } from './../selectors/options';
 import { runOnCurrentArticle } from './../utils/utils';
+import { isLoggedIn } from './../utils/userUtils';
 
 import themes from './../uiTheme/themes';
 
@@ -52,7 +53,7 @@ class App extends Component {
   })
 
   render() {
-    if (!this.props.user) {
+    if (!isLoggedIn(this.props.user)) {
       return (
         <div style={{ margin: '15px' }}>
           <p><i>{'Please, open “Options” window and log in.'}</i></p>

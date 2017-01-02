@@ -23,11 +23,6 @@ const showNotification = (message) => {
 };
 
 export const handleRememberArticle = (store) => {
-  /* eslint-disable */
-  chrome.extension.getBackgroundPage().console.log('background');
-  chrome.extension.getBackgroundPage().console.log(JSON.stringify(store.getState(), null, 2));
-  /* eslint-enable */
-
   runOnCurrentArticle(({ url, title, icon }) => {
     const state = store.getState();
     const article = getArticle(state, url);

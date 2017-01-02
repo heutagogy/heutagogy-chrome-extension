@@ -3,6 +3,7 @@ import { connect, Provider } from 'react-redux';
 import { loginUser } from './../actions/options';
 import { getUser } from './../selectors/user';
 import TextInput from './../components/TextInput';
+import { isLoggedIn } from './../utils/userUtils';
 
 import i18n from '../i18n';
 
@@ -61,7 +62,7 @@ class Options extends Component {
     const { store } = this.props;
     const lang = DEFAULT_LOCALE;
     const i18nTools = new i18n.Tools({ localeData: localeData[lang], locale: lang });
-    const status = this.props.user ? 'You are logged in' : 'You are not logged in';
+    const status = isLoggedIn(this.props.user) ? 'You are logged in' : 'You are not logged in';
 
     return (
       <Provider store={store}>
