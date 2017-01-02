@@ -13,44 +13,44 @@ const updateDuplicationConfirmationState = (url) => {
   localStorage.setItem('duplicationConfirmation', JSON.stringify(newState));
 };
 
-export const bindKeyRememberArticle = (store) => {
-  chrome.commands.onCommand.addListener((command) => {
-    if (command === 'remember-article') {
-      runOnCurrentArticle(({ url, title, icon }) => {
-        const state = store.getState();
-        const article = getArticle(state, url);
-        const user = getUser(state);
+const showNotification = (message) => {
+  chrome.notifications.create({
+    iconUrl: '/img/icon-48.png',
+    type: 'basic',
+    title: 'Heutagogy',
+    message,
+  });
+};
 
-        updateDuplicationConfirmationState(url);
+export const handleRememberArticle = (store) => {
+  /* eslint-disable */
+  chrome.extension.getBackgroundPage().console.log('background');
+  chrome.extension.getBackgroundPage().console.log(JSON.stringify(store.getState(), null, 2));
+  /* eslint-enable */
 
-        if (!user) {
-          chrome.notifications.create({
-            iconUrl: '/img/icon-48.png',
-            type: 'basic',
-            title: 'Heutagogy',
-            message: 'Please, open “Options” window and log in.',
-          });
-        } else if (article.get('state') === true) {
-          chrome.notifications.create({
-            iconUrl: '/img/icon-48.png',
-            type: 'basic',
-            title: 'Heutagogy',
-            message: 'Article is already saved. Use extension\'s popup for duplication.',
-          });
-        } else {
-          rememberArticle({
-            article: Immutable.fromJS({
-              title,
-              url,
-              timestamp: moment().format('ll'),
-              icon,
-              state: true,
-            }),
-            serverAddress: getOptions(state).get('serverAddress'),
-            token: user.get('access_token'),
-          })(store.dispatch);
-        }
-      });
+  runOnCurrentArticle(({ url, title, icon }) => {
+    const state = store.getState();
+    const article = getArticle(state, url);
+    const user = getUser(state);
+
+    updateDuplicationConfirmationState(url);
+
+    if (!user) {
+      showNotification('Please, open “Options” window and log in.');
+    } else if (article.get('state') === true) {
+      showNotification('Article is already saved. Use extension\'s popup for duplication.');
+    } else {
+      rememberArticle({
+        article: Immutable.fromJS({
+          title,
+          url,
+          timestamp: moment().format('ll'),
+          icon,
+          state: true,
+        }),
+        serverAddress: getOptions(state).get('serverAddress'),
+        token: user.get('access_token'),
+      })(store.dispatch);
     }
   });
 };
