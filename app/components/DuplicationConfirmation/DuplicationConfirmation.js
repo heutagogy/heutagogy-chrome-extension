@@ -1,4 +1,5 @@
 import Immutable from 'immutable';
+import moment from 'moment';
 import { PropTypes, Component } from 'react';
 
 const inlineStyles = {
@@ -18,8 +19,9 @@ const inlineStyles = {
 class DuplicationConfirmation extends Component {
   static propTypes = {
     article: PropTypes.object,
-    options: PropTypes.instanceOf(Immutable.Map),
     rememberArticle: PropTypes.func.isRequired,
+    serverAddress: PropTypes.string.isRequired,
+    token: PropTypes.string,
   }
 
   constructor() {
@@ -36,12 +38,13 @@ class DuplicationConfirmation extends Component {
     this.props.rememberArticle({
       article: Immutable.fromJS({
         state: true,
-        timestamp: Date.now(),
+        timestamp: moment().format('ll'),
         title,
         url,
         icon,
       }),
-      options: this.props.options,
+      serverAddress: this.props.serverAddress,
+      token: this.props.token,
     });
     window.close();
   }

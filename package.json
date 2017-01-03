@@ -9,7 +9,6 @@
     "compress-keygen": "crx keygen",
     "clean": "rimraf build/ dev/ *.zip *.crx",
     "lint": "eslint app chrome test scripts webpack/*.js",
-    "test-e2e": "cross-env NODE_ENV=test mocha test/e2e",
     "test": "cross-env NODE_ENV=test mocha -r ./test/setup-app test/app"
   },
   "repository": {
@@ -60,7 +59,6 @@
     "pug-cli": "^1.0.0-alpha6",
     "react-addons-test-utils": "^15.0.2",
     "rimraf": "^2.4.3",
-    "selenium-webdriver": "^2.47.0",
     "shelljs": "^0.7.0",
     "sinon": "^1.17.1",
     "style-loader": "^0.13.1",
@@ -80,6 +78,7 @@
     "material-design-icons": "^3.0.1",
     "material-icons": "^0.1.0",
     "material-ui": "^0.16.4",
+    "moment": "^2.17.1",
     "normalizr": "^2.2.1",
     "pure-render-decorator": "^1.2.1",
     "radium": "^0.18.1",

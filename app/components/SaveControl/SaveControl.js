@@ -1,5 +1,6 @@
 import Immutable from 'immutable';
 import Toggle from 'material-ui/Toggle';
+import moment from 'moment';
 import { PropTypes, Component } from 'react';
 import { runOnCurrentArticle } from '../../../app/utils/utils';
 
@@ -13,8 +14,9 @@ const inlineStyles = {
 class SaveControl extends Component {
   static propTypes = {
     defaultState: PropTypes.bool,
-    options: PropTypes.instanceOf(Immutable.Map),
     rememberArticle: PropTypes.func.isRequired,
+    serverAddress: PropTypes.string.isRequired,
+    token: PropTypes.string.isRequired,
   }
 
   static contextTypes = {
@@ -48,11 +50,12 @@ class SaveControl extends Component {
         article: Immutable.fromJS({
           icon: this.state.icon,
           state,
-          timestamp: Date.now(),
+          timestamp: moment().format('ll'),
           title: this.state.title,
           url: this.state.url,
         }),
-        options: this.props.options,
+        serverAddress: this.props.serverAddress,
+        token: this.props.token,
       });
     } else {
       // implement removal

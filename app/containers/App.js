@@ -8,8 +8,10 @@ import DuplicationConfirmation from './../components/DuplicationConfirmation';
 import { rememberArticle } from './../actions/article';
 import { saveCurrentUrl } from './../actions/view';
 import { getArticle } from './../selectors/article';
+import { getUser } from './../selectors/user';
 import { getOptions } from './../selectors/options';
 import { runOnCurrentArticle } from './../utils/utils';
+import { isLoggedIn } from './../utils/userUtils';
 
 import themes from './../uiTheme/themes';
 
@@ -23,6 +25,7 @@ class App extends Component {
     options: PropTypes.instanceOf(Immutable.Map),
     rememberArticle: PropTypes.func.isRequired,
     saveCurrentUrl: PropTypes.func.isRequired,
+    user: PropTypes.object,
   }
 
   static childContextTypes = {
@@ -50,29 +53,40 @@ class App extends Component {
   })
 
   render() {
+    if (!isLoggedIn(this.props.user)) {
+      return (
+        <div style={{ margin: '15px' }}>
+          <p><i>{'Please, open “Options” window and log in.'}</i></p>
+        </div>
+      );
+    }
+
     const inlineStyles = this.getThematicStyles();
 
     return (
-      <div style={inlineStyles.app}>
-        <MuiThemeProvider muiTheme={theme()}>
+      <MuiThemeProvider muiTheme={theme()}>
+        <div style={inlineStyles.app}>
           <SaveControl
             defaultState={this.props.article.get('state')}
-            options={this.props.options}
             rememberArticle={this.props.rememberArticle}
+            serverAddress={this.props.options.get('serverAddress')}
+            token={this.props.user.get('access_token')}
           />
-        </MuiThemeProvider>
-        <DuplicationConfirmation
-          article={this.props.article}
-          options={this.props.options}
-          rememberArticle={this.props.rememberArticle}
-        />
-      </div>
+          <DuplicationConfirmation
+            article={this.props.article}
+            rememberArticle={this.props.rememberArticle}
+            serverAddress={this.props.options.get('serverAddress')}
+            token={this.props.user.get('access_token')}
+          />
+        </div>
+      </MuiThemeProvider>
     );
   }
 }
 
 const mapStateToProps = (state) => ({
   article: getArticle(state, state.getIn(['view', 'currentUrl'])),
+  user: getUser(state),
   options: getOptions(state),
 });
 

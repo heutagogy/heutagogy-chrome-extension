@@ -1,5 +1,5 @@
 import bluebird from 'bluebird';
-import { bindKeyRememberArticle } from '../../app/utils/keyBindings';
+import { handleRememberArticle } from '../../app/utils/keyBindings';
 import { initRedux } from '../../app/utils/utils';
 
 global.Promise = bluebird; //eslint-disable-line
@@ -40,4 +40,9 @@ require('./background/contextMenus'); //eslint-disable-line
 require('./background/inject'); //eslint-disable-line
 require('./background/badge'); //eslint-disable-line
 
-initRedux(bindKeyRememberArticle);
+chrome.commands.onCommand.addListener((command) => {
+  if (command === 'remember-article') {
+    initRedux(handleRememberArticle);
+  }
+});
+

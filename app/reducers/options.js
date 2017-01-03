@@ -1,6 +1,6 @@
 import Immutable from 'immutable';
 
-import { SAVE_OPTIONS } from './../actions/options';
+import { USER_LOGIN_STARTED } from './../actions/options';
 import { saveOptions } from './../utils/localStorageUtils';
 
 
@@ -12,11 +12,11 @@ const initialState = Immutable.fromJS({
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case SAVE_OPTIONS: {
+    case USER_LOGIN_STARTED: {
       const newState = Immutable.fromJS({
-        serverAddress: action.serverAddress,
-        username: action.username,
-        password: action.password,
+        serverAddress: action.meta.serverAddress,
+        username: action.meta.username,
+        password: action.meta.password,
       });
 
       saveOptions(newState);

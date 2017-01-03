@@ -1,7 +1,9 @@
 import { PropTypes, Component } from 'react';
 import { connect, Provider } from 'react-redux';
-import { saveOptions } from './../actions/options';
+import { loginUser } from './../actions/options';
+import { getUser } from './../selectors/user';
 import TextInput from './../components/TextInput';
+import { isLoggedIn } from './../utils/userUtils';
 
 import i18n from '../i18n';
 
@@ -14,9 +16,14 @@ const localeData = {
 };
 
 const inlineStyles = {
-  options: {
+  button: {
     display: 'block',
-    margin: 10,
+    fontSize: '15px',
+    margin: '30px 10px',
+  },
+  state: {
+    fontSize: '15px',
+    margin: '15px 10px',
   },
 };
 
@@ -26,9 +33,10 @@ class Options extends Component {
 
   static propTypes = {
     children: PropTypes.node,
+    loginUser: PropTypes.func.isRequired,
     options: PropTypes.object.isRequired,
-    saveOptions: PropTypes.func.isRequired,
     store: PropTypes.object.isRequired,
+    user: PropTypes.object,
   }
 
   static usernameId = 'username';
@@ -46,7 +54,7 @@ class Options extends Component {
     const serverAddress = document.getElementById(Options.serverAddressId).value;
 
     if (username !== '' && password !== '' && serverAddress !== '') {
-      this.props.saveOptions({ username, password, serverAddress });
+      this.props.loginUser({ username, password, serverAddress });
     }
   }
 
@@ -54,6 +62,7 @@ class Options extends Component {
     const { store } = this.props;
     const lang = DEFAULT_LOCALE;
     const i18nTools = new i18n.Tools({ localeData: localeData[lang], locale: lang });
+    const status = isLoggedIn(this.props.user) ? 'You are logged in' : 'You are not logged in';
 
     return (
       <Provider store={store}>
@@ -63,6 +72,9 @@ class Options extends Component {
             setLanguage={this.setLanguage}
           >
             <div className="form-div">
+              <div style={inlineStyles.state}>
+                <p><i>{status}</i></p>
+              </div>
               <TextInput
                 id={Options.usernameId}
                 label="Username"
@@ -80,7 +92,7 @@ class Options extends Component {
                 placeholder={this.props.options.get('serverAddress')}
               />
               <button
-                style={inlineStyles.options}
+                style={inlineStyles.button}
                 onClick={this.handleSave}
               >
                 {'Save'}
@@ -96,10 +108,11 @@ class Options extends Component {
 
 const mapStateToProps = (state) => ({
   options: state.get('options'),
+  user: getUser(state),
 });
 
 const mapDispatchToProps = {
-  saveOptions,
+  loginUser,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Options);
