@@ -24,7 +24,7 @@ The context menu is created by [chrome/extension/background/contextMenus.js](chr
 
 The inject script is being run by [chrome/extension/background/inject.js](chrome/extension/background/inject.js).
 
-## Installation
+## Preparing
 
 ```bash
 # clone it
