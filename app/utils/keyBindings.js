@@ -39,7 +39,7 @@ export const handleRememberArticle = (store) => {
         article: Immutable.fromJS({
           title,
           url,
-          timestamp: moment().format('ll'),
+          timestamp: moment().format(),
           icon,
           state: true,
         }),

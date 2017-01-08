@@ -50,7 +50,7 @@ class SaveControl extends Component {
         article: Immutable.fromJS({
           icon: this.state.icon,
           state,
-          timestamp: moment().format('ll'),
+          timestamp: moment().format(),
           title: this.state.title,
           url: this.state.url,
         }),
