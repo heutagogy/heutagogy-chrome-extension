@@ -38,7 +38,7 @@ class DuplicationConfirmation extends Component {
     this.props.rememberArticle({
       article: Immutable.fromJS({
         state: true,
-        timestamp: moment().format('ll'),
+        timestamp: moment().format(),
         title,
         url,
         icon,
