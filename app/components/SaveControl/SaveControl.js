@@ -1,6 +1,9 @@
 import Immutable from 'immutable';
 import Toggle from 'material-ui/Toggle';
 import moment from 'moment';
+import Checkbox from 'material-ui/Checkbox';
+import Visibility from 'material-ui/svg-icons/action/visibility';
+import VisibilityOff from 'material-ui/svg-icons/action/visibility-off';
 import { PropTypes, Component } from 'react';
 import { runOnCurrentArticle } from '../../../app/utils/utils';
 
@@ -13,7 +16,10 @@ const inlineStyles = {
 
 class SaveControl extends Component {
   static propTypes = {
+    articleId: PropTypes.number,
     defaultState: PropTypes.bool,
+    readArticle: PropTypes.func.isRequired,
+    readState: PropTypes.bool,
     rememberArticle: PropTypes.func.isRequired,
     serverAddress: PropTypes.string.isRequired,
     token: PropTypes.string.isRequired,
@@ -25,6 +31,8 @@ class SaveControl extends Component {
 
   constructor(props) {
     super(props);
+
+    this.handleCheck = this.handleCheck.bind(this);
 
     this.state = {};
   }
@@ -44,12 +52,11 @@ class SaveControl extends Component {
     };
   }
 
-  handleToggle = (e, state) => {
+  handleToggle = () => {
     if (!this.props.defaultState) {
       this.props.rememberArticle({
         article: Immutable.fromJS({
           icon: this.state.icon,
-          state,
           timestamp: moment().format(),
           title: this.state.title,
           url: this.state.url,
@@ -60,6 +67,15 @@ class SaveControl extends Component {
     } else {
       // implement removal
     }
+  }
+
+  handleCheck(e, isInputChecked) {
+    this.props.readArticle({
+      articleId: this.props.articleId,
+      timestamp: isInputChecked ? moment().format() : null,
+      serverAddress: this.props.serverAddress,
+      token: this.props.token,
+    });
   }
 
   render() {
@@ -76,6 +92,16 @@ class SaveControl extends Component {
           toggled={this.props.defaultState}
           onToggle={this.handleToggle}
         />
+        { this.props.articleId
+         ? <Checkbox
+           checked={this.props.readState}
+           checkedIcon={<Visibility />}
+           disabled={!this.props.defaultState}
+           label={l('Read article')}
+           labelPosition="left"
+           uncheckedIcon={<VisibilityOff />}
+           onCheck={this.handleCheck}
+         /> : null }
       </div>
     );
   }

@@ -8,6 +8,10 @@ export const REMEMBER_ARTICLE_START = 'REMEMBER_ARTICLE_START';
 export const REMEMBER_ARTICLE_SUCCESS = 'REMEMBER_ARTICLE_SUCCESS';
 export const REMEMBER_ARTICLE_FAILURE = 'REMEMBER_ARTICLE_FAILURE';
 
+export const READ_ARTICLE_START = 'READ_ARTICLE_START';
+export const READ_ARTICLE_SUCCESS = 'READ_ARTICLE_SUCCESS';
+export const READ_ARTICLE_FAILURE = 'READ_ARTICLE_FAILURE';
+
 const postRememberArticle = ({ article, serverAddress, token }) => ({
   [CALL_API]: {
     types: [
@@ -22,6 +26,20 @@ const postRememberArticle = ({ article, serverAddress, token }) => ({
   },
 });
 
+const postReadArticle = ({ articleId, timestamp, token, serverAddress }) => ({
+  [CALL_API]: {
+    types: [
+      { type: READ_ARTICLE_START, meta: { articleId, timestamp } },
+      { type: READ_ARTICLE_SUCCESS },
+      { type: READ_ARTICLE_FAILURE },
+    ],
+    headers: getHttpHeaders(token),
+    method: 'POST',
+    body: JSON.stringify({ read: timestamp }),
+    endpoint: `${serverAddress}/${API_VERSION}/bookmarks/${articleId}`,
+  },
+});
+
 export const rememberArticle = ({ article, serverAddress, token }) => (dispatch) => {
   loadEntities({
     href: 'bookmarks',
@@ -31,4 +49,8 @@ export const rememberArticle = ({ article, serverAddress, token }) => (dispatch)
   })(dispatch);
 
   dispatch(postRememberArticle({ article, serverAddress, token }));
+};
+
+export const readArticle = ({ articleId, timestamp, token, serverAddress }) => (dispatch) => {
+  dispatch(postReadArticle({ articleId, timestamp, token, serverAddress }));
 };
