@@ -2,26 +2,28 @@ import Immutable from 'immutable';
 import Toggle from 'material-ui/Toggle';
 import moment from 'moment';
 import Checkbox from 'material-ui/Checkbox';
+import TextField from 'material-ui/TextField';
 import Visibility from 'material-ui/svg-icons/action/visibility';
 import VisibilityOff from 'material-ui/svg-icons/action/visibility-off';
 import { PropTypes, Component } from 'react';
-import { runOnCurrentArticle } from '../../../app/utils/utils';
 import { ZERO } from '../../../app/constants/Constants';
 
 const inlineStyles = {
+  container: {
+    padding: '10px',
+  },
   saveControl: {
     fontSize: 14,
-    padding: 10,
+    margin: '15px 0',
   },
 };
 
 class SaveControl extends Component {
   static propTypes = {
-    articleId: PropTypes.number,
-    defaultState: PropTypes.bool,
+    article: PropTypes.instanceOf(Immutable.Map),
     readArticle: PropTypes.func.isRequired,
-    readState: PropTypes.bool,
     rememberArticle: PropTypes.func.isRequired,
+    runOnCurrentArticle: PropTypes.func.isRequired,
   }
 
   static contextTypes = {
@@ -32,13 +34,14 @@ class SaveControl extends Component {
     super(props);
 
     this.handleCheck = this.handleCheck.bind(this);
+    this.handleToggle = this.handleToggle.bind(this);
 
     this.state = {};
   }
 
   componentWillMount() {
-    runOnCurrentArticle(({ url, title, icon }) => {
-      this.setState({ url, title, icon });
+    this.props.runOnCurrentArticle((article) => {
+      this.setState({ currentArticle: new Immutable.Map(article) });
     });
   }
 
@@ -56,14 +59,14 @@ class SaveControl extends Component {
   }
 
   handleToggle = (e, state) => {
-    if (!this.props.defaultState) {
+    if (!this.article.get('state')) {
       this.props.rememberArticle({
         article: Immutable.fromJS({
-          icon: this.state.icon,
+          icon: this.article.get('icon'),
           state,
           timestamp: moment().format(),
-          title: this.state.title,
-          url: this.state.url,
+          title: this.article.get('title'),
+          url: this.article.get('url'),
         }),
       });
     } else {
@@ -73,7 +76,7 @@ class SaveControl extends Component {
 
   handleCheck(e, isInputChecked) {
     this.props.readArticle({
-      articleId: this.props.articleId,
+      articleId: this.article.get('id'),
       timestamp: isInputChecked ? moment().format() : null,
     });
   }
@@ -81,25 +84,41 @@ class SaveControl extends Component {
   render() {
     const { l } = this.context.i18n;
 
-    if (this.props.defaultState) {
-      this.saveOnUnload(this.state.url);
+    this.article = this.props.article.isEmpty() ? this.state.currentArticle : this.props.article;
+
+    if (!this.article) {
+      return null;
+    }
+
+    if (this.article.get('state')) {
+      this.saveOnUnload(this.article.get('url'));
     }
 
     return (
-      <div style={inlineStyles.saveControl}>
+      <div style={inlineStyles.container}>
+        <TextField
+          defaultValue={this.article.get('url')}
+          floatingLabelText="url"
+        /><br />
+        <TextField
+          defaultValue={this.article.get('title')}
+          floatingLabelText="title"
+        /><br />
         <Toggle
           id={'remember-article'}
           label={l('Remember article')}
-          toggled={this.props.defaultState}
+          style={inlineStyles.saveControl}
+          toggled={this.article.get('state')}
           onToggle={this.handleToggle}
         />
-        { this.props.articleId
+        { this.article.get('id')
          ? <Checkbox
-           checked={this.props.readState}
+           checked={this.article.get('read')}
            checkedIcon={<Visibility />}
            id={'read-article'}
            label={l('Read article')}
            labelPosition="left"
+           style={inlineStyles.saveControl}
            uncheckedIcon={<VisibilityOff />}
            onCheck={this.handleCheck}
          /> : null }

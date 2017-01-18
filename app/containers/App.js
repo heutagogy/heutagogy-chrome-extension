@@ -66,11 +66,10 @@ class App extends Component {
       <MuiThemeProvider muiTheme={theme()}>
         <div style={inlineStyles.app}>
           <SaveControl
-            articleId={this.props.article.get('id')}
-            defaultState={this.props.article.get('state')}
+            article={this.props.article}
             readArticle={this.props.readArticle}
-            readState={Boolean(this.props.article.get('read'))}
             rememberArticle={this.props.rememberArticle}
+            runOnCurrentArticle={runOnCurrentArticle}
           />
           <DuplicationConfirmation
             article={this.props.article}
