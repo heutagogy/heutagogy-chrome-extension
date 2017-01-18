@@ -21,8 +21,6 @@ class SaveControl extends Component {
     readArticle: PropTypes.func.isRequired,
     readState: PropTypes.bool,
     rememberArticle: PropTypes.func.isRequired,
-    serverAddress: PropTypes.string.isRequired,
-    token: PropTypes.string.isRequired,
   }
 
   static contextTypes = {
@@ -52,17 +50,16 @@ class SaveControl extends Component {
     };
   }
 
-  handleToggle = () => {
+  handleToggle = (e, state) => {
     if (!this.props.defaultState) {
       this.props.rememberArticle({
         article: Immutable.fromJS({
           icon: this.state.icon,
+          state,
           timestamp: moment().format(),
           title: this.state.title,
           url: this.state.url,
         }),
-        serverAddress: this.props.serverAddress,
-        token: this.props.token,
       });
     } else {
       // implement removal
@@ -73,8 +70,6 @@ class SaveControl extends Component {
     this.props.readArticle({
       articleId: this.props.articleId,
       timestamp: isInputChecked ? moment().format() : null,
-      serverAddress: this.props.serverAddress,
-      token: this.props.token,
     });
   }
 

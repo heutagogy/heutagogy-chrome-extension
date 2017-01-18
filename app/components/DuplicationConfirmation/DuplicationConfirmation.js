@@ -20,8 +20,6 @@ class DuplicationConfirmation extends Component {
   static propTypes = {
     article: PropTypes.object,
     rememberArticle: PropTypes.func.isRequired,
-    serverAddress: PropTypes.string.isRequired,
-    token: PropTypes.string,
   }
 
   constructor() {
@@ -43,8 +41,6 @@ class DuplicationConfirmation extends Component {
         url,
         icon,
       }),
-      serverAddress: this.props.serverAddress,
-      token: this.props.token,
     });
     window.close();
   }

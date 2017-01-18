@@ -9,7 +9,6 @@ import { rememberArticle, readArticle } from './../actions/article';
 import { saveCurrentUrl } from './../actions/view';
 import { getArticle } from './../selectors/article';
 import { getUser } from './../selectors/user';
-import { getOptions } from './../selectors/options';
 import { runOnCurrentArticle } from './../utils/utils';
 import { isLoggedIn } from './../utils/userUtils';
 
@@ -22,7 +21,6 @@ const theme = () => getMuiTheme({});
 class App extends Component {
   static propTypes = {
     article: PropTypes.instanceOf(Immutable.Map),
-    options: PropTypes.instanceOf(Immutable.Map),
     readArticle: PropTypes.func.isRequired,
     rememberArticle: PropTypes.func.isRequired,
     saveCurrentUrl: PropTypes.func.isRequired,
@@ -73,14 +71,10 @@ class App extends Component {
             readArticle={this.props.readArticle}
             readState={Boolean(this.props.article.get('read'))}
             rememberArticle={this.props.rememberArticle}
-            serverAddress={this.props.options.get('serverAddress')}
-            token={this.props.user.get('access_token')}
           />
           <DuplicationConfirmation
             article={this.props.article}
             rememberArticle={this.props.rememberArticle}
-            serverAddress={this.props.options.get('serverAddress')}
-            token={this.props.user.get('access_token')}
           />
         </div>
       </MuiThemeProvider>
@@ -91,7 +85,6 @@ class App extends Component {
 const mapStateToProps = (state) => ({
   article: getArticle(state, state.getIn(['view', 'currentUrl'])),
   user: getUser(state),
-  options: getOptions(state),
 });
 
 const mapDispatchToProps = {
