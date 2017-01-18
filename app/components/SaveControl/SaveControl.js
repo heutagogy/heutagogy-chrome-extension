@@ -83,6 +83,7 @@ class SaveControl extends Component {
     return (
       <div style={inlineStyles.saveControl}>
         <Toggle
+          id={'remember-article'}
           label={l('Remember article')}
           toggled={this.props.defaultState}
           onToggle={this.handleToggle}
@@ -92,6 +93,7 @@ class SaveControl extends Component {
            checked={this.props.readState}
            checkedIcon={<Visibility />}
            disabled={!this.props.defaultState}
+           id={'read-article'}
            label={l('Read article')}
            labelPosition="left"
            uncheckedIcon={<VisibilityOff />}
