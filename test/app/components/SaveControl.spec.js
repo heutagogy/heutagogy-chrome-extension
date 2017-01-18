@@ -1,3 +1,4 @@
+import Immutable from 'immutable';
 import moment from 'moment';
 import { expect } from 'chai';
 import { shallow } from 'enzyme';
@@ -31,7 +32,9 @@ describe('Export page tests', () => {
     const rememberArticle = sandbox.spy();
     const wrapper = shallow(
       <SaveControl
+        article={new Immutable.Map({ id: 1, url: 'https://github.com/' })}
         rememberArticle={rememberArticle}
+        runOnCurrentArticle={id}
       />,
       { context }
     );
@@ -45,8 +48,9 @@ describe('Export page tests', () => {
     const rememberArticle = sandbox.spy();
     const wrapper = shallow(
       <SaveControl
-        defaultState
+        article={new Immutable.Map({ id: 1, url: 'https://github.com/', state: true })}
         rememberArticle={rememberArticle}
+        runOnCurrentArticle={id}
       />,
       { context }
     );
@@ -60,8 +64,9 @@ describe('Export page tests', () => {
     const rememberArticle = sandbox.spy();
     const wrapper = shallow(
       <SaveControl
-        defaultState
+        article={new Immutable.Map({ id: 1, url: 'https://github.com/', state: true })}
         rememberArticle={rememberArticle}
+        runOnCurrentArticle={id}
       />,
       { context }
     );
@@ -73,9 +78,9 @@ describe('Export page tests', () => {
     const rememberArticle = sandbox.spy();
     const wrapper = shallow(
       <SaveControl
-        articleId={42}
-        defaultState
+        article={new Immutable.Map({ id: 1, url: 'https://github.com/', state: true })}
         rememberArticle={rememberArticle}
+        runOnCurrentArticle={id}
       />,
       { context }
     );
@@ -87,9 +92,9 @@ describe('Export page tests', () => {
     const readArticle = sandbox.spy();
     const wrapper = shallow(
       <SaveControl
-        articleId={ONE}
-        defaultState
+        article={new Immutable.Map({ id: 1, url: 'https://github.com/', state: true })}
         readArticle={readArticle}
+        runOnCurrentArticle={id}
       />,
       { context }
     );
@@ -108,9 +113,9 @@ describe('Export page tests', () => {
     const readArticle = sandbox.spy();
     const wrapper = shallow(
       <SaveControl
-        articleId={ONE}
-        defaultState
+        article={new Immutable.Map({ id: 1, url: 'https://github.com/', state: true })}
         readArticle={readArticle}
+        runOnCurrentArticle={id}
       />,
       { context }
     );
