@@ -94,7 +94,7 @@ describe('Export page tests', () => {
       { context }
     );
 
-    wrapper.find(readArticleSelector).simulate('check', null, false);
+    wrapper.find(readArticleSelector).simulate('check', null, true);
 
     expect(readArticle.getCall(ZERO).args[0].articleId).to.equal(ONE);
 
@@ -115,7 +115,7 @@ describe('Export page tests', () => {
       { context }
     );
 
-    wrapper.find(readArticleSelector).simulate('check', null, true);
+    wrapper.find(readArticleSelector).simulate('check', null, false);
 
     expect(readArticle.getCall(ZERO).args).to.deep.equal([{ articleId: ONE, timestamp: null }]);
   });

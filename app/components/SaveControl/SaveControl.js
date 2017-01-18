@@ -74,7 +74,7 @@ class SaveControl extends Component {
   handleCheck(e, isInputChecked) {
     this.props.readArticle({
       articleId: this.props.articleId,
-      timestamp: isInputChecked === false ? moment().format() : null,
+      timestamp: isInputChecked ? moment().format() : null,
     });
   }
 
