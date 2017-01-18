@@ -6,6 +6,7 @@ import Visibility from 'material-ui/svg-icons/action/visibility';
 import VisibilityOff from 'material-ui/svg-icons/action/visibility-off';
 import { PropTypes, Component } from 'react';
 import { runOnCurrentArticle } from '../../../app/utils/utils';
+import { ZERO } from '../../../app/constants/Constants';
 
 const inlineStyles = {
   saveControl: {
@@ -42,12 +43,16 @@ class SaveControl extends Component {
   }
 
   saveOnUnload(url) {
-    chrome.extension.getViews({ type: 'popup' })[0].onunload = () => { //eslint-disable-line
-      const prevState = JSON.parse(localStorage.duplicationConfirmation || '{}');
-      const newState = Object.assign({}, prevState, { [url]: true });
+    const popups = chrome.extension.getViews({ type: 'popup' });
 
-      localStorage.setItem('duplicationConfirmation', JSON.stringify(newState));
-    };
+    if (popups && popups.length !== ZERO) {
+      chrome.extension.getViews({ type: 'popup' })[0].onunload = () => { //eslint-disable-line
+        const prevState = JSON.parse(localStorage.duplicationConfirmation || '{}');
+        const newState = Object.assign({}, prevState, { [url]: true });
+
+        localStorage.setItem('duplicationConfirmation', JSON.stringify(newState));
+      };
+    }
   }
 
   handleToggle = (e, state) => {
@@ -69,7 +74,7 @@ class SaveControl extends Component {
   handleCheck(e, isInputChecked) {
     this.props.readArticle({
       articleId: this.props.articleId,
-      timestamp: isInputChecked ? moment().format() : null,
+      timestamp: isInputChecked === false ? moment().format() : null,
     });
   }
 
@@ -92,7 +97,6 @@ class SaveControl extends Component {
          ? <Checkbox
            checked={this.props.readState}
            checkedIcon={<Visibility />}
-           disabled={!this.props.defaultState}
            id={'read-article'}
            label={l('Read article')}
            labelPosition="left"
