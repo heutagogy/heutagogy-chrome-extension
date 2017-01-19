@@ -13,7 +13,7 @@ const readArticleSelector = '#read-article';
 const urlArticleSelector = '#article-url';
 const titleArticleSelector = '#article-title';
 
-describe('Export page tests', () => {
+describe('Save control tests', () => {
   let sandbox; //eslint-disable-line
   let context; //eslint-disable-line
 
@@ -31,27 +31,32 @@ describe('Export page tests', () => {
     sandbox.restore();
   });
 
-  it('Call remember article on toggle', () => {
+  it('Call “remember article” on toggle', () => {
     const rememberArticle = sandbox.spy();
+    const currentArticle = new Immutable.Map({ id: 1, url: 'https://github.com/', title: 'GitHub' });
     const wrapper = shallow(
       <SaveControl
-        article={new Immutable.Map({ id: 1, url: 'https://github.com/' })}
+        article={new Immutable.Map()}
         rememberArticle={rememberArticle}
         runOnCurrentArticle={id}
       />,
       { context }
     );
 
+    wrapper.setState({ currentArticle });
+    wrapper.instance().urlField = { getValue: id }; //eslint-disable-line
+    wrapper.instance().titleField = { getValue: id }; //eslint-disable-line
+
     wrapper.find(rememberArticleSelector).simulate('toggle');
 
     expect(rememberArticle.called).to.equal(true);
   });
 
-  it('Doesn\'t call remember article on toggle if already saved', () => {
+  it('Doesn\'t “call remember” article on toggle if already saved', () => {
     const rememberArticle = sandbox.spy();
     const wrapper = shallow(
       <SaveControl
-        article={new Immutable.Map({ id: 1, url: 'https://github.com/', state: true })}
+        article={new Immutable.Map({ id: 1, url: 'https://github.com/', state: true, title: 'GitHub' })}
         rememberArticle={rememberArticle}
         runOnCurrentArticle={id}
       />,
@@ -63,26 +68,25 @@ describe('Export page tests', () => {
     expect(rememberArticle.called).to.equal(false);
   });
 
-  it('Read article checkbox doesn\'t exist if article is not saved', () => {
-    const rememberArticle = sandbox.spy();
+  it('“Read article” checkbox doesn\'t exist if article is not saved', () => {
+    const currentArticle = new Immutable.Map({ id: 1, url: 'https://github.com/', title: 'GitHub' });
     const wrapper = shallow(
       <SaveControl
-        article={new Immutable.Map({ id: 1, url: 'https://github.com/', state: true })}
-        rememberArticle={rememberArticle}
+        article={new Immutable.Map()}
         runOnCurrentArticle={id}
       />,
       { context }
     );
 
-    expect(wrapper.find(rememberArticle)).to.have.length(ZERO);
+    wrapper.setState({ currentArticle });
+
+    expect(wrapper.find(readArticleSelector)).to.have.length(ZERO);
   });
 
-  it('Read article checkbox exists if article is saved', () => {
-    const rememberArticle = sandbox.spy();
+  it('“Read article” checkbox exists if article is saved', () => {
     const wrapper = shallow(
       <SaveControl
-        article={new Immutable.Map({ id: 1, url: 'https://github.com/', state: true })}
-        rememberArticle={rememberArticle}
+        article={new Immutable.Map({ id: 1, url: 'https://github.com/', state: true, title: 'GitHub' })}
         runOnCurrentArticle={id}
       />,
       { context }
@@ -91,11 +95,11 @@ describe('Export page tests', () => {
     expect(wrapper.find(readArticleSelector)).to.have.length(ONE);
   });
 
-  it('Call read article on check when article hasn\'t been read', () => {
+  it('Call update article on “Read article” check when article hasn\'t been read', () => {
     const updateArticle = sandbox.spy();
     const wrapper = shallow(
       <SaveControl
-        article={new Immutable.Map({ id: 1, url: 'https://github.com/', state: true })}
+        article={new Immutable.Map({ id: 1, url: 'https://github.com/', state: true, title: 'GitHub' })}
         runOnCurrentArticle={id}
         updateArticle={updateArticle}
       />,
@@ -112,11 +116,11 @@ describe('Export page tests', () => {
     expect(moment(actualTimestamp).isSameOrBefore(now)).to.equal(true);
   });
 
-  it('Call read article on check when article has been read', () => {
+  it('Call update article on “Read article” check when article has been read', () => {
     const updateArticle = sandbox.spy();
     const wrapper = shallow(
       <SaveControl
-        article={new Immutable.Map({ id: 1, url: 'https://github.com/', state: true })}
+        article={new Immutable.Map({ id: 1, url: 'https://github.com/', state: true, title: 'GitHub' })}
         runOnCurrentArticle={id}
         updateArticle={updateArticle}
       />,
@@ -129,7 +133,7 @@ describe('Export page tests', () => {
   });
 
   it('Use current article if article is not saved', () => {
-    const currentArticle = new Immutable.Map({ id: 1, url: 'https://github.com/', title: 'GitHub', state: true });
+    const currentArticle = new Immutable.Map({ url: 'https://github.com/', title: 'GitHub' });
     const wrapper = shallow(
       <SaveControl
         article={new Immutable.Map()}
@@ -145,7 +149,7 @@ describe('Export page tests', () => {
   });
 
   it('Use saved article if it\'s not empty', () => {
-    const currentArticle = new Immutable.Map({ id: 1, url: 'https://github.com/', title: 'GitHub', state: true });
+    const currentArticle = new Immutable.Map({ url: 'https://github.com/', title: 'GitHub' });
     const wrapper = shallow(
       <SaveControl
         article={new Immutable.Map({ id: 2, url: 'http://example.com/', title: 'Example Domain', state: true })}
@@ -158,5 +162,58 @@ describe('Export page tests', () => {
 
     expect(wrapper.find(urlArticleSelector).prop('defaultValue')).equal('http://example.com/');
     expect(wrapper.find(titleArticleSelector).prop('defaultValue')).equal('Example Domain');
+  });
+
+  it('Disabled editing of url and title if article is saved', () => {
+    const wrapper = shallow(
+      <SaveControl
+        article={new Immutable.Map({ id: 1, url: 'http://example.com/', title: 'Example Domain', state: true })}
+        runOnCurrentArticle={id}
+      />,
+      { context }
+    );
+
+    expect(wrapper.find(urlArticleSelector).prop('disabled')).to.equal(true);
+    expect(wrapper.find(titleArticleSelector).prop('disabled')).to.equal(true);
+  });
+
+  it('Enabled editing of url and title if article isn\'t saved', () => {
+    const currentArticle = new Immutable.Map({ id: 1, url: 'https://github.com/', title: 'GitHub' });
+    const wrapper = shallow(
+      <SaveControl
+        article={new Immutable.Map()}
+        runOnCurrentArticle={id}
+      />,
+      { context }
+    );
+
+    wrapper.setState({ currentArticle });
+
+    expect(wrapper.find(urlArticleSelector).prop('disabled')).to.equal(false);
+    expect(wrapper.find(titleArticleSelector).prop('disabled')).to.equal(false);
+  });
+
+  it('Edit title and url before save', () => {
+    const rememberArticle = sandbox.spy();
+    const currentArticle = new Immutable.Map({ id: 1, url: 'https://github.com/', title: 'GitHub' });
+    const wrapper = shallow(
+      <SaveControl
+        article={new Immutable.Map()}
+        rememberArticle={rememberArticle}
+        runOnCurrentArticle={id}
+      />,
+      { context }
+    );
+
+    wrapper.setState({ currentArticle });
+    wrapper.instance().urlField = { getValue: () => 'https://new.github.com/' }; //eslint-disable-line
+    wrapper.instance().titleField = { getValue: () => 'New GitHub'}; //eslint-disable-line
+
+    wrapper.find(rememberArticleSelector).simulate('toggle');
+
+    const args = rememberArticle.getCall(ZERO).args[0];
+
+    expect(args.article.get('title')).to.equal('New GitHub');
+    expect(args.article.get('url')).to.equal('https://new.github.com/');
   });
 });

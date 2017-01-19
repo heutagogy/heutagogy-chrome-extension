@@ -85,7 +85,7 @@ class SaveControl extends Component {
     const { l } = this.context.i18n;
 
     if (this.props.article.isEmpty() &&
-        (this.state.currentArticle && this.state.currentArticle.isEmpty())) {
+        (!this.state.currentArticle || this.state.currentArticle.isEmpty())) {
       return null;
     }
 
