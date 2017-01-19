@@ -7,8 +7,11 @@ import SaveControl from '../../../app/components/SaveControl';
 import { ONE, ZERO } from '../../../app/constants/Constants';
 
 const id = (x) => x;
+
 const rememberArticleSelector = '#remember-article';
 const readArticleSelector = '#read-article';
+const urlArticleSelector = '#article-url';
+const titleArticleSelector = '#article-title';
 
 describe('Export page tests', () => {
   let sandbox; //eslint-disable-line
@@ -123,5 +126,37 @@ describe('Export page tests', () => {
     wrapper.find(readArticleSelector).simulate('check', null, false);
 
     expect(readArticle.getCall(ZERO).args).to.deep.equal([{ articleId: ONE, timestamp: null }]);
+  });
+
+  it('Use current article if article is not saved', () => {
+    const currentArticle = new Immutable.Map({ id: 1, url: 'https://github.com/', title: 'GitHub', state: true });
+    const wrapper = shallow(
+      <SaveControl
+        article={new Immutable.Map()}
+        runOnCurrentArticle={id}
+      />,
+      { context }
+    );
+
+    wrapper.setState({ currentArticle });
+
+    expect(wrapper.find(urlArticleSelector).prop('defaultValue')).equal('https://github.com/');
+    expect(wrapper.find(titleArticleSelector).prop('defaultValue')).equal('GitHub');
+  });
+
+  it('Use saved article if it\'s not empty', () => {
+    const currentArticle = new Immutable.Map({ id: 1, url: 'https://github.com/', title: 'GitHub', state: true });
+    const wrapper = shallow(
+      <SaveControl
+        article={new Immutable.Map({ id: 2, url: 'http://example.com/', title: 'Example Domain', state: true })}
+        runOnCurrentArticle={id}
+      />,
+      { context }
+    );
+
+    wrapper.setState({ currentArticle });
+
+    expect(wrapper.find(urlArticleSelector).prop('defaultValue')).equal('http://example.com/');
+    expect(wrapper.find(titleArticleSelector).prop('defaultValue')).equal('Example Domain');
   });
 });

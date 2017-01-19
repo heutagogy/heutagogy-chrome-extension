@@ -99,10 +99,12 @@ class SaveControl extends Component {
         <TextField
           defaultValue={this.article.get('url')}
           floatingLabelText="url"
+          id={'article-url'}
         /><br />
         <TextField
           defaultValue={this.article.get('title')}
           floatingLabelText="title"
+          id={'article-title'}
         /><br />
         <Toggle
           id={'remember-article'}
