@@ -5,7 +5,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import SaveControl from './../components/SaveControl';
 import DuplicationConfirmation from './../components/DuplicationConfirmation';
-import { rememberArticle, readArticle } from './../actions/article';
+import { rememberArticle, updateArticle } from './../actions/article';
 import { saveCurrentUrl } from './../actions/view';
 import { getArticle } from './../selectors/article';
 import { getUser } from './../selectors/user';
@@ -21,9 +21,9 @@ const theme = () => getMuiTheme({});
 class App extends Component {
   static propTypes = {
     article: PropTypes.instanceOf(Immutable.Map),
-    readArticle: PropTypes.func.isRequired,
     rememberArticle: PropTypes.func.isRequired,
     saveCurrentUrl: PropTypes.func.isRequired,
+    updateArticle: PropTypes.func.isRequired,
     user: PropTypes.object,
   }
 
@@ -67,9 +67,9 @@ class App extends Component {
         <div style={inlineStyles.app}>
           <SaveControl
             article={this.props.article}
-            readArticle={this.props.readArticle}
             rememberArticle={this.props.rememberArticle}
             runOnCurrentArticle={runOnCurrentArticle}
+            updateArticle={this.props.updateArticle}
           />
           <DuplicationConfirmation
             article={this.props.article}
@@ -87,8 +87,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-  readArticle,
   rememberArticle,
+  updateArticle,
   saveCurrentUrl,
 };
 

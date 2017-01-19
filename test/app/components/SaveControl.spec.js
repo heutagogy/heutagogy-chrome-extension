@@ -92,40 +92,40 @@ describe('Export page tests', () => {
   });
 
   it('Call read article on check when article hasn\'t been read', () => {
-    const readArticle = sandbox.spy();
+    const updateArticle = sandbox.spy();
     const wrapper = shallow(
       <SaveControl
         article={new Immutable.Map({ id: 1, url: 'https://github.com/', state: true })}
-        readArticle={readArticle}
         runOnCurrentArticle={id}
+        updateArticle={updateArticle}
       />,
       { context }
     );
 
     wrapper.find(readArticleSelector).simulate('check', null, true);
 
-    expect(readArticle.getCall(ZERO).args[0].articleId).to.equal(ONE);
+    expect(updateArticle.getCall(ZERO).args[0]).to.equal(ONE);
 
-    const actualTimestamp = moment(readArticle.getCall(ZERO).args[0].timestamp);
+    const actualTimestamp = moment(updateArticle.getCall(ZERO).args[1].read);
     const now = moment();
 
     expect(moment(actualTimestamp).isSameOrBefore(now)).to.equal(true);
   });
 
   it('Call read article on check when article has been read', () => {
-    const readArticle = sandbox.spy();
+    const updateArticle = sandbox.spy();
     const wrapper = shallow(
       <SaveControl
         article={new Immutable.Map({ id: 1, url: 'https://github.com/', state: true })}
-        readArticle={readArticle}
         runOnCurrentArticle={id}
+        updateArticle={updateArticle}
       />,
       { context }
     );
 
     wrapper.find(readArticleSelector).simulate('check', null, false);
 
-    expect(readArticle.getCall(ZERO).args).to.deep.equal([{ articleId: ONE, timestamp: null }]);
+    expect(updateArticle.getCall(ZERO).args).to.deep.equal([ONE, { read: null }]);
   });
 
   it('Use current article if article is not saved', () => {

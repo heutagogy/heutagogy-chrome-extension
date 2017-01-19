@@ -6,9 +6,9 @@ export const REMEMBER_ARTICLE_START = 'REMEMBER_ARTICLE_START';
 export const REMEMBER_ARTICLE_SUCCESS = 'REMEMBER_ARTICLE_SUCCESS';
 export const REMEMBER_ARTICLE_FAILURE = 'REMEMBER_ARTICLE_FAILURE';
 
-export const READ_ARTICLE_START = 'READ_ARTICLE_START';
-export const READ_ARTICLE_SUCCESS = 'READ_ARTICLE_SUCCESS';
-export const READ_ARTICLE_FAILURE = 'READ_ARTICLE_FAILURE';
+export const UPDATE_ARTICLE_START = 'UPDATE_ARTICLE_START';
+export const UPDATE_ARTICLE_SUCCESS = 'UPDATE_ARTICLE_SUCCESS';
+export const UPDATE_ARTICLE_FAILURE = 'UPDATE_ARTICLE_FAILURE';
 
 const postRememberArticle = ({ article }) => ({
   [CALL_API]: {
@@ -23,15 +23,15 @@ const postRememberArticle = ({ article }) => ({
   },
 });
 
-const postReadArticle = ({ articleId, timestamp }) => ({
+const postUpdateArticle = (articleId, articleFields) => ({
   [CALL_API]: {
     types: [
-      { type: READ_ARTICLE_START, meta: { articleId, timestamp } },
-      { type: READ_ARTICLE_SUCCESS },
-      { type: READ_ARTICLE_FAILURE },
+      { type: UPDATE_ARTICLE_START, meta: { articleId, articleFields } },
+      { type: UPDATE_ARTICLE_SUCCESS },
+      { type: UPDATE_ARTICLE_FAILURE },
     ],
     method: 'POST',
-    body: JSON.stringify({ read: timestamp }),
+    body: JSON.stringify(articleFields),
     endpoint: `${API_VERSION}/bookmarks/${articleId}`,
   },
 });
@@ -42,6 +42,6 @@ export const rememberArticle = ({ article }) => (dispatch) => {
   dispatch(postRememberArticle({ article }));
 };
 
-export const readArticle = ({ articleId, timestamp }) => (dispatch) => {
-  dispatch(postReadArticle({ articleId, timestamp }));
+export const updateArticle = (articleId, articleFields) => (dispatch) => {
+  dispatch(postUpdateArticle(articleId, articleFields));
 };

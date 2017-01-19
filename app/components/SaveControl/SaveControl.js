@@ -21,9 +21,9 @@ const inlineStyles = {
 class SaveControl extends Component {
   static propTypes = {
     article: PropTypes.instanceOf(Immutable.Map),
-    readArticle: PropTypes.func.isRequired,
     rememberArticle: PropTypes.func.isRequired,
     runOnCurrentArticle: PropTypes.func.isRequired,
+    updateArticle: PropTypes.func.isRequired,
   }
 
   static contextTypes = {
@@ -59,14 +59,14 @@ class SaveControl extends Component {
   }
 
   handleToggle = (e, state) => {
-    if (!this.article.get('state')) {
+    if (!this.props.article.get('state')) {
       this.props.rememberArticle({
         article: Immutable.fromJS({
-          icon: this.article.get('icon'),
+          icon: this.state.currentArticle.get('icon'),
           state,
           timestamp: moment().format(),
-          title: this.article.get('title'),
-          url: this.article.get('url'),
+          title: this.titleField.getValue(),
+          url: this.urlField.getValue(),
         }),
       });
     } else {
@@ -75,47 +75,50 @@ class SaveControl extends Component {
   }
 
   handleCheck(e, isInputChecked) {
-    this.props.readArticle({
-      articleId: this.article.get('id'),
-      timestamp: isInputChecked ? moment().format() : null,
-    });
+    this.props.updateArticle(
+      this.props.article.get('id'),
+      { read: isInputChecked ? moment().format() : null }
+    );
   }
 
   render() {
     const { l } = this.context.i18n;
 
-    this.article = this.props.article.isEmpty() ? this.state.currentArticle : this.props.article;
-
-    if (!this.article) {
+    if (this.props.article.isEmpty() &&
+        (this.state.currentArticle && this.state.currentArticle.isEmpty())) {
       return null;
     }
 
-    if (this.article.get('state')) {
-      this.saveOnUnload(this.article.get('url'));
+    if (this.props.article.get('state')) {
+      this.saveOnUnload(this.props.article.get('url'));
     }
 
     return (
       <div style={inlineStyles.container}>
         <TextField
-          defaultValue={this.article.get('url')}
+          defaultValue={this.props.article.get('url') || this.state.currentArticle.get('url')}
+          disabled={this.props.article.get('state')}
           floatingLabelText="url"
           id={'article-url'}
+          ref={(ref) => this.urlField = ref} // eslint-disable-line
         /><br />
         <TextField
-          defaultValue={this.article.get('title')}
+          defaultValue={this.props.article.get('title') || this.state.currentArticle.get('title')}
+          disabled={this.props.article.get('state')}
           floatingLabelText="title"
           id={'article-title'}
+          ref={(ref) => this.titleField = ref} // eslint-disable-line
         /><br />
         <Toggle
           id={'remember-article'}
           label={l('Remember article')}
           style={inlineStyles.saveControl}
-          toggled={this.article.get('state')}
+          toggled={this.props.article.get('state')}
           onToggle={this.handleToggle}
         />
-        { this.article.get('id')
+        { this.props.article.get('id')
          ? <Checkbox
-           checked={this.article.get('read')}
+           checked={this.props.article.get('read')}
            checkedIcon={<Visibility />}
            id={'read-article'}
            label={l('Read article')}

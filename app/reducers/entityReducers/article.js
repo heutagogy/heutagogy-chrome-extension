@@ -1,12 +1,12 @@
 import Immutable from 'immutable';
-import { REMEMBER_ARTICLE_START, REMEMBER_ARTICLE_SUCCESS, READ_ARTICLE_START } from './../../actions/article';
+import { REMEMBER_ARTICLE_START, REMEMBER_ARTICLE_SUCCESS, UPDATE_ARTICLE_START } from './../../actions/article';
 
 const article = (state, action) => {
   switch (action.type) {
-    case READ_ARTICLE_START: {
+    case UPDATE_ARTICLE_START: {
       const articleUrl = state.getIn(['article']).findKey((entity) => entity.get('id') === action.meta.articleId);
 
-      return state.setIn(['article', articleUrl, 'read'], action.meta.timestamp);
+      return state.mergeIn(['article', articleUrl], new Immutable.Map(action.meta.articleFields));
     }
     case REMEMBER_ARTICLE_START: {
       return state.setIn(['article', action.meta.article.get('url')], action.meta.article);
