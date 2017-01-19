@@ -97,7 +97,7 @@ class SaveControl extends Component {
       <div style={inlineStyles.container}>
         <TextField
           defaultValue={this.props.article.get('url') || this.state.currentArticle.get('url')}
-          disabled={true}
+          disabled
           floatingLabelText="url"
           id={'article-url'}
           ref={(ref) => this.urlField = ref} // eslint-disable-line

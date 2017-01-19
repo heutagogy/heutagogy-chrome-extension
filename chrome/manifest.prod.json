@@ -13,6 +13,12 @@
         "default": "Ctrl+Shift+S"
       },
       "description": "Remember article"
+    },
+    "read-article": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+U"
+      },
+      "description": "Read/Unread article"
     }
   },
   "icons": {
