@@ -177,7 +177,7 @@ describe('Save control tests', () => {
     expect(wrapper.find(titleArticleSelector).prop('disabled')).to.equal(true);
   });
 
-  it('Enabled editing of url and title if article isn\'t saved', () => {
+  it('Enabled editing title if article isn\'t saved', () => {
     const currentArticle = new Immutable.Map({ id: 1, url: 'https://github.com/', title: 'GitHub' });
     const wrapper = shallow(
       <SaveControl
@@ -189,11 +189,11 @@ describe('Save control tests', () => {
 
     wrapper.setState({ currentArticle });
 
-    expect(wrapper.find(urlArticleSelector).prop('disabled')).to.equal(false);
+    expect(wrapper.find(urlArticleSelector).prop('disabled')).to.equal(true);
     expect(wrapper.find(titleArticleSelector).prop('disabled')).to.equal(false);
   });
 
-  it('Edit title and url before save', () => {
+  it('Edit title before save', () => {
     const rememberArticle = sandbox.spy();
     const currentArticle = new Immutable.Map({ id: 1, url: 'https://github.com/', title: 'GitHub' });
     const wrapper = shallow(
@@ -206,7 +206,7 @@ describe('Save control tests', () => {
     );
 
     wrapper.setState({ currentArticle });
-    wrapper.instance().urlField = { getValue: () => 'https://new.github.com/' }; //eslint-disable-line
+    wrapper.instance().urlField = { getValue: () => 'https://github.com/' }; //eslint-disable-line
     wrapper.instance().titleField = { getValue: () => 'New GitHub'}; //eslint-disable-line
 
     wrapper.find(rememberArticleSelector).simulate('toggle');
@@ -214,6 +214,6 @@ describe('Save control tests', () => {
     const args = rememberArticle.getCall(ZERO).args[0];
 
     expect(args.article.get('title')).to.equal('New GitHub');
-    expect(args.article.get('url')).to.equal('https://new.github.com/');
+    expect(args.article.get('url')).to.equal('https://github.com/');
   });
 });
