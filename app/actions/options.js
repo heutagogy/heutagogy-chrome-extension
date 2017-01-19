@@ -19,7 +19,6 @@ const fetchUserLogin = ({ serverAddress, username, password }) => {
         { type: USER_LOGIN_FAILURE, meta },
       ],
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password }),
       endpoint: `${serverAddress}/${API_VERSION}/login`,
     },

@@ -5,11 +5,10 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import SaveControl from './../components/SaveControl';
 import DuplicationConfirmation from './../components/DuplicationConfirmation';
-import { rememberArticle } from './../actions/article';
+import { rememberArticle, updateArticle } from './../actions/article';
 import { saveCurrentUrl } from './../actions/view';
 import { getArticle } from './../selectors/article';
 import { getUser } from './../selectors/user';
-import { getOptions } from './../selectors/options';
 import { runOnCurrentArticle } from './../utils/utils';
 import { isLoggedIn } from './../utils/userUtils';
 
@@ -22,9 +21,9 @@ const theme = () => getMuiTheme({});
 class App extends Component {
   static propTypes = {
     article: PropTypes.instanceOf(Immutable.Map),
-    options: PropTypes.instanceOf(Immutable.Map),
     rememberArticle: PropTypes.func.isRequired,
     saveCurrentUrl: PropTypes.func.isRequired,
+    updateArticle: PropTypes.func.isRequired,
     user: PropTypes.object,
   }
 
@@ -67,16 +66,14 @@ class App extends Component {
       <MuiThemeProvider muiTheme={theme()}>
         <div style={inlineStyles.app}>
           <SaveControl
-            defaultState={this.props.article.get('state')}
+            article={this.props.article}
             rememberArticle={this.props.rememberArticle}
-            serverAddress={this.props.options.get('serverAddress')}
-            token={this.props.user.get('access_token')}
+            runOnCurrentArticle={runOnCurrentArticle}
+            updateArticle={this.props.updateArticle}
           />
           <DuplicationConfirmation
             article={this.props.article}
             rememberArticle={this.props.rememberArticle}
-            serverAddress={this.props.options.get('serverAddress')}
-            token={this.props.user.get('access_token')}
           />
         </div>
       </MuiThemeProvider>
@@ -87,11 +84,11 @@ class App extends Component {
 const mapStateToProps = (state) => ({
   article: getArticle(state, state.getIn(['view', 'currentUrl'])),
   user: getUser(state),
-  options: getOptions(state),
 });
 
 const mapDispatchToProps = {
   rememberArticle,
+  updateArticle,
   saveCurrentUrl,
 };
 

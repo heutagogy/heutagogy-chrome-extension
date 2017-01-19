@@ -9,3 +9,5 @@ dev/
 *.crx
 *.pem
 update.xml
+
+.dir-locals.el

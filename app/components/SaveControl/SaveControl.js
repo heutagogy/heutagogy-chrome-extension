@@ -1,22 +1,29 @@
 import Immutable from 'immutable';
 import Toggle from 'material-ui/Toggle';
 import moment from 'moment';
+import Checkbox from 'material-ui/Checkbox';
+import TextField from 'material-ui/TextField';
+import Visibility from 'material-ui/svg-icons/action/visibility';
+import VisibilityOff from 'material-ui/svg-icons/action/visibility-off';
 import { PropTypes, Component } from 'react';
-import { runOnCurrentArticle } from '../../../app/utils/utils';
+import { ZERO } from '../../../app/constants/Constants';
 
 const inlineStyles = {
+  container: {
+    padding: '10px',
+  },
   saveControl: {
     fontSize: 14,
-    padding: 10,
+    margin: '15px 0',
   },
 };
 
 class SaveControl extends Component {
   static propTypes = {
-    defaultState: PropTypes.bool,
+    article: PropTypes.instanceOf(Immutable.Map),
     rememberArticle: PropTypes.func.isRequired,
-    serverAddress: PropTypes.string.isRequired,
-    token: PropTypes.string.isRequired,
+    runOnCurrentArticle: PropTypes.func.isRequired,
+    updateArticle: PropTypes.func.isRequired,
   }
 
   static contextTypes = {
@@ -26,56 +33,100 @@ class SaveControl extends Component {
   constructor(props) {
     super(props);
 
+    this.handleCheck = this.handleCheck.bind(this);
+    this.handleToggle = this.handleToggle.bind(this);
+
     this.state = {};
   }
 
   componentWillMount() {
-    runOnCurrentArticle(({ url, title, icon }) => {
-      this.setState({ url, title, icon });
+    this.props.runOnCurrentArticle((article) => {
+      this.setState({ currentArticle: new Immutable.Map(article) });
     });
   }
 
   saveOnUnload(url) {
-    chrome.extension.getViews({ type: 'popup' })[0].onunload = () => { //eslint-disable-line
-      const prevState = JSON.parse(localStorage.duplicationConfirmation || '{}');
-      const newState = Object.assign({}, prevState, { [url]: true });
+    const popups = chrome.extension.getViews({ type: 'popup' });
 
-      localStorage.setItem('duplicationConfirmation', JSON.stringify(newState));
-    };
+    if (popups && popups.length !== ZERO) {
+      chrome.extension.getViews({ type: 'popup' })[0].onunload = () => { //eslint-disable-line
+        const prevState = JSON.parse(localStorage.duplicationConfirmation || '{}');
+        const newState = Object.assign({}, prevState, { [url]: true });
+
+        localStorage.setItem('duplicationConfirmation', JSON.stringify(newState));
+      };
+    }
   }
 
   handleToggle = (e, state) => {
-    if (!this.props.defaultState) {
+    if (!this.props.article.get('state')) {
       this.props.rememberArticle({
         article: Immutable.fromJS({
-          icon: this.state.icon,
+          icon: this.state.currentArticle.get('icon'),
           state,
           timestamp: moment().format(),
-          title: this.state.title,
-          url: this.state.url,
+          title: this.titleField.getValue(),
+          url: this.urlField.getValue(),
         }),
-        serverAddress: this.props.serverAddress,
-        token: this.props.token,
       });
     } else {
       // implement removal
     }
   }
 
+  handleCheck(e, isInputChecked) {
+    this.props.updateArticle(
+      this.props.article.get('id'),
+      { read: isInputChecked ? moment().format() : null }
+    );
+  }
+
   render() {
     const { l } = this.context.i18n;
 
-    if (this.props.defaultState) {
-      this.saveOnUnload(this.state.url);
+    if (this.props.article.isEmpty() &&
+        (!this.state.currentArticle || this.state.currentArticle.isEmpty())) {
+      return null;
+    }
+
+    if (this.props.article.get('state')) {
+      this.saveOnUnload(this.props.article.get('url'));
     }
 
     return (
-      <div style={inlineStyles.saveControl}>
+      <div style={inlineStyles.container}>
+        <TextField
+          defaultValue={this.props.article.get('url') || this.state.currentArticle.get('url')}
+          disabled
+          floatingLabelText="url"
+          id={'article-url'}
+          ref={(ref) => this.urlField = ref} // eslint-disable-line
+        /><br />
+        <TextField
+          defaultValue={this.props.article.get('title') || this.state.currentArticle.get('title')}
+          disabled={this.props.article.get('state')}
+          floatingLabelText="title"
+          id={'article-title'}
+          ref={(ref) => this.titleField = ref} // eslint-disable-line
+        /><br />
         <Toggle
+          id={'remember-article'}
           label={l('Remember article')}
-          toggled={this.props.defaultState}
+          style={inlineStyles.saveControl}
+          toggled={this.props.article.get('state')}
           onToggle={this.handleToggle}
         />
+        { this.props.article.get('id')
+         ? <Checkbox
+           checked={this.props.article.get('read')}
+           checkedIcon={<Visibility />}
+           id={'read-article'}
+           label={l('Read article')}
+           labelPosition="left"
+           style={inlineStyles.saveControl}
+           uncheckedIcon={<VisibilityOff />}
+           onCheck={this.handleCheck}
+         /> : null }
       </div>
     );
   }

@@ -4,14 +4,14 @@ import { PropTypes, Component } from 'react';
 
 const inlineStyles = {
   duplicateArticle: {
-    padding: 10,
+    margin: '0 30px',
   },
   buttonLeft: {
-    margin: 10,
+    margin: '0 0 30px 0',
     float: 'left',
   },
   buttonRight: {
-    margin: 10,
+    margin: '0 0 30px 0',
     float: 'right',
   },
 };
@@ -20,8 +20,6 @@ class DuplicationConfirmation extends Component {
   static propTypes = {
     article: PropTypes.object,
     rememberArticle: PropTypes.func.isRequired,
-    serverAddress: PropTypes.string.isRequired,
-    token: PropTypes.string,
   }
 
   constructor() {
@@ -43,8 +41,6 @@ class DuplicationConfirmation extends Component {
         url,
         icon,
       }),
-      serverAddress: this.props.serverAddress,
-      token: this.props.token,
     });
     window.close();
   }
@@ -69,7 +65,6 @@ class DuplicationConfirmation extends Component {
 
     return (
       <div style={inlineStyles.duplicateArticle}>
-        <a href={this.props.article.get('url')}>{this.props.article.get('title')}</a>
         <p><i>{'Article is already saved. Do you want to duplicate it?'}</i></p>
         <button
           style={inlineStyles.buttonLeft}

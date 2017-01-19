@@ -1,13 +1,13 @@
 import { CALL_API } from 'redux-api-middleware';
 import { API_VERSION } from './../constants/Api';
 import schemaUtils from './../utils/schemaUtils';
-import { getHttpHeaders } from '../utils/httpHeaders';
+import articleSchema from '../schemas/article';
 
 export const LOAD_ENTITIES_START = 'LOAD_ENTITIES_START';
 export const LOAD_ENTITIES_SUCCESS = 'LOAD_ENTITIES_SUCCESS';
 export const LOAD_ENTITIES_FAILURE = 'LOAD_ENTITIES_FAILURE';
 
-const fetchEntities = ({ href, schema, serverAddress, token }) => {
+const fetchEntities = () => {
   const meta = {};
 
   return {
@@ -16,17 +16,16 @@ const fetchEntities = ({ href, schema, serverAddress, token }) => {
         { type: LOAD_ENTITIES_START, meta },
         schemaUtils.getSuccessActionTypeWithSchema({
           type: LOAD_ENTITIES_SUCCESS,
-          schema,
+          schema: articleSchema,
           meta,
         }),
         { type: LOAD_ENTITIES_FAILURE, meta },
       ],
-      headers: getHttpHeaders(token),
       method: 'GET',
-      endpoint: `${serverAddress}/${API_VERSION}/${href}`,
+      endpoint: `${API_VERSION}/bookmarks`,
     },
   };
 };
 
-export const loadEntities = ({ href, schema, serverAddress, token }) =>
-  (dispatch) => dispatch(fetchEntities({ href, schema, serverAddress, token }));
+export const loadEntities = () =>
+  (dispatch) => dispatch(fetchEntities());

@@ -1,9 +1,8 @@
 import Immutable from 'immutable';
 import moment from 'moment';
-import { rememberArticle } from './../actions/article';
+import { rememberArticle, updateArticle } from './../actions/article';
 import { runOnCurrentArticle } from './../utils/utils';
 import { getArticle } from './../selectors/article';
-import { getOptions } from './../selectors/options';
 import { getUser } from './../selectors/user';
 
 const updateDuplicationConfirmationState = (url) => {
@@ -43,9 +42,28 @@ export const handleRememberArticle = (store) => {
           icon,
           state: true,
         }),
-        serverAddress: getOptions(state).get('serverAddress'),
-        token: user.get('access_token'),
       })(store.dispatch);
+      showNotification('Article saved.');
+    }
+  });
+};
+
+export const handleReadArticle = (store) => {
+  runOnCurrentArticle(({ url }) => {
+    const state = store.getState();
+    const article = getArticle(state, url);
+    const user = getUser(state);
+
+    if (!user) {
+      showNotification('Please, open “Options” window and log in.');
+    } else if (article.get('state') === true) {
+      updateArticle(
+        article.get('id'),
+        { read: article.get('read') ? null : moment().format() }
+      )(store.dispatch);
+      showNotification(article.get('read') ? 'Article marked as unread' : 'Article marked as read');
+    } else {
+      showNotification('Please, save article first');
     }
   });
 };

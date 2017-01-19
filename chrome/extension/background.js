@@ -1,5 +1,5 @@
 import bluebird from 'bluebird';
-import { handleRememberArticle } from '../../app/utils/keyBindings';
+import { handleRememberArticle, handleReadArticle } from '../../app/utils/keyBindings';
 import { initRedux } from '../../app/utils/utils';
 
 global.Promise = bluebird; //eslint-disable-line
@@ -43,6 +43,7 @@ require('./background/badge'); //eslint-disable-line
 chrome.commands.onCommand.addListener((command) => {
   if (command === 'remember-article') {
     initRedux(handleRememberArticle);
+  } else if (command === 'read-article') {
+    initRedux(handleReadArticle);
   }
 });
-
