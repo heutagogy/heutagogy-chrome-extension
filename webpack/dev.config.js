@@ -77,22 +77,6 @@ const baseDevConfig = () => ({
   },
 });
 
-const injectPageConfig = baseDevConfig();
-
-injectPageConfig.entry = [ //eslint-disable-line
-  customPath,
-  path.join(__dirname, '../chrome/extension/inject'),
-];
-delete injectPageConfig.hotMiddleware; //eslint-disable-line
-delete injectPageConfig.module.loaders[0].query; //eslint-disable-line
-injectPageConfig.plugins.shift(); // remove HotModuleReplacementPlugin
-injectPageConfig.output = { //eslint-disable-line
-  path: path.join(__dirname, '../dev/js'),
-  filename: 'inject.bundle.js',
-};
 const appConfig = baseDevConfig();
 
-module.exports = [ //eslint-disable-line
-  injectPageConfig,
-  appConfig,
-];
+module.exports = [ appConfig ]; //eslint-disable-line
