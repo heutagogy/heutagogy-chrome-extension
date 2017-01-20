@@ -9,14 +9,7 @@
 
 ## Examples
 
-
-#### Popup
-
-![Popup](http://res.cloudinary.com/faradey27/image/upload/v1479574864/Screen_Shot_2016-11-19_at_18.54.19_qtpd74.png)
-
 #### Window
-
-![Window]()
 
 The context menu is created by [chrome/extension/background/contextMenus.js](chrome/extension/background/contextMenus.js).
 
@@ -89,7 +82,6 @@ $ npm run lint
 # test/app
 $ npm test
 $ npm test -- --watch  # watch files
-$ npm run build
 ```
 
 ## LICENSE
