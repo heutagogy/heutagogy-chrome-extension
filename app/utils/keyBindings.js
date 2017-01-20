@@ -30,7 +30,7 @@ export const handleRememberArticle = (store) => {
     updateDuplicationConfirmationState(url);
 
     if (!user) {
-      showNotification('Please, open “Options” window and log in.');
+      showNotification('Please, open "Options" window and log in.');
     } else if (article.get('state') === true) {
       showNotification('Article is already saved. Use extension\'s popup for duplication.');
     } else {
@@ -55,7 +55,7 @@ export const handleReadArticle = (store) => {
     const user = getUser(state);
 
     if (!user) {
-      showNotification('Please, open “Options” window and log in.');
+      showNotification('Please, open "Options" window and log in.');
     } else if (article.get('state') === true) {
       updateArticle(
         article.get('id'),
