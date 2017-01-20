@@ -55,7 +55,7 @@ class App extends Component {
     if (!isLoggedIn(this.props.user)) {
       return (
         <div style={{ margin: '15px' }}>
-          <p><i>{'Please, open “Options” window and log in.'}</i></p>
+          <p><i>{'Please, open "Options" window and log in.'}</i></p>
         </div>
       );
     }
