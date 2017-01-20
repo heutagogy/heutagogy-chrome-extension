@@ -2,6 +2,10 @@
 
 > Heutagogy  chrome extension project.
 
+## Install
+
+Install extension from Chrome Web Store: [Heutagogy](https://chrome.google.com/webstore/detail/heutagogy/dcjclncadeblkbflledfnlldlidmjnhj)
+
 ## Features
 
  - Hot reloading React/Redux (Using [Webpack](https://github.com/webpack/webpack) and [React Transform](https://github.com/gaearon/react-transform))
@@ -9,14 +13,7 @@
 
 ## Examples
 
-
-#### Popup
-
-![Popup](http://res.cloudinary.com/faradey27/image/upload/v1479574864/Screen_Shot_2016-11-19_at_18.54.19_qtpd74.png)
-
 #### Window
-
-![Window]()
 
 The context menu is created by [chrome/extension/background/contextMenus.js](chrome/extension/background/contextMenus.js).
 
@@ -89,7 +86,6 @@ $ npm run lint
 # test/app
 $ npm test
 $ npm test -- --watch  # watch files
-$ npm run build
 ```
 
 ## LICENSE
