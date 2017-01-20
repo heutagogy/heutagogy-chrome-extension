@@ -37,7 +37,6 @@ promisifyAll(chrome.storage, [
 ]);
 
 require('./background/contextMenus'); //eslint-disable-line
-require('./background/inject'); //eslint-disable-line
 require('./background/badge'); //eslint-disable-line
 
 chrome.commands.onCommand.addListener((command) => {
