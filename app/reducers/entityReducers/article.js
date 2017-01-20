@@ -1,5 +1,5 @@
 import Immutable from 'immutable';
-import { REMEMBER_ARTICLE_START, REMEMBER_ARTICLE_SUCCESS, UPDATE_ARTICLE_START } from './../../actions/article';
+import { REMEMBER_ARTICLE_START, UPDATE_ARTICLE_START } from './../../actions/article';
 
 const article = (state, action) => {
   switch (action.type) {
@@ -10,11 +10,6 @@ const article = (state, action) => {
     }
     case REMEMBER_ARTICLE_START: {
       return state.setIn(['article', action.meta.article.get('url')], action.meta.article);
-    }
-    case REMEMBER_ARTICLE_SUCCESS: {
-      action.payload.state = true; //eslint-disable-line
-
-      return state.setIn(['article', action.payload.url], new Immutable.Map(action.payload));
     }
     default:
       return state;
