@@ -1,7 +1,12 @@
 import Immutable from 'immutable';
-import { REMEMBER_ARTICLE_START, UPDATE_ARTICLE_START } from './../../actions/article';
+import {
+  REMEMBER_ARTICLE_START, REMEMBER_ARTICLE_SUCCESS,
+  UPDATE_ARTICLE_START, UPDATE_ARTICLE_SUCCESS,
+} from './../../actions/article';
+import { saveEntities } from './../../utils/localStorageUtils';
 
-const article = (state, action) => {
+
+export default (state, action) => {
   switch (action.type) {
     case UPDATE_ARTICLE_START: {
       const articleUrl = state.getIn(['article']).findKey((entity) => entity.get('id') === action.meta.articleId);
@@ -11,9 +16,17 @@ const article = (state, action) => {
     case REMEMBER_ARTICLE_START: {
       return state.setIn(['article', action.meta.article.get('url')], action.meta.article);
     }
-    default:
+    case REMEMBER_ARTICLE_SUCCESS:
+    case UPDATE_ARTICLE_SUCCESS: {
+      const article = action.payload.getIn(['entities', 'article']);
+      const newState = state.mergeIn(['article'], article);
+
+      saveEntities(newState);
+
+      return newState;
+    }
+    default: {
       return state;
+    }
   }
 };
-
-export default article;

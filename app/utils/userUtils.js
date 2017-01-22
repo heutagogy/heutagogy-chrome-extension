@@ -1,7 +1,7 @@
 import moment from 'moment';
 
 export const isLoggedIn = (user) => {
-  if (!user || !user.get('exp')) {
+  if (user.isEmpty() || !user.get('exp')) {
     return false;
   }
 
