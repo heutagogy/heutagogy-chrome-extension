@@ -1,8 +1,8 @@
-import { Schema, arrayOf } from 'normalizr';
+import { Schema } from 'normalizr';
 
-const article = arrayOf(new Schema('article', {
+const article = new Schema('article', {
   idAttribute: 'url',
   defaults: { state: true },
-}));
+});
 
 export default article;

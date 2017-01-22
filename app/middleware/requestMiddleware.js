@@ -13,7 +13,7 @@ const requestMiddleware = () => (store) => (next) => (action) => {
     if (method === 'GET' || method === 'POST' || method === 'PUT' || method === 'DELETE') {
       headers['Content-Type'] = 'application/json';
 
-      if (user !== null) {
+      if (!user.isEmpty()) {
         const serverAddress = getOptions(state).get('serverAddress');
 
         action[CALL_API].endpoint = `${serverAddress.replace(/\/$/, '')}/${action[CALL_API].endpoint}`; // eslint-disable-line

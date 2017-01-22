@@ -1,5 +1,1 @@
-export const getUser = (state) => {
-  const user = state.getIn(['entities', 'authUser']);
-
-  return user ? user.toList().first() : null;
-};
+export const getUser = (state) => state.getIn(['options', 'authUser']);
