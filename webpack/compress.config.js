@@ -12,7 +12,7 @@ module.exports = {  //eslint-disable-line
       name: 'heutagogy',
       outputPath: '../dist',
       updateFilename: 'updates.xml',
-      updateUrl: 'http://localhost:8000/',
+      updateUrl: 'http://heutagogy.s3.amazonaws.com/heutagogy-chrome-extension/',
     }),
   ],
 };
