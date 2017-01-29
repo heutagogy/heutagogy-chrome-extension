@@ -1,9 +1,4 @@
-const tasks = require('./tasks'); //eslint-disable-line
-
-tasks.replaceWebpack();
-console.log('[Copy assets]');
-console.log('-'.repeat(80)); //eslint-disable-line
-tasks.copyAssets('build');
+require('shelljs/global'); //eslint-disable-line
 
 console.log('[Webpack Compress]');
 console.log('-'.repeat(80)); //eslint-disable-line

@@ -1,6 +1,10 @@
-require('shelljs/global'); //eslint-disable-line
+/* eslint-disable */
 
-exports.replaceWebpack = () => { //eslint-disable-line
+require('shelljs/global');
+
+var fs = require('fs');
+
+exports.replaceWebpack = () => {
   const replaceTasks = [{
     from: 'webpack/replace/JsonpMainTemplate.runtime.js',
     to: 'node_modules/webpack/lib/JsonpMainTemplate.runtime.js',
@@ -12,12 +16,24 @@ exports.replaceWebpack = () => { //eslint-disable-line
   replaceTasks.forEach((task) => cp(task.from, task.to));
 };
 
-exports.copyAssets = (type) => { //eslint-disable-line
+const updateVersionAndCopyManifest = (env, type) => {
+  if (!process.env.TRAVIS_BUILD_NUMBER) {
+    cp(`chrome/manifest.${env}.json`, `${type}/manifest.json`);
+  } else {
+    const manifest = require(`../chrome/manifest.${env}.json`);
+
+    manifest.version += `.${process.env.TRAVIS_BUILD_NUMBER}`;
+
+    fs.writeFile(`${type}/manifest.json`, JSON.stringify(manifest, null, 2));
+  }
+};
+
+exports.copyAssets = (type) => {
   const env = type === 'build' ? 'prod' : type;
 
   rm('-rf', type);
   mkdir(type);
-  cp(`chrome/manifest.${env}.json`, `${type}/manifest.json`);
+  updateVersionAndCopyManifest(env, type);
   cp('-R', 'chrome/assets/*', type);
   exec(`pug -O "{ env: '${env}' }" -o ${type} chrome/views/`);
 };
