@@ -1,7 +1,8 @@
 /* eslint-disable */
 
-var fs = require('fs');
 require('shelljs/global');
+
+var fs = require('fs');
 
 exports.replaceWebpack = () => {
   const replaceTasks = [{
