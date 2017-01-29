@@ -19,7 +19,7 @@ const fetchEntities = () => ({
       { type: LOAD_ENTITIES_FAILURE },
     ],
     method: 'GET',
-    endpoint: `${API_VERSION}/bookmarks`,
+    endpoint: `${API_VERSION}/bookmarks?per_page=200`,
   },
 });
 
