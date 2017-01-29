@@ -51,19 +51,22 @@ $ npm run build
 ## Compress
 
 ```bash
-# compress build folder to {manifest.name}.zip and crx
+# generate crx and xml files
 $ npm run build
-$ npm run compress -- [options]
+$ npm run compress
 ```
 
 #### Options
 
-If you want to build `crx` file (auto update), please provide options, and add `update.xml` file url in [manifest.json](https://developer.chrome.com/extensions/autoupdate#update_url manifest.json).
+To build `crx` file (auto update), please set options in [compress.config.js](https://github.com/heutagogy/heutagogy-chrome-extension/blob/master/webpack/compress.config.js), and add `update.xml` file url in [manifest.json](https://developer.chrome.com/extensions/autoupdate#update_url manifest.json).
 
-* --app-id: your extension id (can be get it when you first release extension)
-* --key: your private key path (default: './key.pem')
+* keyFile: your private key path (default: '../key.pem')
   you can use `npm run compress-keygen` to generate private key `./key.pem`
-* --codebase: your `crx` file url
+* contentPath: (default: '../build')
+* name: name of crx file (default: 'heutagogy')
+* outputPath: path to desired crx and xml files (default: '../dist')
+* updateFilename: name of update file (default: 'updates.xml')
+* updateUrl: (default: 'http://localhost:8000/')
 
 See [autoupdate guide](https://developer.chrome.com/extensions/autoupdate) for more information.
 
