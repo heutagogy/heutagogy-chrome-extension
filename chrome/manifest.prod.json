@@ -2,6 +2,7 @@
   "version": "0.0.1",
   "name": "Heutagogy",
   "manifest_version": 2,
+  "update_url": "http://heutagogy.s3.amazonaws.com/heutagogy-chrome-extension/updates.xml",
   "description": "Heutagogy",
   "browser_action": {
     "default_title": "Heutagogy Extension",
