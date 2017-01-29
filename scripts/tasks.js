@@ -16,7 +16,7 @@ exports.replaceWebpack = () => {
   replaceTasks.forEach((task) => cp(task.from, task.to));
 };
 
-const updateVersionAndCopy = (env, type) => {
+const updateVersionAndCopyManifest = (env, type) => {
   if (!process.env.TRAVIS_BUILD_NUMBER) {
     cp(`chrome/manifest.${env}.json`, `${type}/manifest.json`);
   } else {
@@ -33,7 +33,7 @@ exports.copyAssets = (type) => {
 
   rm('-rf', type);
   mkdir(type);
-  updateVersionAndCopy(env, type);
+  updateVersionAndCopyManifest(env, type);
   cp('-R', 'chrome/assets/*', type);
   exec(`pug -O "{ env: '${env}' }" -o ${type} chrome/views/`);
 };
