@@ -31,7 +31,6 @@ export const handleRememberArticle = (store) => {
           url,
           timestamp: moment().format(),
           icon,
-          state: true,
         }),
       })(store.dispatch);
       showNotification('Article saved.');
