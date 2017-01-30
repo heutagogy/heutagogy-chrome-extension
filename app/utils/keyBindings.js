@@ -4,6 +4,7 @@ import { rememberArticle, updateArticle } from './../actions/article';
 import { runOnCurrentArticle } from './../utils/utils';
 import { getArticle } from './../selectors/article';
 import { getUser } from './../selectors/user';
+import { isLoggedIn } from './../utils/userUtils';
 
 const updateDuplicationConfirmationState = (url) => {
   const prevState = JSON.parse(localStorage.duplicationConfirmation || '{}');
@@ -29,8 +30,8 @@ export const handleRememberArticle = (store) => {
 
     updateDuplicationConfirmationState(url);
 
-    if (!user) {
-      showNotification('Please, open "Options" window and log in.');
+    if (!isLoggedIn(user)) {
+      chrome.runtime.openOptionsPage();
     } else if (article.get('state') === true) {
       showNotification('Article is already saved. Use extension\'s popup for duplication.');
     } else {
@@ -54,8 +55,8 @@ export const handleReadArticle = (store) => {
     const article = getArticle(state, url);
     const user = getUser(state);
 
-    if (!user) {
-      showNotification('Please, open "Options" window and log in.');
+    if (!isLoggedIn(user)) {
+      chrome.runtime.openOptionsPage();
     } else if (article.get('state') === true) {
       updateArticle(
         article.get('id'),
