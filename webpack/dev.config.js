@@ -5,6 +5,8 @@ const host = 'localhost';
 const port = 3000;
 const customPath = path.join(__dirname, './customPublicPath');
 const hotScript = 'webpack-hot-middleware/client?path=__webpack_hmr&dynamicPublicPath=true';
+const autoprefixer = require('autoprefixer'); // eslint-disable-line
+const StyleLintPlugin = require('stylelint-webpack-plugin'); //eslint-disable-line
 
 const baseDevConfig = () => ({
   devtool: 'eval-cheap-module-source-map',
@@ -30,7 +32,7 @@ const baseDevConfig = () => ({
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
     new webpack.IgnorePlugin(/[^/]+\/[\S]+.prod$/),
     new webpack.ProvidePlugin({
       React: 'react',
@@ -42,20 +44,45 @@ const baseDevConfig = () => ({
         NODE_ENV: JSON.stringify('development'),
       },
     }),
+    new webpack.LoaderOptionsPlugin({
+      test: /\.less$/,
+      options: {
+        postcss: [
+          autoprefixer({
+            browsers: [
+              'last 3 version',
+              'ie >= 10',
+            ],
+          }),
+        ],
+      },
+    }),
+    new StyleLintPlugin({
+      configFile: '.stylelintrc',
+      context: './app/',
+      files: '**/*.?(less|css)',
+      failOnError: false,
+    }),
   ],
   resolve: {
-    extensions: ['', '.js'],
+    extensions: ['*', '.js'],
   },
   module: {
     loaders: [
-      { test: /\.(woff(2)?|ttf|eot)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'url?limit=1' },
+      {
+        test: /\.(woff|woff2|ttf|eot)/,
+        loader: 'url-loader',
+        query: {
+          limit: 1,
+        },
+      },
       {
         test: /\.json$/,
         loader: 'json-loader',
       },
       {
         test: /\.js$/,
-        loader: 'babel',
+        loader: 'babel-loader',
         exclude: /node_modules/,
         query: {
           presets: ['react-hmre'],
@@ -71,7 +98,25 @@ const baseDevConfig = () => ({
       },
       {
         test: /\.less$/,
-        loader: 'style-loader!css-loader!less-loader',
+        use: [
+          {
+            loader: 'style-loader',
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 1,
+              modules: true,
+              localIdentName: '[name]__[hash:base64:5]',
+            },
+          },
+          {
+            loader: 'postcss-loader',
+          },
+          {
+            loader: 'less-loader',
+          },
+        ],
       },
     ],
   },
