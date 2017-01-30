@@ -10,7 +10,6 @@ const id = (x) => x;
 
 const rememberArticleSelector = '#remember-article';
 const readArticleSelector = '#read-article';
-const urlArticleSelector = '#article-url';
 const titleArticleSelector = '#article-title';
 
 describe('Save control tests', () => {

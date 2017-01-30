@@ -51,6 +51,7 @@
     "eslint-plugin-import": "^1.16.0",
     "eslint-plugin-jsx-a11y": "^2.2.3",
     "eslint-plugin-react": "^6.7.1",
+    "httpolyglot-webpack-server": "^0.2.5",
     "jsdom": "^9.2.1",
     "less": "^2.7.1",
     "less-loader": "^2.2.3",
@@ -66,8 +67,7 @@
     "style-loader": "^0.13.1",
     "stylelint-webpack-plugin": "^0.4.0",
     "webpack": "^2.2.0",
-    "webpack-hot-middleware": "^2.12.2",
-    "webpack-httpolyglot-server": "^0.2.0"
+    "webpack-hot-middleware": "^2.12.2"
   },
   "dependencies": {
     "autoprefixer": "^6.5.2",
@@ -100,6 +100,7 @@
     "redux-immutablejs": "0.0.8",
     "redux-logger": "^2.7.4",
     "redux-saga": "^0.13.0",
+    "react-tap-event-plugin": "^2.0.0",
     "redux-thunk": "^2.0.1",
     "reselect": "^2.5.4",
     "stylelint-webpack-plugin": "^0.4.0",
