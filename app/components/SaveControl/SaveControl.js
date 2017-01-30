@@ -76,8 +76,10 @@ class SaveControl extends Component {
     }
   }
 
-  handleToggle = (e, state) => {
-    if (state) {
+  handleToggle = () => {
+    if (this.props.article.get('id')) {
+      // implement removal
+    } else {
       this.props.rememberArticle({
         article: Immutable.fromJS({
           icon: this.state.currentArticle.get('icon'),
@@ -86,15 +88,13 @@ class SaveControl extends Component {
           url: this.state.currentArticle.get('url'),
         }),
       });
-    } else {
-      // implement removal
     }
   }
 
-  handleCheck(e, isInputChecked) {
+  handleCheck() {
     this.props.updateArticle(
       this.props.article.get('id'),
-      { read: isInputChecked ? moment().format() : null }
+      { read: this.props.article.get('read') ? null : moment().format() }
     );
   }
 

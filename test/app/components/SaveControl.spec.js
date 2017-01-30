@@ -40,7 +40,7 @@ describe('Save control tests', () => {
     wrapper.instance().urlField = { getValue: id }; //eslint-disable-line
     wrapper.instance().titleField = { getValue: id }; //eslint-disable-line
 
-    wrapper.find(rememberArticleSelector).simulate('toggle', null, true);
+    wrapper.find(rememberArticleSelector).simulate('toggle');
 
     expect(rememberArticle.called).to.equal(true);
   });
@@ -56,7 +56,7 @@ describe('Save control tests', () => {
       { context }
     );
 
-    wrapper.find(rememberArticleSelector).simulate('toggle', null, false);
+    wrapper.find(rememberArticleSelector).simulate('toggle');
 
     expect(rememberArticle.called).to.equal(false);
   });
@@ -99,7 +99,7 @@ describe('Save control tests', () => {
       { context }
     );
 
-    wrapper.find(readArticleSelector).simulate('check', null, true);
+    wrapper.find(readArticleSelector).simulate('check');
 
     expect(updateArticle.getCall(ZERO).args[0]).to.equal(ONE);
 
@@ -113,14 +113,14 @@ describe('Save control tests', () => {
     const updateArticle = sandbox.spy();
     const wrapper = shallow(
       <SaveControl
-        article={new Immutable.Map({ id: 1, url: 'https://github.com/', title: 'GitHub' })}
+        article={new Immutable.Map({ id: 1, url: 'https://github.com/', title: 'GitHub', read: '2017-03-01T18:11:26+01:00' })}
         runOnCurrentArticle={id}
         updateArticle={updateArticle}
       />,
       { context }
     );
 
-    wrapper.find(readArticleSelector).simulate('check', null, false);
+    wrapper.find(readArticleSelector).simulate('check');
 
     expect(updateArticle.getCall(ZERO).args).to.deep.equal([ONE, { read: null }]);
   });
@@ -198,7 +198,7 @@ describe('Save control tests', () => {
     wrapper.instance().urlField = { getValue: () => 'https://github.com/' }; //eslint-disable-line
     wrapper.instance().titleField = { getValue: () => 'New GitHub'}; //eslint-disable-line
 
-    wrapper.find(rememberArticleSelector).simulate('toggle', null, true);
+    wrapper.find(rememberArticleSelector).simulate('toggle');
 
     const args = rememberArticle.getCall(ZERO).args[0];
 
