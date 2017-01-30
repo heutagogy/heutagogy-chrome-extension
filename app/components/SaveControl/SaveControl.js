@@ -6,7 +6,6 @@ import TextField from 'material-ui/TextField';
 import Visibility from 'material-ui/svg-icons/action/visibility';
 import VisibilityOff from 'material-ui/svg-icons/action/visibility-off';
 import { PropTypes, Component } from 'react';
-import { ZERO } from './../../../app/constants/Constants';
 import Spinner from './../Spinner';
 
 
@@ -63,19 +62,6 @@ class SaveControl extends Component {
     this.updateArticleInProgress = this.updateArticleInProgress.bind(this);
   }
 
-  saveOnUnload(url) {
-    const popups = chrome.extension.getViews({ type: 'popup' });
-
-    if (popups && popups.length !== ZERO) {
-      chrome.extension.getViews({ type: 'popup' })[0].onunload = () => { //eslint-disable-line
-        const prevState = JSON.parse(localStorage.duplicationConfirmation || '{}');
-        const newState = Object.assign({}, prevState, { [url]: true });
-
-        localStorage.setItem('duplicationConfirmation', JSON.stringify(newState));
-      };
-    }
-  }
-
   handleToggle = () => {
     if (this.props.article.get('id')) {
       // implement removal
@@ -123,10 +109,6 @@ class SaveControl extends Component {
     if (this.props.article.isEmpty() &&
         (!this.state.currentArticle || this.state.currentArticle.isEmpty())) {
       return null;
-    }
-
-    if (this.props.article.get('id')) {
-      this.saveOnUnload(this.props.article.get('url'));
     }
 
     return (
