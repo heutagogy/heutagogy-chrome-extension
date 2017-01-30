@@ -2,6 +2,7 @@ const path = require('path'); //eslint-disable-line
 const webpack = require('webpack'); //eslint-disable-line
 
 const customPath = path.join(__dirname, './customPublicPath');
+const autoprefixer = require('autoprefixer'); // eslint-disable-line
 
 module.exports = { //eslint-disable-line
   entry: {
@@ -15,9 +16,8 @@ module.exports = { //eslint-disable-line
     chunkFilename: '[id].chunk.js',
   },
   plugins: [
-    new webpack.optimize.OccurenceOrderPlugin(),
+    new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.IgnorePlugin(/[^/]+\/[\S]+.dev$/),
-    new webpack.optimize.DedupePlugin(),
     new webpack.ProvidePlugin({
       React: 'react',
     }),
@@ -32,23 +32,39 @@ module.exports = { //eslint-disable-line
         NODE_ENV: JSON.stringify('production'),
       },
     }),
+    new webpack.LoaderOptionsPlugin({
+      test: /\.less$/,
+      options: {
+        postcss: [
+          autoprefixer({
+            browsers: [
+              'last 3 version',
+              'ie >= 10',
+            ],
+          }),
+        ],
+      },
+    }),
   ],
   resolve: {
-    extensions: ['', '.js'],
+    extensions: ['*', '.js'],
   },
   module: {
     loaders: [
       {
         test: /\.js$/,
-        loader: 'babel',
+        loader: 'babel-loader',
         exclude: /node_modules/,
         query: {
           presets: ['react-optimize'],
         },
       },
       {
-        test: /\.(woff(2)?|ttf|eot)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: 'url?limit=1',
+        test: /\.(woff|woff2|ttf|eot)/,
+        loader: 'url-loader',
+        query: {
+          limit: 1,
+        },
       },
       {
         test: /\.json$/,
@@ -64,7 +80,25 @@ module.exports = { //eslint-disable-line
       },
       {
         test: /\.less$/,
-        loader: 'style-loader!css-loader!less-loader',
+        use: [
+          {
+            loader: 'style-loader',
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 1,
+              modules: true,
+              localIdentName: '[name]__[hash:base64:5]',
+            },
+          },
+          {
+            loader: 'postcss-loader',
+          },
+          {
+            loader: 'less-loader',
+          },
+        ],
       },
     ],
   },

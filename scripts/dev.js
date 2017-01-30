@@ -1,5 +1,5 @@
 const tasks = require('./tasks'); //eslint-disable-line
-const createWebpackServer = require('webpack-httpolyglot-server'); //eslint-disable-line
+const createWebpackServer = require('httpolyglot-webpack-server').default; //eslint-disable-line
 const devConfig = require('../webpack/dev.config'); //eslint-disable-line
 
 tasks.replaceWebpack();

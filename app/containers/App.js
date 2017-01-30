@@ -9,8 +9,10 @@ import { rememberArticle, updateArticle } from './../actions/article';
 import { saveCurrentUrl } from './../actions/view';
 import { getArticle } from './../selectors/article';
 import { getUser } from './../selectors/user';
+import { getViewState } from './../selectors/view';
 import { runOnCurrentArticle } from './../utils/utils';
 import { isLoggedIn } from './../utils/userUtils';
+import { REMEMBER_ARTICLE_VIEW_STATE, UPDATE_ARTICLE_VIEW_STATE } from './../constants/ViewStates';
 
 import themes from './../uiTheme/themes';
 
@@ -22,8 +24,10 @@ class App extends Component {
   static propTypes = {
     article: PropTypes.instanceOf(Immutable.Map),
     rememberArticle: PropTypes.func.isRequired,
+    rememberArticleState: PropTypes.instanceOf(Immutable.Map),
     saveCurrentUrl: PropTypes.func.isRequired,
     updateArticle: PropTypes.func.isRequired,
+    updateArticleState: PropTypes.instanceOf(Immutable.Map),
     user: PropTypes.object,
   }
 
@@ -68,8 +72,10 @@ class App extends Component {
           <SaveControl
             article={this.props.article}
             rememberArticle={this.props.rememberArticle}
+            rememberArticleState={this.props.rememberArticleState}
             runOnCurrentArticle={runOnCurrentArticle}
             updateArticle={this.props.updateArticle}
+            updateArticleState={this.props.updateArticleState}
           />
           <DuplicationConfirmation
             article={this.props.article}
@@ -84,6 +90,8 @@ class App extends Component {
 const mapStateToProps = (state) => ({
   article: getArticle(state, state.getIn(['view', 'currentUrl'])),
   user: getUser(state),
+  rememberArticleState: getViewState(state, REMEMBER_ARTICLE_VIEW_STATE),
+  updateArticleState: getViewState(state, UPDATE_ARTICLE_VIEW_STATE),
 });
 
 const mapDispatchToProps = {

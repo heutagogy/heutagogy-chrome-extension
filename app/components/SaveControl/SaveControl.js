@@ -6,7 +6,9 @@ import TextField from 'material-ui/TextField';
 import Visibility from 'material-ui/svg-icons/action/visibility';
 import VisibilityOff from 'material-ui/svg-icons/action/visibility-off';
 import { PropTypes, Component } from 'react';
-import { ZERO } from '../../../app/constants/Constants';
+import { ZERO } from './../../../app/constants/Constants';
+import Spinner from './../Spinner';
+
 
 const inlineStyles = {
   container: {
@@ -16,14 +18,24 @@ const inlineStyles = {
     fontSize: 14,
     margin: '15px 0',
   },
+  left: {
+    float: 'left',
+    display: 'inline',
+  },
+  right: {
+    float: 'right',
+    display: 'inline',
+  },
 };
 
 class SaveControl extends Component {
   static propTypes = {
     article: PropTypes.instanceOf(Immutable.Map),
     rememberArticle: PropTypes.func.isRequired,
+    rememberArticleState: PropTypes.instanceOf(Immutable.Map),
     runOnCurrentArticle: PropTypes.func.isRequired,
     updateArticle: PropTypes.func.isRequired,
+    updateArticleState: PropTypes.instanceOf(Immutable.Map),
   }
 
   static contextTypes = {
@@ -33,8 +45,7 @@ class SaveControl extends Component {
   constructor(props) {
     super(props);
 
-    this.handleCheck = this.handleCheck.bind(this);
-    this.handleToggle = this.handleToggle.bind(this);
+    this.bind();
 
     this.state = {};
   }
@@ -43,6 +54,13 @@ class SaveControl extends Component {
     this.props.runOnCurrentArticle((article) => {
       this.setState({ currentArticle: new Immutable.Map(article) });
     });
+  }
+
+  bind() {
+    this.handleCheck = this.handleCheck.bind(this);
+    this.handleToggle = this.handleToggle.bind(this);
+    this.rememberArticleInProgress = this.rememberArticleInProgress.bind(this);
+    this.updateArticleInProgress = this.updateArticleInProgress.bind(this);
   }
 
   saveOnUnload(url) {
@@ -59,14 +77,13 @@ class SaveControl extends Component {
   }
 
   handleToggle = (e, state) => {
-    if (!this.props.article.get('state')) {
+    if (state) {
       this.props.rememberArticle({
         article: Immutable.fromJS({
           icon: this.state.currentArticle.get('icon'),
-          state,
           timestamp: moment().format(),
           title: this.titleField.getValue(),
-          url: this.urlField.getValue(),
+          url: this.state.currentArticle.get('url'),
         }),
       });
     } else {
@@ -81,47 +98,59 @@ class SaveControl extends Component {
     );
   }
 
-  render() {
-    const { l } = this.context.i18n;
+  rememberArticleInProgress() {
+    return this.props.rememberArticleState && this.props.rememberArticleState.get('isInProgress');
+  }
 
+  updateArticleInProgress() {
+    return this.props.updateArticleState && this.props.updateArticleState.get('isInProgress');
+  }
+
+  spinner(text) {
+    return (
+      <div>
+        <div style={inlineStyles.left}>
+          {text}
+        </div>
+        <div style={inlineStyles.right}>
+          <Spinner size={23} />
+        </div>
+      </div>
+    );
+  }
+
+  render() {
     if (this.props.article.isEmpty() &&
         (!this.state.currentArticle || this.state.currentArticle.isEmpty())) {
       return null;
     }
 
-    if (this.props.article.get('state')) {
+    if (this.props.article.get('id')) {
       this.saveOnUnload(this.props.article.get('url'));
     }
 
     return (
       <div style={inlineStyles.container}>
         <TextField
-          defaultValue={this.props.article.get('url') || this.state.currentArticle.get('url')}
-          disabled
-          floatingLabelText="url"
-          id={'article-url'}
-          ref={(ref) => this.urlField = ref} // eslint-disable-line
-        /><br />
-        <TextField
           defaultValue={this.props.article.get('title') || this.state.currentArticle.get('title')}
-          disabled={this.props.article.get('state')}
+          disabled={this.props.article.get('id')}
           floatingLabelText="title"
-          id={'article-title'}
+          id="article-title"
           ref={(ref) => this.titleField = ref} // eslint-disable-line
         /><br />
         <Toggle
-          id={'remember-article'}
-          label={l('Remember article')}
+          id="remember-article"
+          label={this.rememberArticleInProgress() ? this.spinner('Remember article') : 'Remember article'}
           style={inlineStyles.saveControl}
-          toggled={this.props.article.get('state')}
+          toggled={this.props.article.get('id')}
           onToggle={this.handleToggle}
         />
         { this.props.article.get('id')
          ? <Checkbox
            checked={this.props.article.get('read')}
            checkedIcon={<Visibility />}
-           id={'read-article'}
-           label={l('Read article')}
+           id="read-article"
+           label={this.updateArticleInProgress() ? this.spinner('Read article') : 'Read article'}
            labelPosition="left"
            style={inlineStyles.saveControl}
            uncheckedIcon={<VisibilityOff />}

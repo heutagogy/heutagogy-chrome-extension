@@ -51,7 +51,7 @@ class DuplicationConfirmation extends Component {
 
   isEnabled() {
     const article = this.props.article;
-    const isSaved = article.get('state');
+    const isSaved = article.get('id');
 
     const duplicationConfirmationState = JSON.parse(localStorage.duplicationConfirmation || '{}');
 

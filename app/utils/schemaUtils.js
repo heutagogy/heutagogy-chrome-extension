@@ -3,9 +3,10 @@ import { normalize } from 'normalizr';
 import { NOT_FOUND, EMPTY_VALUE } from './../constants/Constants';
 
 class SchemaUtils {
-  getSuccessActionTypeWithSchema({ type, schema }) {
+  getSuccessActionTypeWithSchema({ type, schema, meta }) {
     return {
       type,
+      meta,
       payload: (action, state, res) => {
         const contentType = res.headers.get('Content-Type');
 
