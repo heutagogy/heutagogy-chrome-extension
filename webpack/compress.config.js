@@ -1,9 +1,14 @@
-var Crx = require("crx-webpack-plugin");  //eslint-disable-line
+const Crx = require("crx-webpack-plugin");  //eslint-disable-line
+const path = require('path'); //eslint-disable-line
+const customPath = path.join(__dirname, './customPublicPath');
 
 module.exports = {  //eslint-disable-line
+  entry: {
+    dummy: [customPath, path.join(__dirname, '../chrome/manifest.prod.json')],
+  },
   output: {
-    path: __dirname,
-    filename: '[name].crx',
+    path: path.join(__dirname, '../dev'),
+    filename: '[name].js',
   },
   plugins: [
     new Crx({
