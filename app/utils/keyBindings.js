@@ -4,6 +4,7 @@ import { rememberArticle, updateArticle } from './../actions/article';
 import { runOnCurrentArticle } from './../utils/utils';
 import { getArticle } from './../selectors/article';
 import { getUser } from './../selectors/user';
+import { isLoggedIn } from './../utils/userUtils';
 
 const showNotification = (message) => {
   chrome.notifications.create({
@@ -20,8 +21,8 @@ export const handleRememberArticle = (store) => {
     const article = getArticle(state, url);
     const user = getUser(state);
 
-    if (!user) {
-      showNotification('Please, open "Options" window and log in.');
+    if (!isLoggedIn(user)) {
+      chrome.runtime.openOptionsPage();
     } else if (article.get('id')) {
       showNotification('Article is already saved.');
     } else {
@@ -44,8 +45,8 @@ export const handleReadArticle = (store) => {
     const article = getArticle(state, url);
     const user = getUser(state);
 
-    if (!user) {
-      showNotification('Please, open "Options" window and log in.');
+    if (!isLoggedIn(user)) {
+      chrome.runtime.openOptionsPage();
     } else if (article.get('id')) {
       showNotification(article.get('read') ? 'Article marked as unread' : 'Article marked as read');
       updateArticle(
