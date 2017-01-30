@@ -70,6 +70,8 @@ class App extends Component {
         <div style={inlineStyles.app}>
           <SaveControl
             article={this.props.article}
+            fetchArticleByUrl={this.props.fetchArticleByUrl}
+            fetchArticleState={this.props.fetchArticleState}
             rememberArticle={this.props.rememberArticle}
             rememberArticleState={this.props.rememberArticleState}
             runOnCurrentArticle={runOnCurrentArticle}
