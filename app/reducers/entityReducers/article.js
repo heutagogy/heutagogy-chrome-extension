@@ -1,5 +1,6 @@
-import { REMEMBER_ARTICLE_SUCCESS, UPDATE_ARTICLE_SUCCESS } from './../../actions/article';
-import { saveEntities } from './../../utils/localStorageUtils';
+/* eslint-disable fp/no-let */
+/* eslint-disable fp/no-mutation */
+import { REMEMBER_ARTICLE_SUCCESS, UPDATE_ARTICLE_SUCCESS, LOAD_ARTICLE_SUCCESS } from './../../actions/article';
 
 
 export default (state, action) => {
@@ -9,9 +10,20 @@ export default (state, action) => {
       const article = action.payload.getIn(['entities', 'article']);
       const newState = state.mergeIn(['article'], article);
 
-      saveEntities(newState);
-
       return newState;
+    }
+    case LOAD_ARTICLE_SUCCESS: {
+      const entities = action.payload.get('entities');
+
+      let result = state;
+
+      entities.forEach((theEntities, entityType) => {
+        theEntities.forEach((entity, entityId) => {
+          result = result.mergeIn([entityType, entityId], entity);
+        });
+      });
+
+      return result;
     }
     default: {
       return state;

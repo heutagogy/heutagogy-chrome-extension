@@ -18,10 +18,6 @@ const save = (newEntities, key) => {
   });
 };
 
-export const saveEntities = (newEntities) => {
-  save(newEntities, 'entities');
-};
-
 export const saveOptions = (newOptions) => {
   save(newOptions, 'options');
 };
