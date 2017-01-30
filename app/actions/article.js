@@ -70,6 +70,7 @@ export const LOAD_ARTICLE_FAILURE = 'LOAD_ARTICLE_FAILURE';
 
 const getArticleByUrl = (articleUrl) => {
   const meta = { viewId: FETCH_ARTICLE_VIEW_STATE };
+  const encodedURI = encodeURIComponent(articleUrl);
 
   return {
     [CALL_API]: {
@@ -83,7 +84,7 @@ const getArticleByUrl = (articleUrl) => {
         { type: LOAD_ARTICLE_FAILURE, meta },
       ],
       method: 'GET',
-      endpoint: `${API_VERSION}/bookmarks?url=${articleUrl}`,
+      endpoint: `${API_VERSION}/bookmarks?url=${encodedURI}`,
     },
   };
 };
