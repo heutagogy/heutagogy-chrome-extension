@@ -25,15 +25,20 @@ const inlineStyles = {
     float: 'right',
     display: 'inline',
   },
+  bigSpinner: {
+    margin: '80px 0',
+  },
 };
 
 class SaveControl extends Component {
   static propTypes = {
     article: PropTypes.instanceOf(Immutable.Map),
-    rememberArticle: PropTypes.func.isRequired,
+    fetchArticleByUrl: PropTypes.func,
+    fetchArticleState: PropTypes.instanceOf(Immutable.Map),
+    rememberArticle: PropTypes.func,
     rememberArticleState: PropTypes.instanceOf(Immutable.Map),
-    runOnCurrentArticle: PropTypes.func.isRequired,
-    updateArticle: PropTypes.func.isRequired,
+    runOnCurrentArticle: PropTypes.func,
+    updateArticle: PropTypes.func,
     updateArticleState: PropTypes.instanceOf(Immutable.Map),
   }
 
@@ -52,14 +57,13 @@ class SaveControl extends Component {
   componentWillMount() {
     this.props.runOnCurrentArticle((article) => {
       this.setState({ currentArticle: new Immutable.Map(article) });
+      this.props.fetchArticleByUrl(article.url);
     });
   }
 
   bind() {
     this.handleCheck = this.handleCheck.bind(this);
     this.handleToggle = this.handleToggle.bind(this);
-    this.rememberArticleInProgress = this.rememberArticleInProgress.bind(this);
-    this.updateArticleInProgress = this.updateArticleInProgress.bind(this);
   }
 
   handleToggle = () => {
@@ -84,15 +88,11 @@ class SaveControl extends Component {
     );
   }
 
-  rememberArticleInProgress() {
-    return this.props.rememberArticleState && this.props.rememberArticleState.get('isInProgress');
+  inProgress(prop) {
+    return prop && prop.get('isInProgress');
   }
 
-  updateArticleInProgress() {
-    return this.props.updateArticleState && this.props.updateArticleState.get('isInProgress');
-  }
-
-  spinner(text) {
+  spinnerWithText(text) {
     return (
       <div>
         <div style={inlineStyles.left}>
@@ -105,10 +105,22 @@ class SaveControl extends Component {
     );
   }
 
+  spinner() {
+    return (
+      <div style={inlineStyles.bigSpinner}>
+        <Spinner size={100} />
+      </div>
+    );
+  }
+
   render() {
     if (this.props.article.isEmpty() &&
         (!this.state.currentArticle || this.state.currentArticle.isEmpty())) {
       return null;
+    }
+
+    if (this.inProgress(this.props.fetchArticleState)) {
+      return this.spinner();
     }
 
     return (
@@ -122,7 +134,8 @@ class SaveControl extends Component {
         /><br />
         <Toggle
           id="remember-article"
-          label={this.rememberArticleInProgress() ? this.spinner('Remember article') : 'Remember article'}
+          label={this.inProgress(this.props.rememberArticleState)
+            ? this.spinnerWithText('Remember article') : 'Remember article'}
           style={inlineStyles.saveControl}
           toggled={this.props.article.get('id')}
           onToggle={this.handleToggle}
@@ -132,7 +145,7 @@ class SaveControl extends Component {
            checked={this.props.article.get('read')}
            checkedIcon={<Visibility />}
            id="read-article"
-           label={this.updateArticleInProgress() ? this.spinner('Read article') : 'Read article'}
+           label={this.inProgress(this.props.updateArticleState) ? this.spinnerWithText('Read article') : 'Read article'}
            labelPosition="left"
            style={inlineStyles.saveControl}
            uncheckedIcon={<VisibilityOff />}
