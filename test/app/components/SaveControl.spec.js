@@ -45,28 +45,14 @@ describe('Save control tests', () => {
     expect(rememberArticle.called).to.equal(true);
   });
 
-  it("Don't call 'Remember article' on toggle if already saved", () => {
+  it("Call 'Remove article' on toggle if already saved", () => {
+    const removeArticle = sandbox.spy();
     const rememberArticle = sandbox.spy();
     const wrapper = shallow(
       <SaveControl
         article={new Immutable.Map({ id: 1, url: 'https://github.com/', title: 'GitHub' })}
         rememberArticle={rememberArticle}
-        runOnCurrentArticle={id}
-      />,
-      { context }
-    );
-
-    wrapper.find(rememberArticleSelector).simulate('toggle');
-
-    expect(rememberArticle.called).to.equal(false);
-  });
-
-  it("Call 'Remove article' on toggle if already saved", () => {
-    const removeArticle = sandbox.spy();
-    const wrapper = shallow(
-      <SaveControl
-        article={new Immutable.Map({ id: 1, url: 'https://github.com/', title: 'GitHub' })}
-        rememberArticle={removeArticle}
+        removeArticle={removeArticle}
         runOnCurrentArticle={id}
       />,
       { context }
@@ -75,6 +61,7 @@ describe('Save control tests', () => {
     wrapper.find(rememberArticleSelector).simulate('toggle');
 
     expect(removeArticle.called).to.equal(true);
+    expect(rememberArticle.called).to.equal(false);
   });
 
   it("'Read article' checkbox doesn't exist if article is not saved", () => {

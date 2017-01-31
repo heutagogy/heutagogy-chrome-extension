@@ -3,7 +3,12 @@ import { arrayOf } from 'normalizr';
 import { API_VERSION } from './../constants/Api';
 import schemaUtils from './../utils/schemaUtils';
 import articleSchema from '../schemas/article';
-import { REMEMBER_ARTICLE_VIEW_STATE, UPDATE_ARTICLE_VIEW_STATE, FETCH_ARTICLE_VIEW_STATE } from './../constants/ViewStates';
+import {
+  REMEMBER_ARTICLE_VIEW_STATE,
+  UPDATE_ARTICLE_VIEW_STATE,
+  FETCH_ARTICLE_VIEW_STATE,
+  REMOVE_ARTICLE_VIEW_STATE,
+} from './../constants/ViewStates';
 
 
 export const REMEMBER_ARTICLE_START = 'REMEMBER_ARTICLE_START';
@@ -17,6 +22,10 @@ export const UPDATE_ARTICLE_FAILURE = 'UPDATE_ARTICLE_FAILURE';
 export const LOAD_ARTICLE_START = 'LOAD_ARTICLE_START';
 export const LOAD_ARTICLE_SUCCESS = 'LOAD_ARTICLE_SUCCESS';
 export const LOAD_ARTICLE_FAILURE = 'LOAD_ARTICLE_FAILURE';
+
+export const REMOVE_ARTICLE_START = 'REMOVE_ARTICLE_START';
+export const REMOVE_ARTICLE_SUCCESS = 'REMOVE_ARTICLE_SUCCESS';
+export const REMOVE_ARTICLE_FAILURE = 'REMOVE_ARTICLE_FAILURE';
 
 
 const postRememberArticle = ({ article }) => {
@@ -82,6 +91,23 @@ const getArticleByUrl = (articleUrl) => {
   };
 };
 
+const deleteRemoveArticle = (articleId) => {
+  const meta = { viewId: REMOVE_ARTICLE_VIEW_STATE, articleId };
+  const successMeta = { ...meta, success: true };
+
+  return {
+    [CALL_API]: {
+      types: [
+        { type: REMOVE_ARTICLE_START, meta },
+        { type: REMOVE_ARTICLE_SUCCESS, meta: successMeta },
+        { type: REMOVE_ARTICLE_FAILURE, meta },
+      ],
+      method: 'DELETE',
+      endpoint: `${API_VERSION}/bookmarks/${articleId}`,
+    },
+  };
+};
+
 
 export const rememberArticle = ({ article }) =>
   (dispatch) => dispatch(postRememberArticle({ article }));
@@ -92,3 +118,6 @@ export const updateArticle = (articleId, articleFields) => (dispatch) => {
 
 export const fetchArticleByUrl = (articleUrl) =>
   (dispatch) => dispatch(getArticleByUrl(articleUrl));
+
+export const removeArticle = (articleId) =>
+  (dispatch) => dispatch(deleteRemoveArticle(articleId));

@@ -37,6 +37,8 @@ class SaveControl extends Component {
     fetchArticleState: PropTypes.instanceOf(Immutable.Map),
     rememberArticle: PropTypes.func,
     rememberArticleState: PropTypes.instanceOf(Immutable.Map),
+    removeArticle: PropTypes.func,
+    removeArticleState: PropTypes.instanceOf(Immutable.Map),
     runOnCurrentArticle: PropTypes.func,
     updateArticle: PropTypes.func,
     updateArticleState: PropTypes.instanceOf(Immutable.Map),
@@ -68,7 +70,7 @@ class SaveControl extends Component {
 
   handleToggle = () => {
     if (this.props.article.get('id')) {
-      // implement removal
+      this.props.removeArticle(this.props.article.get('id'));
     } else {
       this.props.rememberArticle({
         article: Immutable.fromJS({
@@ -134,7 +136,7 @@ class SaveControl extends Component {
         /><br />
         <Toggle
           id="remember-article"
-          label={this.inProgress(this.props.rememberArticleState)
+          label={this.inProgress(this.props.rememberArticleState) || this.inProgress(this.props.removeArticleState)
             ? this.spinnerWithText('Remember article') : 'Remember article'}
           style={inlineStyles.saveControl}
           toggled={this.props.article.get('id')}
