@@ -18,6 +18,7 @@ before_deploy:
 - npm run compress
 deploy:
   provider: script
+  skip_cleanup: true
   script: npm run webstore-upload
   on:
     repo: heutagogy/heutagogy-chrome-extension
