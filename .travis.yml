@@ -17,16 +17,21 @@ before_deploy:
   -in key.pem.enc -out key.pem -d
 - npm run compress
 deploy:
-  provider: s3
-  access_key_id: AKIAJDRP7B726YPQFT3Q
-  secret_access_key:
-    secure: IZptevjHEtmpUp84vrIbojrf4DSwOac5Hnu6Pzks8NeSKB09AFox7Wj4YL4y5GN0GlcE9Bt2huoZ2exD7HUp9Ig0jHBXtyvL8gJYUxwLOBzD1oBkj0aIb6sCJ5T647U+4/NxulxZAT6mOsTpflrTn42bb7ToSZdEalhyqHasgboWq5RcAKEM2A9NHt0Sr95YLLsjiVSmPhi9cDpJ/WB+ID4tR7uN8frHlBZUeH41J7bC6SBhnUebNgHwacE4ph8rjxct0eb4gjrJNmy5yRwFvV+QUzYx7f4qwmJbh3EAWB5WVepRndKgyqPi4DcesrTQywDXeWsuKlGe0cM7Uao6Bgi2hVRvc1rNOybFziO9Z0+Dz3QBq23mbKaKWPs0SZ5/iWjR0MI6lBPGGGz0+18WXml8C4WmldRA9LX/q8xOQz62/iHnBM9Q+8UAkey9XDKI1RjaiGN7aZYhXnm2rtTNv31BMH+zgXAoEuBqIYAovBiPH7RyCjMG6jTGJZ24r4P3o+IohV7SAIZb6GnYLMMCq1qZD+ryd96kVY759hhtjr7xclAWc3HIpUzRhBktF6vslKx1t4Hs9x8jFh1ldASw32+kH5uCr8KtNNXiu3QQ4n4Y2lgkAvVOCWT09WQWqT4LKc9InXGx3Uh5xVrBQP2LGvIoeJNlL7XVleQpq1hZWjA=
-  bucket: heutagogy
-  region: eu-central-1
-  skip_cleanup: true
-  local-dir: dist
-  upload-dir: heutagogy-chrome-extension
-  acl: public_read
-  on:
-    repo: heutagogy/heutagogy-chrome-extension
-    branch: master
+  - provider: script
+    script: npm run webstore-upload
+    on:
+      repo: heutagogy/heutagogy-chrome-extension
+      branch: master
+  - provider: s3
+    access_key_id: AKIAJDRP7B726YPQFT3Q
+    secret_access_key:
+      secure: IZptevjHEtmpUp84vrIbojrf4DSwOac5Hnu6Pzks8NeSKB09AFox7Wj4YL4y5GN0GlcE9Bt2huoZ2exD7HUp9Ig0jHBXtyvL8gJYUxwLOBzD1oBkj0aIb6sCJ5T647U+4/NxulxZAT6mOsTpflrTn42bb7ToSZdEalhyqHasgboWq5RcAKEM2A9NHt0Sr95YLLsjiVSmPhi9cDpJ/WB+ID4tR7uN8frHlBZUeH41J7bC6SBhnUebNgHwacE4ph8rjxct0eb4gjrJNmy5yRwFvV+QUzYx7f4qwmJbh3EAWB5WVepRndKgyqPi4DcesrTQywDXeWsuKlGe0cM7Uao6Bgi2hVRvc1rNOybFziO9Z0+Dz3QBq23mbKaKWPs0SZ5/iWjR0MI6lBPGGGz0+18WXml8C4WmldRA9LX/q8xOQz62/iHnBM9Q+8UAkey9XDKI1RjaiGN7aZYhXnm2rtTNv31BMH+zgXAoEuBqIYAovBiPH7RyCjMG6jTGJZ24r4P3o+IohV7SAIZb6GnYLMMCq1qZD+ryd96kVY759hhtjr7xclAWc3HIpUzRhBktF6vslKx1t4Hs9x8jFh1ldASw32+kH5uCr8KtNNXiu3QQ4n4Y2lgkAvVOCWT09WQWqT4LKc9InXGx3Uh5xVrBQP2LGvIoeJNlL7XVleQpq1hZWjA=
+    bucket: heutagogy
+    region: eu-central-1
+    skip_cleanup: true
+    local-dir: dist
+    upload-dir: heutagogy-chrome-extension
+    acl: public_read
+    on:
+      repo: heutagogy/heutagogy-chrome-extension
+      branch: master
