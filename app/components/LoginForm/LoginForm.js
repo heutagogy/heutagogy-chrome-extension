@@ -29,7 +29,7 @@ const inlineStyles = {
   statusDiv: {
     height: '30px',
     textAlign: 'center',
-    margin: '7px 0 35px 0',
+    margin: '5px 0 30px 0',
   },
   statusMessage: {
     fontSize: '14px',
