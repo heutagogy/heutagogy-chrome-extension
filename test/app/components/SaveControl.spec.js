@@ -61,6 +61,22 @@ describe('Save control tests', () => {
     expect(rememberArticle.called).to.equal(false);
   });
 
+  it("Call 'Remove article' on toggle if already saved", () => {
+    const removeArticle = sandbox.spy();
+    const wrapper = shallow(
+      <SaveControl
+        article={new Immutable.Map({ id: 1, url: 'https://github.com/', title: 'GitHub' })}
+        rememberArticle={removeArticle}
+        runOnCurrentArticle={id}
+      />,
+      { context }
+    );
+
+    wrapper.find(rememberArticleSelector).simulate('toggle');
+
+    expect(removeArticle.called).to.equal(true);
+  });
+
   it("'Read article' checkbox doesn't exist if article is not saved", () => {
     const currentArticle = new Immutable.Map({ url: 'https://github.com/', title: 'GitHub' });
     const wrapper = shallow(
