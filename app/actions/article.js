@@ -29,7 +29,8 @@ export const REMOVE_ARTICLE_FAILURE = 'REMOVE_ARTICLE_FAILURE';
 
 
 const postRememberArticle = ({ article }) => {
-  const meta = { viewId: REMEMBER_ARTICLE_VIEW_STATE, article };
+  const articleUrl = article.get('url');
+  const meta = { viewId: REMEMBER_ARTICLE_VIEW_STATE, articleUrl };
 
   return {
     [CALL_API]: {
@@ -50,7 +51,7 @@ const postRememberArticle = ({ article }) => {
 };
 
 const postUpdateArticle = (articleId, articleFields) => {
-  const meta = { viewId: UPDATE_ARTICLE_VIEW_STATE, articleId, articleFields };
+  const meta = { viewId: UPDATE_ARTICLE_VIEW_STATE, articleId };
 
   return {
     [CALL_API]: {
@@ -71,7 +72,7 @@ const postUpdateArticle = (articleId, articleFields) => {
 };
 
 const getArticleByUrl = (articleUrl) => {
-  const meta = { viewId: FETCH_ARTICLE_VIEW_STATE };
+  const meta = { viewId: FETCH_ARTICLE_VIEW_STATE, articleUrl };
   const encodedURI = encodeURIComponent(articleUrl);
 
   return {
