@@ -31,8 +31,7 @@
     "page": "background.html"
   },
   "options_ui": {
-    "page": "options.html",
-    "chrome_style": true
+    "page": "options.html"
   },
   "permissions": [ "contextMenus", "notifications", "tabs", "storage", "http://*/", "https://*/" ],
   "content_security_policy": "default-src 'self' http://localhost:3000/ ; font-src http://localhost:3000/js/; script-src 'self' http://localhost:3000 https://www.google-analytics.com/ 'unsafe-eval'; connect-src * ; style-src * 'unsafe-inline' 'self' blob:; img-src 'self' data:;"
