@@ -14,6 +14,11 @@ export const UPDATE_ARTICLE_START = 'UPDATE_ARTICLE_START';
 export const UPDATE_ARTICLE_SUCCESS = 'UPDATE_ARTICLE_SUCCESS';
 export const UPDATE_ARTICLE_FAILURE = 'UPDATE_ARTICLE_FAILURE';
 
+export const LOAD_ARTICLE_START = 'LOAD_ARTICLE_START';
+export const LOAD_ARTICLE_SUCCESS = 'LOAD_ARTICLE_SUCCESS';
+export const LOAD_ARTICLE_FAILURE = 'LOAD_ARTICLE_FAILURE';
+
+
 const postRememberArticle = ({ article }) => {
   const meta = { viewId: REMEMBER_ARTICLE_VIEW_STATE, article };
 
@@ -56,18 +61,6 @@ const postUpdateArticle = (articleId, articleFields) => {
   };
 };
 
-export const rememberArticle = ({ article }) =>
-  (dispatch) => dispatch(postRememberArticle({ article }));
-
-export const updateArticle = (articleId, articleFields) => (dispatch) => {
-  dispatch(postUpdateArticle(articleId, articleFields));
-};
-
-
-export const LOAD_ARTICLE_START = 'LOAD_ARTICLE_START';
-export const LOAD_ARTICLE_SUCCESS = 'LOAD_ARTICLE_SUCCESS';
-export const LOAD_ARTICLE_FAILURE = 'LOAD_ARTICLE_FAILURE';
-
 const getArticleByUrl = (articleUrl) => {
   const meta = { viewId: FETCH_ARTICLE_VIEW_STATE };
   const encodedURI = encodeURIComponent(articleUrl);
@@ -87,6 +80,14 @@ const getArticleByUrl = (articleUrl) => {
       endpoint: `${API_VERSION}/bookmarks?url=${encodedURI}`,
     },
   };
+};
+
+
+export const rememberArticle = ({ article }) =>
+  (dispatch) => dispatch(postRememberArticle({ article }));
+
+export const updateArticle = (articleId, articleFields) => (dispatch) => {
+  dispatch(postUpdateArticle(articleId, articleFields));
 };
 
 export const fetchArticleByUrl = (articleUrl) =>
