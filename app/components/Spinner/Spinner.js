@@ -11,9 +11,10 @@ class Spinner extends Component {
 
   render() {
     return (
-      <div className={`${styles.spinner} ${this.props.className}`}>
+      <div
+        className={`${styles.spinner} ${this.props.className}`}
+      >
         <CircularProgress
-          className={styles.spinner}
           size={this.props.size}
         />
       </div>

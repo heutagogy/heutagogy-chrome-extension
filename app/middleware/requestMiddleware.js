@@ -9,14 +9,14 @@ const requestMiddleware = () => (store) => (next) => (action) => {
     const method = action[CALL_API].method;
     const state = store.getState();
     const user = getUser(state);
+    const serverAddress = getOptions(state).get('serverAddress');
 
     if (method === 'GET' || method === 'POST' || method === 'PUT' || method === 'DELETE') {
       headers['Content-Type'] = 'application/json';
 
-      if (!user.isEmpty()) {
-        const serverAddress = getOptions(state).get('serverAddress');
+      action[CALL_API].endpoint = `${serverAddress.replace(/\/$/, '')}/${action[CALL_API].endpoint}`; // eslint-disable-line
 
-        action[CALL_API].endpoint = `${serverAddress.replace(/\/$/, '')}/${action[CALL_API].endpoint}`; // eslint-disable-line
+      if (!user.isEmpty()) {
         headers.Authorization = headers.Authorization || `JWT ${user.get('access_token')}`;
       }
 
