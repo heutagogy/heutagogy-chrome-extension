@@ -1,6 +1,11 @@
 /* eslint-disable fp/no-let */
 /* eslint-disable fp/no-mutation */
-import { REMEMBER_ARTICLE_SUCCESS, UPDATE_ARTICLE_SUCCESS, LOAD_ARTICLE_SUCCESS } from './../../actions/article';
+import {
+  REMEMBER_ARTICLE_SUCCESS,
+  UPDATE_ARTICLE_SUCCESS,
+  LOAD_ARTICLE_SUCCESS,
+  REMOVE_ARTICLE_SUCCESS,
+} from './../../actions/article';
 
 
 export default (state, action) => {
@@ -24,6 +29,11 @@ export default (state, action) => {
       });
 
       return result;
+    }
+    case REMOVE_ARTICLE_SUCCESS: {
+      const article = state.getIn(['article']).find((el) => el.get('id') === action.meta.articleId);
+
+      return state.deleteIn(['article', article.get('url')]);
     }
     default: {
       return state;
