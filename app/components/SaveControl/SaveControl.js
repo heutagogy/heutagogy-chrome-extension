@@ -63,6 +63,26 @@ class SaveControl extends Component {
     });
   }
 
+  getReadLabel() {
+    const text = this.props.article.get('read') ? 'Unread article' : 'Read article';
+
+    if (this.inProgress(this.props.updateArticleState)) {
+      return this.spinnerWithText(text);
+    }
+
+    return text;
+  }
+
+  getRememberLabel() {
+    const text = this.props.article.get('id') ? 'Delete article' : 'Save article';
+
+    if (this.inProgress(this.props.rememberArticleState) || this.inProgress(this.props.removeArticleState)) {
+      return this.spinnerWithText(text);
+    }
+
+    return text;
+  }
+
   bind() {
     this.handleCheck = this.handleCheck.bind(this);
     this.handleToggle = this.handleToggle.bind(this);
@@ -130,14 +150,13 @@ class SaveControl extends Component {
         <TextField
           defaultValue={this.props.article.get('title') || this.state.currentArticle.get('title')}
           disabled={this.props.article.get('id')}
-          floatingLabelText="title"
+          floatingLabelText="Article title"
           id="article-title"
           ref={(ref) => this.titleField = ref} // eslint-disable-line
         /><br />
         <Toggle
           id="remember-article"
-          label={this.inProgress(this.props.rememberArticleState) || this.inProgress(this.props.removeArticleState)
-            ? this.spinnerWithText('Remember article') : 'Remember article'}
+          label={this.getRememberLabel()}
           style={inlineStyles.saveControl}
           toggled={this.props.article.get('id')}
           onToggle={this.handleToggle}
@@ -147,7 +166,7 @@ class SaveControl extends Component {
            checked={this.props.article.get('read')}
            checkedIcon={<Visibility />}
            id="read-article"
-           label={this.inProgress(this.props.updateArticleState) ? this.spinnerWithText('Read article') : 'Read article'}
+           label={this.getReadLabel()}
            labelPosition="left"
            style={inlineStyles.saveControl}
            uncheckedIcon={<VisibilityOff />}
