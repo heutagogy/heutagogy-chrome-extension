@@ -52,6 +52,14 @@ module.exports = { //eslint-disable-line
   module: {
     loaders: [
       {
+        test: /\.png/,
+        loader: 'url-loader',
+        query: {
+          limit: 26000,
+          mimetype: 'image/png',
+        },
+      },
+      {
         test: /\.js$/,
         loader: 'babel-loader',
         exclude: /node_modules/,
