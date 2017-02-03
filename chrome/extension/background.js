@@ -36,7 +36,7 @@ promisifyAll(chrome.storage, [
   'local',
 ]);
 
-require('./background/badge'); //eslint-disable-line
+require('./background/icon'); //eslint-disable-line
 
 chrome.commands.onCommand.addListener((command) => {
   if (command === 'remember-article') {

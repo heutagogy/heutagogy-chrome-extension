@@ -70,6 +70,14 @@ const baseDevConfig = () => ({
   module: {
     loaders: [
       {
+        test: /\.png/,
+        loader: 'url-loader',
+        query: {
+          limit: 26000,
+          mimetype: 'image/png',
+        },
+      },
+      {
         test: /\.(woff|woff2|ttf|eot)/,
         loader: 'url-loader',
         query: {
