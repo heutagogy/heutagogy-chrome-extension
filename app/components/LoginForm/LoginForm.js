@@ -105,7 +105,6 @@ class LoginForm extends Component {
             fullWidth
             inputStyle={inlineStyles.input}
             name="server"
-            placeholder={'http://localhost:5000'}
             underlineFocusStyle={inlineStyles.blue500}
           />
           <RaisedButton
@@ -127,6 +126,9 @@ const mapStateToProps = (state) => ({
   viewState: getViewState(state, LOGIN_VIEW_STATE),
   user: getUser(state),
   options: getOptions(state),
+  initialValues: {
+    server: getOptions(state).get('serverAddress') || 'https://heutagogy.herokuapp.com',
+  },
 });
 
 export default connect(mapStateToProps, { loginUser, setServerAddress })(LoginFormWrapped);
