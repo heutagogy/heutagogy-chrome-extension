@@ -51,6 +51,7 @@ class LoginForm extends Component {
   }
 
   submit = (form) => {
+    form = Immutable.fromJS(form);
     this.props.setServerAddress({ address: form.get('server') });
     this.props.loginUser({ username: form.get('login'), password: form.get('password') });
   }
@@ -122,13 +123,16 @@ class LoginForm extends Component {
 
 const LoginFormWrapped = reduxForm({ form: 'LoginForm' })(LoginForm);
 
-const mapStateToProps = (state) => ({
-  viewState: getViewState(state, LOGIN_VIEW_STATE),
-  user: getUser(state),
-  options: getOptions(state),
-  initialValues: {
-    server: getOptions(state).get('serverAddress') || 'https://heutagogy.herokuapp.com',
-  },
-});
+const mapStateToProps = (state) => {
+  state = Immutable.fromJS(state);
+  return ({
+    viewState: getViewState(state, LOGIN_VIEW_STATE),
+    user: getUser(state),
+    options: getOptions(state),
+    initialValues: {
+      server: getOptions(state).get('serverAddress') || 'https://heutagogy.herokuapp.com',
+    },
+  });
+};
 
 export default connect(mapStateToProps, { loginUser, setServerAddress })(LoginFormWrapped);

@@ -1,6 +1,8 @@
 import bluebird from 'bluebird';
+import { wrapStore } from 'react-chrome-redux';
 import { handleRememberArticle, handleReadArticle } from '../../app/utils/keyBindings';
 import { initRedux } from '../../app/utils/utils';
+import { tabHandler } from './background/icon';
 
 global.Promise = bluebird; //eslint-disable-line
 
@@ -36,12 +38,16 @@ promisifyAll(chrome.storage, [
   'local',
 ]);
 
-require('./background/icon'); //eslint-disable-line
+initRedux((store) => {
+  wrapStore(store, {portName: 'Heutagogy'});
 
-chrome.commands.onCommand.addListener((command) => {
-  if (command === 'remember-article') {
-    initRedux(handleRememberArticle);
-  } else if (command === 'read-article') {
-    initRedux(handleReadArticle);
-  }
+  chrome.commands.onCommand.addListener((command) => {
+    if (command === 'remember-article') {
+      handleRememberArticle(store);
+    } else if (command === 'read-article') {
+      handleReadArticle(store);
+    }
+  });
+
+  chrome.tabs.onUpdated.addListener(tabHandler(store));
 });

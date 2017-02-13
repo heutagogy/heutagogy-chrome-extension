@@ -93,14 +93,17 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  article: getArticle(state, state.getIn(['view', 'currentUrl'])),
-  fetchArticleState: getViewState(state, FETCH_ARTICLE_VIEW_STATE),
-  rememberArticleState: getViewState(state, REMEMBER_ARTICLE_VIEW_STATE),
-  removeArticleState: getViewState(state, REMOVE_ARTICLE_VIEW_STATE),
-  updateArticleState: getViewState(state, UPDATE_ARTICLE_VIEW_STATE),
-  user: getUser(state),
-});
+const mapStateToProps = (state) => {
+  state = Immutable.fromJS(state);
+  return ({
+    article: getArticle(state, state.getIn(['view', 'currentUrl'])),
+    fetchArticleState: getViewState(state, FETCH_ARTICLE_VIEW_STATE),
+    rememberArticleState: getViewState(state, REMEMBER_ARTICLE_VIEW_STATE),
+    removeArticleState: getViewState(state, REMOVE_ARTICLE_VIEW_STATE),
+    updateArticleState: getViewState(state, UPDATE_ARTICLE_VIEW_STATE),
+    user: getUser(state),
+  });
+};
 
 const mapDispatchToProps = {
   fetchArticleByUrl,
