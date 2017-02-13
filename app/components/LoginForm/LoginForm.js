@@ -16,6 +16,9 @@ import { loginUser } from './../../actions/options';
 import { renderTextField } from './../renders';
 import { setServerAddress } from './../../actions/server';
 
+import injectTapEventPlugin from 'react-tap-event-plugin';
+injectTapEventPlugin();
+
 const inlineStyles = {
   input: {
     backgroundColor: '#fafafa',

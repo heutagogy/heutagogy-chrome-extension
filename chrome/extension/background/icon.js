@@ -11,7 +11,7 @@ export const tabHandler = (store) => (tabId, changeInfo, tab) => {
   if (changeInfo.status === 'complete' && tab.active) {
     const currentUrl = tab.url;
 
-    fetchArticleByUrl(currentUrl)(store.dispatch).then(() => {
+    store.dispatch(fetchArticleByUrl(currentUrl)).then(() => {
       const state = store.getState();
       const article = getArticle(state, currentUrl);
       const user = getUser(state);
