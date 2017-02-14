@@ -106,6 +106,7 @@
     "redux-logger": "^2.7.4",
     "redux-saga": "^0.13.0",
     "redux-thunk": "^2.0.1",
+    "redux-watch": "^1.1.1",
     "reselect": "^2.5.4",
     "stylelint-webpack-plugin": "^0.4.0",
     "url-loader": "^0.5.7"

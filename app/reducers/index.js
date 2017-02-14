@@ -5,6 +5,7 @@ import { reducer as formReducer } from 'redux-form/immutable';
 import dataView from './dataView';
 import view from './view';
 import options from './options';
+import tabs from './tabs';
 
 import * as entityReducers from './entityReducers';
 
@@ -15,6 +16,7 @@ export default combineReducers({
   entities,
   dataView,
   options,
+  tabs,
   view,
   form: formReducer,
 });

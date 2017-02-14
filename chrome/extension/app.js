@@ -11,7 +11,6 @@ const store = new Store({
 });
 
 store.ready().then(() => {
-  chrome.browserAction.setBadgeBackgroundColor({ color: '#ff0000' });
   ReactDOM.render(
     <Root store={store} />,
       document.querySelector('#root')

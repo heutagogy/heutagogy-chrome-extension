@@ -1,7 +1,8 @@
+import Immutable from 'immutable';
 import bluebird from 'bluebird';
 import { wrapStore } from 'react-chrome-redux';
+import watch from 'redux-watch';
 import { handleRememberArticle, handleReadArticle } from '../../app/utils/keyBindings';
-import { initRedux } from '../../app/utils/utils';
 import { tabHandler } from './background/icon';
 
 global.Promise = bluebird; //eslint-disable-line
@@ -38,7 +39,12 @@ promisifyAll(chrome.storage, [
   'local',
 ]);
 
-initRedux((store) => {
+chrome.storage.local.get('state', (obj) => {
+  const { state } = obj;
+
+  const initialState = state ? JSON.parse(state) : {};
+  const createStore = require('../../app/store/configureStore'); //eslint-disable-line
+  const store = createStore(Immutable.fromJS(initialState));
   wrapStore(store, {portName: 'Heutagogy'});
 
   chrome.commands.onCommand.addListener((command) => {
@@ -49,5 +55,40 @@ initRedux((store) => {
     }
   });
 
-  chrome.tabs.onUpdated.addListener(tabHandler(store));
+  chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+    if (changeInfo.url) {
+      store.dispatch({
+        type: 'TAB_CHANGED',
+        tabId,
+        url: changeInfo.url,
+      });
+    }
+  });
+
+  chrome.tabs.onActivated.addListener((activeInfo) => {
+    chrome.tabs.get(activeInfo.tabId, (tab) => {
+      store.dispatch({
+        type: 'TAB_ACTIVATED',
+        tabId: activeInfo.tabId,
+        url: tab.url,
+      });
+    });
+  });
+
+  chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
+    store.dispatch({
+      type: 'TAB_REMOVED',
+      tabId,
+    });
+  });
+
+  let w = watch(() => store.getState().getIn(['tabs', 'urls']));
+  store.subscribe(w((newVal, oldVal, objectPath) => {
+    newVal.forEach((url, tabId) => {
+      if (url !== oldVal.get(tabId, null)) {
+        tabHandler(store)(tabId, url);
+      }
+      return true;
+    });
+  }));
 });

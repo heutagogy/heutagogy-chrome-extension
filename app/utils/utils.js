@@ -12,15 +12,3 @@ export const runOnCurrentArticle = (callback) => {
     callback({ url, title, icon });
   });
 };
-
-export const initRedux = (callback) => {
-  chrome.storage.local.get('state', (obj) => {
-    const { state } = obj;
-
-    const initialState = state ? JSON.parse(state) : {};
-    const createStore = require('../store/configureStore'); //eslint-disable-line
-    const store = createStore(Immutable.fromJS(initialState));
-
-    callback(store);
-  });
-};
