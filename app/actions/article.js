@@ -111,7 +111,7 @@ export const getArticleByUrlAlias = ({ articleUrl }) => {
 };
 
 const deleteRemoveArticle = (articleId) => ({
-  type: 'deleteRemoveArticle',
+  type: 'deleteRemoveArticleAlias',
   articleId,
 });
 
