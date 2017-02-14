@@ -1,3 +1,4 @@
+import Immutable from 'immutable';
 import { CALL_API } from 'redux-api-middleware';
 import { arrayOf } from 'normalizr';
 import { API_VERSION } from './../constants/Api';
@@ -34,6 +35,7 @@ const postRememberArticle = ({ article }) => ({
 });
 
 export const postRememberArticleAlias = ({ article }) => {
+  article = Immutable.fromJS(article);
   const articleUrl = article.get('url');
   const meta = { viewId: REMEMBER_ARTICLE_VIEW_STATE, articleUrl };
 
