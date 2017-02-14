@@ -5,7 +5,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import SaveControl from './../components/SaveControl';
 import { rememberArticle, updateArticle, fetchArticleByUrl, removeArticle } from './../actions/article';
-import { saveCurrentUrl } from './../actions/view';
+import { setCurrentUrl } from './../actions/view';
 import { getArticle } from './../selectors/article';
 import { getUser } from './../selectors/user';
 import { getViewState } from './../selectors/view';
@@ -33,7 +33,7 @@ class App extends Component {
     rememberArticleState: PropTypes.instanceOf(Immutable.Map),
     removeArticle: PropTypes.func,
     removeArticleState: PropTypes.instanceOf(Immutable.Map),
-    saveCurrentUrl: PropTypes.func,
+    setCurrentUrl: PropTypes.func,
     updateArticle: PropTypes.func,
     updateArticleState: PropTypes.instanceOf(Immutable.Map),
     user: PropTypes.object,
@@ -55,7 +55,7 @@ class App extends Component {
 
   componentWillMount() {
     runOnCurrentArticle(({ url }) => {
-      this.props.saveCurrentUrl({ currentUrl: url });
+      this.props.setCurrentUrl({ currentUrl: url });
     });
   }
 
@@ -109,7 +109,7 @@ const mapDispatchToProps = {
   fetchArticleByUrl,
   rememberArticle,
   removeArticle,
-  saveCurrentUrl,
+  setCurrentUrl,
   updateArticle,
 };
 
