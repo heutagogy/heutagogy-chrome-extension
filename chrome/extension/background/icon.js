@@ -37,12 +37,13 @@ export const tabHandler = (store) => (tabId, url) => {
   const user = getUser(state);
 
   if (isLoggedIn(user)) {
-    setBadge(tabId, false, false);
-    store.dispatch(fetchArticleByUrl(url)).then(() => {
-      const article = getArticle(state, url);
+    const article = getArticle(state, url);
 
-      setBadge(tabId, article.get('id'), article.get('read'));
-    });
+    setBadge(tabId, article.get('id'), article.get('read'));
+
+    if (!article.get('url')) {
+      store.dispatch(fetchArticleByUrl(url));
+    }
   } else {
     setBadge(tabId, false, false);
   }
