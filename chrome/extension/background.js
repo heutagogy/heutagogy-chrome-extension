@@ -4,6 +4,7 @@ import { wrapStore } from 'react-chrome-redux';
 import watch from 'redux-watch';
 import { handleRememberArticle, handleReadArticle } from '../../app/utils/keyBindings';
 import { tabHandler } from './background/icon';
+import { getArticle } from './../../app/selectors/article';
 
 global.Promise = bluebird; //eslint-disable-line
 
@@ -82,10 +83,11 @@ chrome.storage.local.get('state', (obj) => {
     });
   });
 
-  let w = watch(() => store.getState().getIn(['tabs', 'urls']));
+  let w = watch(store.getState);
   store.subscribe(w((newVal, oldVal, objectPath) => {
-    newVal.forEach((url, tabId) => {
-      if (url !== oldVal.get(tabId, null)) {
+    newVal.getIn(['tabs', 'urls']).forEach((url, tabId) => {
+      if (url !== oldVal.getIn(['tabs', 'urls', tabId], null)
+          || !getArticle(newVal, url).equals(getArticle(oldVal, url))) {
         tabHandler(store)(tabId, url);
       }
       return true;
