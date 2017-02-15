@@ -1,7 +1,7 @@
 import React from 'react'; // eslint-disable-line
 import ReactDOM from 'react-dom';
-import Options from '../../app/containers/Options';
 import { Store } from 'react-chrome-redux';
+import Options from '../../app/containers/Options';
 
 const store = new Store({
   portName: 'Heutagogy',

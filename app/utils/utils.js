@@ -1,5 +1,3 @@
-import Immutable from 'immutable';
-
 export const runOnCurrentArticle = (callback) => {
   chrome.tabs.query({
     active: true,

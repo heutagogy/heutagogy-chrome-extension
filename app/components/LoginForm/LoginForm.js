@@ -4,6 +4,7 @@ import { Component, PropTypes } from 'react';
 import { blue500 } from 'material-ui/styles/colors';
 import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form/immutable';
+import injectTapEventPlugin from 'react-tap-event-plugin';
 
 import Spinner from './../Spinner';
 import styles from './LoginForm.less';
@@ -16,7 +17,6 @@ import { loginUser } from './../../actions/options';
 import { renderTextField } from './../renders';
 import { setServerAddress } from './../../actions/server';
 
-import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 
 const inlineStyles = {
@@ -54,7 +54,7 @@ class LoginForm extends Component {
   }
 
   submit = (form) => {
-    form = Immutable.fromJS(form);
+    form = Immutable.fromJS(form); // eslint-disable-line
     this.props.setServerAddress({ address: form.get('server') });
     this.props.loginUser({ username: form.get('login'), password: form.get('password') });
   }
@@ -127,7 +127,8 @@ class LoginForm extends Component {
 const LoginFormWrapped = reduxForm({ form: 'LoginForm' })(LoginForm);
 
 const mapStateToProps = (state) => {
-  state = Immutable.fromJS(state);
+  state = Immutable.fromJS(state); // eslint-disable-line
+
   return ({
     viewState: getViewState(state, LOGIN_VIEW_STATE),
     user: getUser(state),

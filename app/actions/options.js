@@ -8,13 +8,13 @@ export const USER_LOGIN_STARTED = 'USER_LOGIN_STARTED';
 export const USER_LOGIN_SUCCESS = 'USER_LOGIN_SUCCESS';
 export const USER_LOGIN_FAILURE = 'USER_LOGIN_FAILURE';
 
-const fetchUserLogin = ({ username, password }) => ({
-  type: 'loginUserLoginAlias',
+export const loginUser = ({ username, password }) => ({
+  type: 'loginUserAlias',
   username,
   password,
 });
 
-export const loginUserLoginAlias = ({ username, password }) => {
+export const loginUserAlias = ({ username, password }) => {
   const meta = { viewId: LOGIN_VIEW_STATE, username };
 
   return {
@@ -30,5 +30,3 @@ export const loginUserLoginAlias = ({ username, password }) => {
     },
   };
 };
-
-export const loginUser = fetchUserLogin;

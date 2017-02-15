@@ -35,7 +35,7 @@ const postRememberArticle = ({ article }) => ({
 });
 
 export const postRememberArticleAlias = ({ article }) => {
-  article = Immutable.fromJS(article);
+  article = Immutable.fromJS(article); // eslint-disable-line
   const articleUrl = article.get('url');
   const meta = { viewId: REMEMBER_ARTICLE_VIEW_STATE, articleUrl };
 

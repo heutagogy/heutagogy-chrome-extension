@@ -94,7 +94,8 @@ class App extends Component {
 }
 
 const mapStateToProps = (state) => {
-  state = Immutable.fromJS(state);
+  state = Immutable.fromJS(state); // eslint-disable-line
+
   return ({
     article: getArticle(state, state.getIn(['view', 'currentUrl'])),
     fetchArticleState: getViewState(state, FETCH_ARTICLE_VIEW_STATE),

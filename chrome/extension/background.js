@@ -47,7 +47,8 @@ chrome.storage.local.get('state', (obj) => {
   const initialState = state ? JSON.parse(state) : {};
   const createStore = require('../../app/store/configureStore'); //eslint-disable-line
   const store = createStore(Immutable.fromJS(initialState));
-  wrapStore(store, {portName: 'Heutagogy'});
+
+  wrapStore(store, { portName: 'Heutagogy' });
 
   chrome.commands.onCommand.addListener((command) => {
     if (command === 'remember-article') {
@@ -59,16 +60,19 @@ chrome.storage.local.get('state', (obj) => {
 
   initTabTracker(store);
 
-  let w = watch(store.getState);
-  store.subscribe(w((newVal, oldVal, objectPath) => {
+  const w = watch(store.getState);
+
+  store.subscribe(w((newVal, oldVal) => {
     getTabs(newVal).forEach((tab, tabId) => {
       const url = tab.get('url');
       const oldTab = getTab(oldVal, tabId);
-      if (url !== oldTab.get('url')
-          || tab.get('status') !== oldTab.get('status')
-          || !getArticle(newVal, url).equals(getArticle(oldVal, url))) {
+
+      if (url !== oldTab.get('url') ||
+          tab.get('status') !== oldTab.get('status') ||
+          !getArticle(newVal, url).equals(getArticle(oldVal, url))) {
         tabHandler(store)(tabId, url);
       }
+
       return true;
     });
   }));

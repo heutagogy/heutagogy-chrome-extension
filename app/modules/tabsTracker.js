@@ -1,7 +1,7 @@
 import Immutable from 'immutable';
 
 const initialState = Immutable.fromJS({
-  tabs: Immutable.Map(),
+  tabs: new Immutable.Map(),
   activeTabId: null,
 });
 
@@ -11,24 +11,25 @@ export const getTabUrl = (store, tabId) => store.getIn(['tabs', 'tabs', tabId, '
 
 export const getTabs = (store) => store.getIn(['tabs', 'tabs']);
 
-export const getTab = (store, tabId) => store.getIn(['tabs', 'tabs', tabId], Immutable.Map());
+export const getTab = (store, tabId) => store.getIn(['tabs', 'tabs', tabId], new Immutable.Map());
 
 export const getCurrentUrl = (store) => getTabUrl(store, getCurrentTab(store));
 
 export const initTabTracker = (store) => {
-  chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-    let action = {
+  chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => { // eslint-disable-line
+    const action = {
       type: 'TAB_CHANGED',
       tabId,
     };
+
     if (changeInfo.url) {
-      action.url = changeInfo.url;
+      action.url = changeInfo.url; // eslint-disable-line
     }
     if (changeInfo.title) {
-      action.title = changeInfo.title;
+      action.title = changeInfo.title; // eslint-disable-line
     }
     if (changeInfo.status) {
-      action.status = changeInfo.status;
+      action.status = changeInfo.status; // eslint-disable-line
     }
     store.dispatch(action);
   });
@@ -45,7 +46,7 @@ export const initTabTracker = (store) => {
     });
   });
 
-  chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
+  chrome.tabs.onRemoved.addListener((tabId, removeInfo) => { // eslint-disable-line
     store.dispatch({
       type: 'TAB_REMOVED',
       tabId,
@@ -53,10 +54,10 @@ export const initTabTracker = (store) => {
   });
 };
 
-export const reducer = (state = initialState, action) => {
-  const updateState = (state, action) =>
-        state.mergeIn(['tabs', action.tabId], Immutable.fromJS(action).delete('type').delete('tabId'));
+const updateState = (state, action) =>
+      state.mergeIn(['tabs', action.tabId], Immutable.fromJS(action).delete('type').delete('tabId'));
 
+export const reducer = (state = initialState, action) => {
   switch (action.type) {
     case 'TAB_CHANGED': {
       return updateState(state, action);
@@ -71,4 +72,4 @@ export const reducer = (state = initialState, action) => {
       return state;
     }
   }
-}
+};

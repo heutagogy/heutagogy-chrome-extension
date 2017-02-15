@@ -1,7 +1,7 @@
 import React from 'react'; // eslint-disable-line
 import ReactDOM from 'react-dom';
-import Root from '../../app/containers/Root';
 import { Store } from 'react-chrome-redux';
+import Root from '../../app/containers/Root';
 import './../../app/assets/media.less';
 import './../../app/assets/normalize.less';
 import './../../app/assets/typography.less';
