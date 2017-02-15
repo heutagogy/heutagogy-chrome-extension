@@ -5,7 +5,7 @@ import { reducer as formReducer } from 'redux-form/immutable';
 import dataView from './dataView';
 import view from './view';
 import options from './options';
-import tabs from './tabs';
+import { reducer as tabs } from './../modules/tabsTracker';
 
 import * as entityReducers from './entityReducers';
 

@@ -5,6 +5,7 @@ import watch from 'redux-watch';
 import { handleRememberArticle, handleReadArticle } from '../../app/utils/keyBindings';
 import { tabHandler } from './background/icon';
 import { getArticle } from './../../app/selectors/article';
+import { initTabTracker, getTabs, getTab } from './../../app/modules/tabsTracker';
 
 global.Promise = bluebird; //eslint-disable-line
 
@@ -56,37 +57,15 @@ chrome.storage.local.get('state', (obj) => {
     }
   });
 
-  chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-    if (changeInfo.url) {
-      store.dispatch({
-        type: 'TAB_CHANGED',
-        tabId,
-        url: changeInfo.url,
-      });
-    }
-  });
-
-  chrome.tabs.onActivated.addListener((activeInfo) => {
-    chrome.tabs.get(activeInfo.tabId, (tab) => {
-      store.dispatch({
-        type: 'TAB_ACTIVATED',
-        tabId: activeInfo.tabId,
-        url: tab.url,
-      });
-    });
-  });
-
-  chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
-    store.dispatch({
-      type: 'TAB_REMOVED',
-      tabId,
-    });
-  });
+  initTabTracker(store);
 
   let w = watch(store.getState);
   store.subscribe(w((newVal, oldVal, objectPath) => {
-    newVal.getIn(['tabs', 'urls']).forEach((url, tabId) => {
-      if (url !== oldVal.getIn(['tabs', 'urls', tabId], null)
+    getTabs(newVal).forEach((tab, tabId) => {
+      const url = tab.get('url');
+      const oldTab = getTab(oldVal, tabId);
+      if (url !== oldTab.get('url')
+          || tab.get('status') !== oldTab.get('status')
           || !getArticle(newVal, url).equals(getArticle(oldVal, url))) {
         tabHandler(store)(tabId, url);
       }
