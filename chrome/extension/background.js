@@ -6,6 +6,8 @@ import { handleRememberArticle, handleReadArticle } from '../../app/utils/keyBin
 import { tabHandler } from './background/icon';
 import { getArticle } from './../../app/selectors/article';
 import { initTabTracker, getTabs, getTab } from './../../app/modules/tabsTracker';
+import { getUser } from './../../app/selectors/user';
+import { isLoggedIn } from './../../app/utils/userUtils';
 
 global.Promise = bluebird; //eslint-disable-line
 
@@ -67,7 +69,8 @@ chrome.storage.local.get('state', (obj) => {
       const url = tab.get('url');
       const oldTab = getTab(oldVal, tabId);
 
-      if (url !== oldTab.get('url') ||
+      if (isLoggedIn(getUser(newVal)) !== isLoggedIn(getUser(oldVal)) ||
+          url !== oldTab.get('url') ||
           tab.get('status') !== oldTab.get('status') ||
           !getArticle(newVal, url).equals(getArticle(oldVal, url))) {
         tabHandler(store)(tabId, url);

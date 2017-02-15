@@ -134,7 +134,7 @@ const mapStateToProps = (state) => {
     user: getUser(state),
     options: getOptions(state),
     initialValues: {
-      server: getOptions(state).get('serverAddress') || 'https://heutagogy.herokuapp.com',
+      server: getOptions(state).get('serverAddress'),
     },
   });
 };

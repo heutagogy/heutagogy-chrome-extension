@@ -7,6 +7,7 @@ import { saveOptions } from './../utils/localStorageUtils';
 
 const initialState = Immutable.fromJS({
   authUser: {},
+  serverAddress: 'https://heutagogy.herokuapp.com',
 });
 
 export default (state = initialState, action) => {
