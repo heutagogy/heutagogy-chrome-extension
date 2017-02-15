@@ -1,3 +1,4 @@
+import Immutable from 'immutable';
 import { CALL_API } from 'redux-api-middleware';
 import { arrayOf } from 'normalizr';
 import { API_VERSION } from './../constants/Api';
@@ -28,7 +29,13 @@ export const REMOVE_ARTICLE_SUCCESS = 'REMOVE_ARTICLE_SUCCESS';
 export const REMOVE_ARTICLE_FAILURE = 'REMOVE_ARTICLE_FAILURE';
 
 
-const postRememberArticle = ({ article }) => {
+const postRememberArticle = ({ article }) => ({
+  type: 'postRememberArticleAlias',
+  article,
+});
+
+export const postRememberArticleAlias = ({ article }) => {
+  article = Immutable.fromJS(article); // eslint-disable-line
   const articleUrl = article.get('url');
   const meta = { viewId: REMEMBER_ARTICLE_VIEW_STATE, articleUrl };
 
@@ -50,7 +57,13 @@ const postRememberArticle = ({ article }) => {
   };
 };
 
-const postUpdateArticle = (articleId, articleFields) => {
+const postUpdateArticle = (articleId, articleFields) => ({
+  type: 'postUpdateArticleAlias',
+  articleId,
+  articleFields,
+});
+
+export const postUpdateArticleAlias = ({ articleId, articleFields }) => {
   const meta = { viewId: UPDATE_ARTICLE_VIEW_STATE, articleId };
 
   return {
@@ -71,7 +84,12 @@ const postUpdateArticle = (articleId, articleFields) => {
   };
 };
 
-const getArticleByUrl = (articleUrl) => {
+const getArticleByUrl = (articleUrl) => ({
+  type: 'getArticleByUrlAlias',
+  articleUrl,
+});
+
+export const getArticleByUrlAlias = ({ articleUrl }) => {
   const meta = { viewId: FETCH_ARTICLE_VIEW_STATE, articleUrl };
   const encodedURI = encodeURIComponent(articleUrl);
 
@@ -92,7 +110,12 @@ const getArticleByUrl = (articleUrl) => {
   };
 };
 
-const deleteRemoveArticle = (articleId) => {
+const deleteRemoveArticle = (articleId) => ({
+  type: 'deleteRemoveArticleAlias',
+  articleId,
+});
+
+export const deleteRemoveArticleAlias = ({ articleId }) => {
   const meta = { viewId: REMOVE_ARTICLE_VIEW_STATE, articleId };
   const successMeta = { ...meta, success: true };
 
@@ -110,15 +133,10 @@ const deleteRemoveArticle = (articleId) => {
 };
 
 
-export const rememberArticle = ({ article }) =>
-  (dispatch) => dispatch(postRememberArticle({ article }));
+export const rememberArticle = postRememberArticle;
 
-export const updateArticle = (articleId, articleFields) => (dispatch) => {
-  dispatch(postUpdateArticle(articleId, articleFields));
-};
+export const updateArticle = postUpdateArticle;
 
-export const fetchArticleByUrl = (articleUrl) =>
-  (dispatch) => dispatch(getArticleByUrl(articleUrl));
+export const fetchArticleByUrl = getArticleByUrl;
 
-export const removeArticle = (articleId) =>
-  (dispatch) => dispatch(deleteRemoveArticle(articleId));
+export const removeArticle = deleteRemoveArticle;

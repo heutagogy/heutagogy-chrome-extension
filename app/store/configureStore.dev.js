@@ -1,6 +1,7 @@
 import { applyMiddleware, compose, createStore } from 'redux';
 import createLogger from 'redux-logger';
 import createSagaMiddleware from 'redux-saga';
+import Immutable from 'immutable';
 
 import { basicMiddleware, middlewaresToApply } from './commonMiddlewares';
 
@@ -14,7 +15,14 @@ export default function configureStore(preloadedState) {
     ...basicMiddleware,
     preloadedState,
     compose(
-      applyMiddleware(...middlewaresToApply, sagaMiddleware, createLogger()),
+      applyMiddleware(
+        ...middlewaresToApply,
+        sagaMiddleware,
+        createLogger({
+          stateTransformer: (state) => state.toJS(),
+          // because toJS() is deep
+          actionTransformer: (action) => Immutable.fromJS(action).toJS(),
+        })),
       DevTools.instrument()
     )
   );

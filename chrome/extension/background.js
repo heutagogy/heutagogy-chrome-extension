@@ -1,6 +1,11 @@
+import Immutable from 'immutable';
 import bluebird from 'bluebird';
+import { wrapStore } from 'react-chrome-redux';
+import watch from 'redux-watch';
 import { handleRememberArticle, handleReadArticle } from '../../app/utils/keyBindings';
-import { initRedux } from '../../app/utils/utils';
+import { tabHandler } from './background/icon';
+import { getArticle } from './../../app/selectors/article';
+import { initTabTracker, getTabs, getTab } from './../../app/modules/tabsTracker';
 
 global.Promise = bluebird; //eslint-disable-line
 
@@ -36,12 +41,39 @@ promisifyAll(chrome.storage, [
   'local',
 ]);
 
-require('./background/icon'); //eslint-disable-line
+chrome.storage.local.get('state', (obj) => {
+  const { state } = obj;
 
-chrome.commands.onCommand.addListener((command) => {
-  if (command === 'remember-article') {
-    initRedux(handleRememberArticle);
-  } else if (command === 'read-article') {
-    initRedux(handleReadArticle);
-  }
+  const initialState = state ? JSON.parse(state) : {};
+  const createStore = require('../../app/store/configureStore'); //eslint-disable-line
+  const store = createStore(Immutable.fromJS(initialState));
+
+  wrapStore(store, { portName: 'Heutagogy' });
+
+  chrome.commands.onCommand.addListener((command) => {
+    if (command === 'remember-article') {
+      handleRememberArticle(store);
+    } else if (command === 'read-article') {
+      handleReadArticle(store);
+    }
+  });
+
+  initTabTracker(store);
+
+  const w = watch(store.getState);
+
+  store.subscribe(w((newVal, oldVal) => {
+    getTabs(newVal).forEach((tab, tabId) => {
+      const url = tab.get('url');
+      const oldTab = getTab(oldVal, tabId);
+
+      if (url !== oldTab.get('url') ||
+          tab.get('status') !== oldTab.get('status') ||
+          !getArticle(newVal, url).equals(getArticle(oldVal, url))) {
+        tabHandler(store)(tabId, url);
+      }
+
+      return true;
+    });
+  }));
 });
