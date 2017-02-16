@@ -24,14 +24,14 @@ export default (state, action) => {
     }
     case UPDATE_ARTICLE_SUCCESS: {
       const article = action.payload.getIn(['entities', 'article']).first();
-      const articleUrl = state.getIn(['article']).findKey((el) => el.get('id') === action.meta.articleId);
 
-      return state.setIn(['article', articleUrl], article);
+      return state.update('article', (articles) =>
+                          articles.map((v) =>
+                                       (v.get('id') === action.meta.articleId ? article : v)));
     }
     case REMOVE_ARTICLE_SUCCESS: {
-      const articleUrl = state.getIn(['article']).findKey((el) => el.get('id') === action.meta.articleId);
-
-      return state.deleteIn(['article', articleUrl]);
+      return state.update('article', (articles) =>
+                          articles.filter((v) => v.get('id') !== action.meta.articleId));
     }
     default: {
       return state;
