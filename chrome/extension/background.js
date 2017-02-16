@@ -73,7 +73,7 @@ chrome.storage.local.get('state', (obj) => {
           url !== oldTab.get('url') ||
           tab.get('status') !== oldTab.get('status') ||
           !getArticle(newVal, url).equals(getArticle(oldVal, url))) {
-        tabHandler(store)(tabId, url);
+        tabHandler(store)(parseInt(tabId, 10), url);
       }
 
       return true;

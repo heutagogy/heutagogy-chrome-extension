@@ -3,7 +3,6 @@ import Immutable from 'immutable';
 import { reducer as formReducer } from 'redux-form/immutable';
 
 import dataView from './dataView';
-import view from './view';
 import options from './options';
 import { reducer as tabs } from './../modules/tabsTracker';
 
@@ -17,6 +16,5 @@ export default combineReducers({
   dataView,
   options,
   tabs,
-  view,
   form: formReducer,
 });

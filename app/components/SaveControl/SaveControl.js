@@ -33,13 +33,12 @@ const inlineStyles = {
 class SaveControl extends Component {
   static propTypes = {
     article: PropTypes.instanceOf(Immutable.Map),
-    fetchArticleByUrl: PropTypes.func,
+    currentTab: PropTypes.instanceOf(Immutable.Map),
     fetchArticleState: PropTypes.instanceOf(Immutable.Map),
     rememberArticle: PropTypes.func,
     rememberArticleState: PropTypes.instanceOf(Immutable.Map),
     removeArticle: PropTypes.func,
     removeArticleState: PropTypes.instanceOf(Immutable.Map),
-    runOnCurrentArticle: PropTypes.func,
     updateArticle: PropTypes.func,
     updateArticleState: PropTypes.instanceOf(Immutable.Map),
   }
@@ -52,15 +51,6 @@ class SaveControl extends Component {
     super(props);
 
     this.bind();
-
-    this.state = {};
-  }
-
-  componentWillMount() {
-    this.props.runOnCurrentArticle((article) => {
-      this.setState({ currentArticle: new Immutable.Map(article) });
-      this.props.fetchArticleByUrl(article.url);
-    });
   }
 
   getReadLabel() {
@@ -94,10 +84,9 @@ class SaveControl extends Component {
     } else {
       this.props.rememberArticle({
         article: Immutable.fromJS({
-          icon: this.state.currentArticle.get('icon'),
           timestamp: moment().format(),
           title: this.titleField.getValue(),
-          url: this.state.currentArticle.get('url'),
+          url: this.props.currentTab.get('url'),
         }),
       });
     }
@@ -137,7 +126,7 @@ class SaveControl extends Component {
 
   render() {
     if (this.props.article.isEmpty() &&
-        (!this.state.currentArticle || this.state.currentArticle.isEmpty())) {
+        (!this.props.currentTab || this.props.currentTab.isEmpty())) {
       return null;
     }
 
@@ -148,7 +137,7 @@ class SaveControl extends Component {
     return (
       <div style={inlineStyles.container}>
         <TextField
-          defaultValue={this.props.article.get('title') || this.state.currentArticle.get('title')}
+          defaultValue={this.props.article.get('title') || this.props.currentTab.get('title')}
           disabled={this.props.article.get('id')}
           floatingLabelText="Article title"
           id="article-title"

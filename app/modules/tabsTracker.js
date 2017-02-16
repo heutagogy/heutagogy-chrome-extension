@@ -7,11 +7,11 @@ const initialState = Immutable.fromJS({
 
 export const getCurrentTab = (store) => store.getIn(['tabs', 'activeTabId']);
 
-export const getTabUrl = (store, tabId) => store.getIn(['tabs', 'tabs', tabId, 'url']);
+export const getTabUrl = (store, tabId) => store.getIn(['tabs', 'tabs', tabId.toString(), 'url']);
 
 export const getTabs = (store) => store.getIn(['tabs', 'tabs']);
 
-export const getTab = (store, tabId) => store.getIn(['tabs', 'tabs', tabId], new Immutable.Map());
+export const getTab = (store, tabId) => store.getIn(['tabs', 'tabs', tabId.toString()], new Immutable.Map());
 
 export const getCurrentUrl = (store) => getTabUrl(store, getCurrentTab(store));
 
@@ -55,7 +55,7 @@ export const initTabTracker = (store) => {
 };
 
 const updateState = (state, action) =>
-      state.mergeIn(['tabs', action.tabId], Immutable.fromJS(action).delete('type').delete('tabId'));
+      state.mergeIn(['tabs', action.tabId.toString()], Immutable.fromJS(action).delete('type').delete('tabId'));
 
 export const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -63,7 +63,7 @@ export const reducer = (state = initialState, action) => {
       return updateState(state, action);
     }
     case 'TAB_REMOVED': {
-      return state.deleteIn(['tabs', action.tabId]);
+      return state.deleteIn(['tabs', action.tabId.toString()]);
     }
     case 'TAB_ACTIVATED': {
       return updateState(state.set('activeTabId', action.tabId), action);
