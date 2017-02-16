@@ -5,10 +5,10 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import SaveControl from './../components/SaveControl';
 import { rememberArticle, updateArticle, fetchArticleByUrl, removeArticle } from './../actions/article';
-import { setCurrentUrl } from './../actions/view';
 import { getArticle } from './../selectors/article';
 import { getUser } from './../selectors/user';
 import { getViewState } from './../selectors/view';
+import { getCurrentUrl, getTab, getCurrentTab } from './../modules/tabsTracker';
 import { runOnCurrentArticle } from './../utils/utils';
 import { isLoggedIn } from './../utils/userUtils';
 import {
@@ -27,13 +27,13 @@ const theme = () => getMuiTheme({});
 class App extends Component {
   static propTypes = {
     article: PropTypes.instanceOf(Immutable.Map),
+    currentTab: PropTypes.instanceOf(Immutable.Map),
     fetchArticleByUrl: PropTypes.func,
     fetchArticleState: PropTypes.instanceOf(Immutable.Map),
     rememberArticle: PropTypes.func,
     rememberArticleState: PropTypes.instanceOf(Immutable.Map),
     removeArticle: PropTypes.func,
     removeArticleState: PropTypes.instanceOf(Immutable.Map),
-    setCurrentUrl: PropTypes.func,
     updateArticle: PropTypes.func,
     updateArticleState: PropTypes.instanceOf(Immutable.Map),
     user: PropTypes.object,
@@ -54,9 +54,7 @@ class App extends Component {
   }
 
   componentWillMount() {
-    runOnCurrentArticle(({ url }) => {
-      this.props.setCurrentUrl({ currentUrl: url });
-    });
+    this.props.fetchArticleByUrl(this.props.currentUrl);
   }
 
   getThematicStyles = () => ({
@@ -76,6 +74,7 @@ class App extends Component {
       <MuiThemeProvider muiTheme={theme()}>
         <div style={inlineStyles.app}>
           <SaveControl
+            currentTab={this.props.currentTab}
             article={this.props.article}
             fetchArticleByUrl={this.props.fetchArticleByUrl}
             fetchArticleState={this.props.fetchArticleState}
@@ -97,7 +96,8 @@ const mapStateToProps = (state) => {
   state = Immutable.fromJS(state); // eslint-disable-line
 
   return ({
-    article: getArticle(state, state.getIn(['view', 'currentUrl'])),
+    currentTab: getTab(state, getCurrentTab(state)),
+    article: getArticle(state, getCurrentUrl(state)),
     fetchArticleState: getViewState(state, FETCH_ARTICLE_VIEW_STATE),
     rememberArticleState: getViewState(state, REMEMBER_ARTICLE_VIEW_STATE),
     removeArticleState: getViewState(state, REMOVE_ARTICLE_VIEW_STATE),
@@ -110,7 +110,6 @@ const mapDispatchToProps = {
   fetchArticleByUrl,
   rememberArticle,
   removeArticle,
-  setCurrentUrl,
   updateArticle,
 };
 
