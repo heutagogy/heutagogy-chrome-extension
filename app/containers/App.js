@@ -9,7 +9,6 @@ import { getArticle } from './../selectors/article';
 import { getUser } from './../selectors/user';
 import { getViewState } from './../selectors/view';
 import { getCurrentUrl, getTab, getCurrentTab } from './../modules/tabsTracker';
-import { runOnCurrentArticle } from './../utils/utils';
 import { isLoggedIn } from './../utils/userUtils';
 import {
   REMEMBER_ARTICLE_VIEW_STATE,
@@ -54,7 +53,7 @@ class App extends Component {
   }
 
   componentWillMount() {
-    this.props.fetchArticleByUrl(this.props.currentUrl);
+    this.props.fetchArticleByUrl(this.props.currentTab.get('url'));
   }
 
   getThematicStyles = () => ({
@@ -74,15 +73,13 @@ class App extends Component {
       <MuiThemeProvider muiTheme={theme()}>
         <div style={inlineStyles.app}>
           <SaveControl
-            currentTab={this.props.currentTab}
             article={this.props.article}
-            fetchArticleByUrl={this.props.fetchArticleByUrl}
+            currentTab={this.props.currentTab}
             fetchArticleState={this.props.fetchArticleState}
             rememberArticle={this.props.rememberArticle}
             rememberArticleState={this.props.rememberArticleState}
             removeArticle={this.props.removeArticle}
             removeArticleState={this.props.removeArticleState}
-            runOnCurrentArticle={runOnCurrentArticle}
             updateArticle={this.props.updateArticle}
             updateArticleState={this.props.updateArticleState}
           />

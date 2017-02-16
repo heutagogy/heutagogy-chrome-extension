@@ -32,15 +32,13 @@ const inlineStyles = {
 
 class SaveControl extends Component {
   static propTypes = {
-    currentTab: PropTypes.instanceOf(Immutable.Map),
     article: PropTypes.instanceOf(Immutable.Map),
-    fetchArticleByUrl: PropTypes.func,
+    currentTab: PropTypes.instanceOf(Immutable.Map),
     fetchArticleState: PropTypes.instanceOf(Immutable.Map),
     rememberArticle: PropTypes.func,
     rememberArticleState: PropTypes.instanceOf(Immutable.Map),
     removeArticle: PropTypes.func,
     removeArticleState: PropTypes.instanceOf(Immutable.Map),
-    runOnCurrentArticle: PropTypes.func,
     updateArticle: PropTypes.func,
     updateArticleState: PropTypes.instanceOf(Immutable.Map),
   }

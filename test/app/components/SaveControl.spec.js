@@ -26,17 +26,17 @@ describe('Save control tests', () => {
 
   it('Call "Remember article" on toggle', () => {
     const rememberArticle = sandbox.spy();
-    const currentArticle = new Immutable.Map({ url: 'https://github.com/', title: 'GitHub' });
+    const currentTab = new Immutable.Map({ url: 'https://github.com/', title: 'GitHub' });
     const wrapper = shallow(
       <SaveControl
         article={new Immutable.Map()}
+        currentTab={currentTab}
         rememberArticle={rememberArticle}
         runOnCurrentArticle={id}
       />,
       { context }
     );
 
-    wrapper.setState({ currentArticle });
     wrapper.instance().urlField = { getValue: id }; //eslint-disable-line
     wrapper.instance().titleField = { getValue: id }; //eslint-disable-line
 
@@ -117,7 +117,6 @@ describe('Save control tests', () => {
     const wrapper = shallow(
       <SaveControl
         article={new Immutable.Map({ id: 1, url: 'https://github.com/', title: 'GitHub', read: '2017-03-01T18:11:26+01:00' })}
-        runOnCurrentArticle={id}
         updateArticle={updateArticle}
       />,
       { context }
@@ -129,31 +128,27 @@ describe('Save control tests', () => {
   });
 
   it('Use current title if article is not saved', () => {
-    const currentArticle = new Immutable.Map({ url: 'https://github.com/', title: 'GitHub' });
+    const currentTab = new Immutable.Map({ url: 'https://github.com/', title: 'GitHub' });
     const wrapper = shallow(
       <SaveControl
         article={new Immutable.Map()}
-        runOnCurrentArticle={id}
+        currentTab={currentTab}
       />,
       { context }
     );
-
-    wrapper.setState({ currentArticle });
 
     expect(wrapper.find(titleArticleSelector).prop('defaultValue')).equal('GitHub');
   });
 
   it("Use saved article if it's not empty", () => {
-    const currentArticle = new Immutable.Map({ url: 'https://github.com/', title: 'GitHub' });
+    const currentTab = new Immutable.Map({ url: 'https://github.com/', title: 'GitHub' });
     const wrapper = shallow(
       <SaveControl
         article={new Immutable.Map({ id: 2, url: 'http://example.com/', title: 'Example Domain' })}
-        runOnCurrentArticle={id}
+        currentTab={currentTab}
       />,
       { context }
     );
-
-    wrapper.setState({ currentArticle });
 
     expect(wrapper.find(titleArticleSelector).prop('defaultValue')).equal('Example Domain');
   });
@@ -162,7 +157,6 @@ describe('Save control tests', () => {
     const wrapper = shallow(
       <SaveControl
         article={new Immutable.Map({ id: 1, url: 'http://example.com/', title: 'Example Domain' })}
-        runOnCurrentArticle={id}
       />,
       { context }
     );
@@ -171,33 +165,30 @@ describe('Save control tests', () => {
   });
 
   it("Editing of title is enabled if article isn't saved", () => {
-    const currentArticle = new Immutable.Map({ url: 'https://github.com/', title: 'GitHub' });
+    const currentTab = new Immutable.Map({ url: 'https://github.com/', title: 'GitHub' });
     const wrapper = shallow(
       <SaveControl
         article={new Immutable.Map()}
-        runOnCurrentArticle={id}
+        currentTab={currentTab}
       />,
       { context }
     );
-
-    wrapper.setState({ currentArticle });
 
     expect(wrapper.find(titleArticleSelector).prop('disabled')).to.equal(false);
   });
 
   it('Edit title before save', () => {
     const rememberArticle = sandbox.spy();
-    const currentArticle = new Immutable.Map({ url: 'https://github.com/', title: 'GitHub' });
+    const currentTab = new Immutable.Map({ url: 'https://github.com/', title: 'GitHub' });
     const wrapper = shallow(
       <SaveControl
         article={new Immutable.Map()}
+        currentTab={currentTab}
         rememberArticle={rememberArticle}
-        runOnCurrentArticle={id}
       />,
       { context }
     );
 
-    wrapper.setState({ currentArticle });
     wrapper.instance().urlField = { getValue: () => 'https://github.com/' }; //eslint-disable-line
     wrapper.instance().titleField = { getValue: () => 'New GitHub'}; //eslint-disable-line
 
