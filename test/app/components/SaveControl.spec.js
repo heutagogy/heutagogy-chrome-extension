@@ -32,7 +32,6 @@ describe('Save control tests', () => {
         article={new Immutable.Map()}
         currentTab={currentTab}
         rememberArticle={rememberArticle}
-        runOnCurrentArticle={id}
       />,
       { context }
     );
@@ -53,7 +52,6 @@ describe('Save control tests', () => {
         article={new Immutable.Map({ id: 1, url: 'https://github.com/', title: 'GitHub' })}
         rememberArticle={rememberArticle}
         removeArticle={removeArticle}
-        runOnCurrentArticle={id}
       />,
       { context }
     );
@@ -69,7 +67,6 @@ describe('Save control tests', () => {
     const wrapper = shallow(
       <SaveControl
         article={new Immutable.Map()}
-        runOnCurrentArticle={id}
       />,
       { context }
     );
@@ -83,7 +80,6 @@ describe('Save control tests', () => {
     const wrapper = shallow(
       <SaveControl
         article={new Immutable.Map({ id: 1, url: 'https://github.com/', title: 'GitHub' })}
-        runOnCurrentArticle={id}
       />,
       { context }
     );
@@ -96,7 +92,6 @@ describe('Save control tests', () => {
     const wrapper = shallow(
       <SaveControl
         article={new Immutable.Map({ id: 1, url: 'https://github.com/', title: 'GitHub' })}
-        runOnCurrentArticle={id}
         updateArticle={updateArticle}
       />,
       { context }
