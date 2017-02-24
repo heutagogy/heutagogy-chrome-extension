@@ -12,7 +12,7 @@ export default (state, action) => {
       const articles = action.payload.getIn(['entities', 'article']);
 
       if (!articles) {
-        return state;
+        return state.deleteIn(['article', action.meta.articleUrl]);
       }
 
       return state.setIn(['article', action.meta.articleUrl], articles.first());
