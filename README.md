@@ -2,6 +2,10 @@
 
 > Heutagogy  chrome extension project.
 
+## Install
+
+Install extension from Chrome Web Store: [Heutagogy](https://chrome.google.com/webstore/detail/heutagogy/dcjclncadeblkbflledfnlldlidmjnhj)
+
 ## Features
 
  - Hot reloading React/Redux (Using [Webpack](https://github.com/webpack/webpack) and [React Transform](https://github.com/gaearon/react-transform))
