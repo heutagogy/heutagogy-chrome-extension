@@ -13,9 +13,12 @@ const inlineStyles = {
   container: {
     padding: '10px',
   },
+  tags: {
+    fontSize: 14,
+  },
   saveControl: {
     fontSize: 14,
-    margin: '15px 0',
+    margin: '7px 0 15px 0',
   },
   left: {
     float: 'left',
@@ -29,6 +32,12 @@ const inlineStyles = {
     margin: '80px 0',
   },
 };
+
+const transformStringToTags = (str = '') =>
+  (str !== '' ? str.split(',').map((s) => s.replace(/ /g, '')) : []);
+
+const transformTagsToString = (lst = []) =>
+  lst.join(', ');
 
 class SaveControl extends Component {
   static propTypes = {
@@ -86,6 +95,7 @@ class SaveControl extends Component {
         article: Immutable.fromJS({
           timestamp: moment().format(),
           title: this.titleField.getValue(),
+          tags: transformStringToTags(this.tagsField.getValue()),
           url: this.props.currentTab.get('url'),
         }),
       });
@@ -142,6 +152,15 @@ class SaveControl extends Component {
           floatingLabelText="Article title"
           id="article-title"
           ref={(ref) => this.titleField = ref} // eslint-disable-line
+        /><br />
+        <TextField
+          defaultValue={transformTagsToString(this.props.article.get('tags'))}
+          disabled={this.props.article.get('id')}
+          hintText="tags"
+          id="article-tags"
+          ref={(ref) => this.tagsField = ref} // eslint-disable-line
+          style={inlineStyles.tags}
+          underlineShow={false}
         /><br />
         <Toggle
           id="remember-article"

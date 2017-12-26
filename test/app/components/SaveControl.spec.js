@@ -11,6 +11,7 @@ const id = (x) => x;
 const rememberArticleSelector = '#remember-article';
 const readArticleSelector = '#read-article';
 const titleArticleSelector = '#article-title';
+const tagsArticleSelector = '#article-tags';
 
 describe('Save control tests', () => {
   let sandbox; //eslint-disable-line
@@ -38,6 +39,7 @@ describe('Save control tests', () => {
 
     wrapper.instance().urlField = { getValue: id }; //eslint-disable-line
     wrapper.instance().titleField = { getValue: id }; //eslint-disable-line
+    wrapper.instance().tagsField = { getValue: id }; //eslint-disable-line
 
     wrapper.find(rememberArticleSelector).simulate('toggle');
 
@@ -148,18 +150,19 @@ describe('Save control tests', () => {
     expect(wrapper.find(titleArticleSelector).prop('defaultValue')).equal('Example Domain');
   });
 
-  it('Editing of title is disabled if article is saved', () => {
+  it('Editing of title and tags are disabled if article is saved', () => {
     const wrapper = shallow(
       <SaveControl
-        article={new Immutable.Map({ id: 1, url: 'http://example.com/', title: 'Example Domain' })}
+        article={new Immutable.Map({ id: 1, url: 'http://example.com/', title: 'Example Domain', tags: ['github', 'test'] })}
       />,
       { context }
     );
 
     expect(wrapper.find(titleArticleSelector).prop('disabled')).to.equal(ONE);
+    expect(wrapper.find(tagsArticleSelector).prop('disabled')).to.equal(ONE);
   });
 
-  it("Editing of title is enabled if article isn't saved", () => {
+  it("Editing of title and tags are enabled if article isn't saved", () => {
     const currentTab = new Immutable.Map({ url: 'https://github.com/', title: 'GitHub' });
     const wrapper = shallow(
       <SaveControl
@@ -170,11 +173,13 @@ describe('Save control tests', () => {
     );
 
     expect(wrapper.find(titleArticleSelector).prop('disabled')).to.equal(false);
+    expect(wrapper.find(tagsArticleSelector).prop('disabled')).to.equal(false);
   });
 
-  it('Edit title before save', () => {
+  it('Filling article data before save', () => {
+    const url = 'https://github.com/';
     const rememberArticle = sandbox.spy();
-    const currentTab = new Immutable.Map({ url: 'https://github.com/', title: 'GitHub' });
+    const currentTab = new Immutable.Map({ url, title: 'GitHub' });
     const wrapper = shallow(
       <SaveControl
         article={new Immutable.Map()}
@@ -184,14 +189,16 @@ describe('Save control tests', () => {
       { context }
     );
 
-    wrapper.instance().urlField = { getValue: () => 'https://github.com/' }; //eslint-disable-line
-    wrapper.instance().titleField = { getValue: () => 'New GitHub'}; //eslint-disable-line
+    wrapper.instance().urlField = { getValue: () => url }; //eslint-disable-line
+    wrapper.instance().titleField = { getValue: () => 'New GitHub' }; //eslint-disable-line
+    wrapper.instance().tagsField = { getValue: () => 'github, test' }; //eslint-disable-line
 
     wrapper.find(rememberArticleSelector).simulate('toggle');
 
     const args = rememberArticle.getCall(ZERO).args[0];
 
     expect(args.article.get('title')).to.equal('New GitHub');
-    expect(args.article.get('url')).to.equal('https://github.com/');
+    expect(args.article.get('tags')).to.deep.equal(new Immutable.List(['github', 'test']));
+    expect(args.article.get('url')).to.equal(url);
   });
 });
