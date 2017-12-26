@@ -33,10 +33,10 @@ const inlineStyles = {
   },
 };
 
-const textFieldValueToTags = (str) =>
-  str.split(',').map((s) => s.trim());
+const transformStringToTags = (str = '') =>
+  (str !== '' ? str.split(',').map((s) => s.replace(/ /g, '')) : []);
 
-const tagsToTextFieldValue = (lst) =>
+const transformTagsToString = (lst = []) =>
   lst.join(', ');
 
 class SaveControl extends Component {
@@ -95,7 +95,7 @@ class SaveControl extends Component {
         article: Immutable.fromJS({
           timestamp: moment().format(),
           title: this.titleField.getValue(),
-          tags: textFieldValueToTags(this.tagsField.getValue()),
+          tags: transformStringToTags(this.tagsField.getValue()),
           url: this.props.currentTab.get('url'),
         }),
       });
@@ -154,10 +154,10 @@ class SaveControl extends Component {
           ref={(ref) => this.titleField = ref} // eslint-disable-line
         /><br />
         <TextField
-          defaultValue={tagsToTextFieldValue(this.props.article.get('tags') || [])}
+          defaultValue={transformTagsToString(this.props.article.get('tags'))}
           disabled={this.props.article.get('id')}
           hintText="tags"
-          id="tags"
+          id="article-tags"
           ref={(ref) => this.tagsField = ref} // eslint-disable-line
           style={inlineStyles.tags}
           underlineShow={false}
