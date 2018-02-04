@@ -65,8 +65,8 @@ chrome.storage.local.get('state', (obj) => {
   const w = watch(store.getState);
 
   store.subscribe(w((newVal, oldVal) => {
-    newVal = Immutable.fromJS(newVal);
-    oldVal = Immutable.fromJS(oldVal);
+    newVal = Immutable.fromJS(newVal); // eslint-disable-line
+    oldVal = Immutable.fromJS(oldVal); // eslint-disable-line
 
     getTabs(newVal).forEach((tab, tabId) => {
       const url = tab.get('url');

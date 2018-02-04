@@ -1,7 +1,6 @@
 import { applyMiddleware, compose, createStore } from 'redux';
 import createLogger from 'redux-logger';
 import createSagaMiddleware from 'redux-saga';
-import Immutable from 'immutable';
 
 import { basicMiddleware, middlewaresToApply } from './commonMiddlewares';
 

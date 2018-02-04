@@ -19,6 +19,5 @@ const reducers = combineReducers({
   form: formReducer,
 });
 
-export default (state, action) => {
-  return reducers(Immutable.fromJS(state), action).toJS();
-};
+export default (state, action) =>
+  reducers(Immutable.fromJS(state), action).toJS();

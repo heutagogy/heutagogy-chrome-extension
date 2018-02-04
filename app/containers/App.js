@@ -66,15 +66,15 @@ class App extends Component {
       isLoggedIn(this.props.user)
       ? (
         <SaveControl
-        article={this.props.article}
-        currentTab={this.props.currentTab}
-        fetchArticleState={this.props.fetchArticleState}
-        rememberArticle={this.props.rememberArticle}
-        rememberArticleState={this.props.rememberArticleState}
-        removeArticle={this.props.removeArticle}
-        removeArticleState={this.props.removeArticleState}
-        updateArticle={this.props.updateArticle}
-        updateArticleState={this.props.updateArticleState}
+          article={this.props.article}
+          currentTab={this.props.currentTab}
+          fetchArticleState={this.props.fetchArticleState}
+          rememberArticle={this.props.rememberArticle}
+          rememberArticleState={this.props.rememberArticleState}
+          removeArticle={this.props.removeArticle}
+          removeArticleState={this.props.removeArticleState}
+          updateArticle={this.props.updateArticle}
+          updateArticleState={this.props.updateArticleState}
         />
       ) : (
         <LoginForm />

@@ -29,7 +29,7 @@ export const REMOVE_ARTICLE_SUCCESS = 'REMOVE_ARTICLE_SUCCESS';
 export const REMOVE_ARTICLE_FAILURE = 'REMOVE_ARTICLE_FAILURE';
 
 
-const toJS = (x) => x.toJS ? x.toJS() : x;
+const toJS = (x) => (x.toJS ? x.toJS() : x);
 
 
 const postRememberArticle = ({ article }) => ({
