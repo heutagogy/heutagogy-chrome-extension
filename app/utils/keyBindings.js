@@ -16,7 +16,7 @@ const showNotification = (message) => {
 };
 
 export const handleRememberArticle = (store) => {
-  const state = store.getState();
+  const state = Immutable.fromJS(store.getState());
   const tab = getTab(state, getCurrentTab(state));
   const url = tab.get('url');
   const title = tab.get('title');
@@ -40,7 +40,7 @@ export const handleRememberArticle = (store) => {
 };
 
 export const handleReadArticle = (store) => {
-  const state = store.getState();
+  const state = Immutable.fromJS(store.getState());
   const tab = getTab(state, getCurrentTab(state));
   const url = tab.get('url');
   const article = getArticle(state, url);

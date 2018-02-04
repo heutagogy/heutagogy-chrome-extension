@@ -29,9 +29,12 @@ export const REMOVE_ARTICLE_SUCCESS = 'REMOVE_ARTICLE_SUCCESS';
 export const REMOVE_ARTICLE_FAILURE = 'REMOVE_ARTICLE_FAILURE';
 
 
+const toJS = (x) => x.toJS ? x.toJS() : x;
+
+
 const postRememberArticle = ({ article }) => ({
   type: 'postRememberArticleAlias',
-  article,
+  article: toJS(article),
 });
 
 export const postRememberArticleAlias = ({ article }) => {
@@ -60,7 +63,7 @@ export const postRememberArticleAlias = ({ article }) => {
 const postUpdateArticle = (articleId, articleFields) => ({
   type: 'postUpdateArticleAlias',
   articleId,
-  articleFields,
+  articleFields: toJS(articleFields),
 });
 
 export const postUpdateArticleAlias = ({ articleId, articleFields }) => {

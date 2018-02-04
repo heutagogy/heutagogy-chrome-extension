@@ -19,9 +19,6 @@ export default function configureStore(preloadedState) {
         ...middlewaresToApply,
         sagaMiddleware,
         createLogger({
-          stateTransformer: (state) => state.toJS(),
-          // because toJS() is deep
-          actionTransformer: (action) => Immutable.fromJS(action).toJS(),
         })),
       DevTools.instrument()
     )
