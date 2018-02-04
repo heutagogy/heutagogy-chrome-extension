@@ -1,4 +1,6 @@
 /* eslint-disable fp/no-mutation */
+import Immutable from 'immutable';
+
 import { CALL_API } from 'redux-api-middleware';
 import { getUser } from './../selectors/user';
 import { getOptions } from './../selectors/options';
@@ -7,7 +9,7 @@ const requestMiddleware = () => (store) => (next) => (action) => {
   if (action[CALL_API]) {
     const headers = action[CALL_API].headers = action[CALL_API].headers || {}; // eslint-disable-line
     const method = action[CALL_API].method;
-    const state = store.getState();
+    const state = Immutable.fromJS(store.getState());
     const user = getUser(state);
     const serverAddress = getOptions(state).get('serverAddress');
 

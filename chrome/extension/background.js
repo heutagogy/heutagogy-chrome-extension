@@ -48,7 +48,7 @@ chrome.storage.local.get('state', (obj) => {
 
   const initialState = state ? JSON.parse(state) : {};
   const createStore = require('../../app/store/configureStore'); //eslint-disable-line
-  const store = createStore(Immutable.fromJS(initialState));
+  const store = createStore(initialState);
 
   wrapStore(store, { portName: 'Heutagogy' });
 
@@ -65,6 +65,9 @@ chrome.storage.local.get('state', (obj) => {
   const w = watch(store.getState);
 
   store.subscribe(w((newVal, oldVal) => {
+    newVal = Immutable.fromJS(newVal); // eslint-disable-line
+    oldVal = Immutable.fromJS(oldVal); // eslint-disable-line
+
     getTabs(newVal).forEach((tab, tabId) => {
       const url = tab.get('url');
       const oldTab = getTab(oldVal, tabId);

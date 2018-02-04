@@ -1,3 +1,5 @@
+import Immutable from 'immutable';
+
 import { fetchArticleByUrl } from './../../../app/actions/article';
 import { getArticle } from './../../../app/selectors/article';
 import { getUser } from './../../../app/selectors/user';
@@ -33,7 +35,7 @@ const setBadge = (tabId, saved, read) => {
 };
 
 export const tabHandler = (store) => (tabId, url) => {
-  const state = store.getState();
+  const state = Immutable.fromJS(store.getState());
   const user = getUser(state);
 
   if (isLoggedIn(user)) {

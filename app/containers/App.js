@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import Immutable from 'immutable';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import LoginForm from './../components/LoginForm';
 import SaveControl from './../components/SaveControl';
 import { rememberArticle, updateArticle, fetchArticleByUrl, removeArticle } from './../actions/article';
 import { getArticle } from './../selectors/article';
@@ -61,28 +62,30 @@ class App extends Component {
   })
 
   render() {
-    if (!isLoggedIn(this.props.user)) {
-      chrome.runtime.openOptionsPage();
-
-      return null;
-    }
+    const content =
+      isLoggedIn(this.props.user)
+      ? (
+        <SaveControl
+          article={this.props.article}
+          currentTab={this.props.currentTab}
+          fetchArticleState={this.props.fetchArticleState}
+          rememberArticle={this.props.rememberArticle}
+          rememberArticleState={this.props.rememberArticleState}
+          removeArticle={this.props.removeArticle}
+          removeArticleState={this.props.removeArticleState}
+          updateArticle={this.props.updateArticle}
+          updateArticleState={this.props.updateArticleState}
+        />
+      ) : (
+        <LoginForm />
+      );
 
     const inlineStyles = this.getThematicStyles();
 
     return (
       <MuiThemeProvider muiTheme={theme()}>
         <div style={inlineStyles.app}>
-          <SaveControl
-            article={this.props.article}
-            currentTab={this.props.currentTab}
-            fetchArticleState={this.props.fetchArticleState}
-            rememberArticle={this.props.rememberArticle}
-            rememberArticleState={this.props.rememberArticleState}
-            removeArticle={this.props.removeArticle}
-            removeArticleState={this.props.removeArticleState}
-            updateArticle={this.props.updateArticle}
-            updateArticleState={this.props.updateArticleState}
-          />
+          {content}
         </div>
       </MuiThemeProvider>
     );
